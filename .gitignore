@@ -1,0 +1,12 @@
+# For build
+build
+app
+
+# For .env files
+.env
+.env.prod
+.env.dev
+
+# for proto files
+/api_service/proto/*
+/auth_service/proto/*
