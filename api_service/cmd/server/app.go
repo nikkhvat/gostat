@@ -7,6 +7,7 @@ import (
 	"github.com/nik19ta/gostat/api_service/internal/auth/delivery/http"
 	"github.com/nik19ta/gostat/api_service/internal/auth/repository/grpc"
 	"github.com/nik19ta/gostat/api_service/internal/auth/service"
+	middleware "github.com/nik19ta/gostat/api_service/middleware/auth"
 	"github.com/nik19ta/gostat/api_service/pkg/env"
 )
 
@@ -26,6 +27,14 @@ func main() {
 	{
 		authRouter.POST("/login", authHandler.Login)
 		authRouter.POST("/registration", authHandler.Registration)
+	}
+
+	privateRouter := router.Group("/api")
+	privateRouter.Use(middleware.AuthRequired())
+	{
+		privateRouter.GET("/test", func(c *gin.Context) {
+			c.JSON(200, gin.H{"test": "ok"})
+		})
 	}
 
 	router.Run(env.Get("PORT"))
