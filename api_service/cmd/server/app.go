@@ -3,22 +3,37 @@ package main
 import (
 	"log"
 
-	"github.com/gin-gonic/gin"
-	"github.com/nik19ta/gostat/api_service/internal/auth/delivery/http"
-	"github.com/nik19ta/gostat/api_service/internal/auth/repository/grpc"
-	"github.com/nik19ta/gostat/api_service/internal/auth/service"
+	gin "github.com/gin-gonic/gin"
+
+	authGrpc "github.com/nik19ta/gostat/api_service/internal/auth/repository/grpc"
+	statsGrpc "github.com/nik19ta/gostat/api_service/internal/stats/repository/grpc"
+
+	authHttp "github.com/nik19ta/gostat/api_service/internal/auth/delivery/http"
+	statsHttp "github.com/nik19ta/gostat/api_service/internal/stats/delivery/http"
+
+	authService "github.com/nik19ta/gostat/api_service/internal/auth/service"
+	statsService "github.com/nik19ta/gostat/api_service/internal/stats/service"
+
 	middleware "github.com/nik19ta/gostat/api_service/middleware/auth"
-	"github.com/nik19ta/gostat/api_service/pkg/env"
+	env "github.com/nik19ta/gostat/api_service/pkg/env"
 )
 
 func main() {
-	client, err := grpc.NewAuthClient(env.Get("AUTH_HOST"))
+	authClient, err := authGrpc.NewAuthClient(env.Get("AUTH_HOST"))
 	if err != nil {
 		log.Fatalf("Failed to connect to auth service: %v", err)
 	}
 
-	authService := service.NewAuthService(client)
-	authHandler := http.NewAuthHandler(authService)
+	statsClient, err := statsGrpc.NewStatsClient(env.Get("STATS_HOST"))
+	if err != nil {
+		log.Fatalf("Failed to connect to auth service: %v", err)
+	}
+
+	authService := authService.NewAuthService(authClient)
+	authHandler := authHttp.NewAuthHandler(authService)
+
+	statsService := statsService.NewStatsService(statsClient)
+	statsHandler := statsHttp.NewStatsHandler(statsService)
 
 	router := gin.Default()
 
@@ -27,6 +42,23 @@ func main() {
 	{
 		authRouter.POST("/login", authHandler.Login)
 		authRouter.POST("/registration", authHandler.Registration)
+	}
+
+	// * Stats Router
+	statsRouter := router.Group("/api/stats")
+	{
+		publicStatsRouter := statsRouter.Group("/set")
+		{
+			publicStatsRouter.PUT("/visit", statsHandler.SetVisit)
+			publicStatsRouter.PUT("/visit/extend", statsHandler.VisitExtend)
+		}
+
+		// privateStatsRouter := statsRouter.Group("/get")
+		// privateStatsRouter.Use(middleware.AuthRequired())
+		// {
+		// 	privateStatsRouter.GET("/visits", h.GetVisits)
+		// 	privateStatsRouter.GET("/links", h.GetLinks)
+		// }
 	}
 
 	privateRouter := router.Group("/api")

@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package stats;
+
+option go_package = "github.com/nik19ta/gostat/proto/stats";
+
+service StatsService {
+  rpc SetVisit (SetVisitRequest) returns (SetVisitResponse) {}
+  rpc VisitExtend (VisitExtendRequest) returns (VisitExtendResponse) {}
+}
+
+message SetVisitRequest {
+  string ip = 1;
+	string user_agent = 2;
+	string utm = 3;
+	string http_referer = 4;
+	string url = 5;
+	string title = 6;
+	string session = 7;
+	bool unique = 8;
+}
+
+message VisitExtendRequest {
+  string session = 1;
+}
+
+message SetVisitResponse {
+  string session = 1;
+}
+
+message VisitExtendResponse {
+  string session = 1;
+}
