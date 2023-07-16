@@ -16,8 +16,17 @@ func NewAuthService(client *grpc.AuthClient) *AuthService {
 }
 
 type LoginRequest struct {
-	Login    string
-	Password string
+	Login    string `json:"login"`
+	Password string `json:"password"`
+}
+
+type RegistrationRequest struct {
+	Login      string `json:"login"`
+	Mail       string `json:"mail"`
+	Password   string `json:"password"`
+	FirstName  string `json:"first_name"`
+	LastName   string `json:"last_name"`
+	MiddleName string `json:"middle_name"`
 }
 
 func (s *AuthService) Login(ctx context.Context, req LoginRequest) (string, error) {
@@ -25,6 +34,22 @@ func (s *AuthService) Login(ctx context.Context, req LoginRequest) (string, erro
 		Login:    req.Login,
 		Password: req.Password,
 	})
+	if err != nil {
+		return "", err
+	}
+	return resp.GetToken(), nil
+}
+
+func (s *AuthService) Registration(ctx context.Context, req RegistrationRequest) (string, error) {
+	resp, err := s.client.Registration(ctx, &auth.RegistrationRequest{
+		Login:      req.Login,
+		Mail:       req.Mail,
+		Password:   req.Password,
+		FirstName:  req.FirstName,
+		LastName:   req.LastName,
+		MiddleName: req.MiddleName,
+	})
+
 	if err != nil {
 		return "", err
 	}

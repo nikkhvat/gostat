@@ -20,3 +20,20 @@ func (r UserRepository) GetUserByLoginAndPassword(login, password string) (model
 	}
 	return user, nil
 }
+
+func (r UserRepository) RegistrationUser(login, mail, password, firstName, lastName, middleName string) (model.User, error) {
+	user := model.User{
+		Email:      mail,
+		Login:      login,
+		Password:   password,
+		FirstName:  firstName,
+		LastName:   lastName,
+		MiddleName: middleName,
+	}
+
+	if err := r.db.Create(&user).Error; err != nil {
+		return model.User{}, err
+	}
+
+	return user, nil
+}

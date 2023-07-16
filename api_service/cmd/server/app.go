@@ -25,6 +25,7 @@ func main() {
 	authRouter := router.Group("/api/auth")
 	{
 		authRouter.POST("/login", authHandler.Login)
+		authRouter.POST("/registration", authHandler.Registration)
 	}
 
 	router.Run(env.Get("PORT"))

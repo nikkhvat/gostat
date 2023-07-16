@@ -25,6 +25,10 @@ func (c *AuthClient) Login(ctx context.Context, req *auth.LoginRequest) (*auth.L
 	return c.client.Login(ctx, req)
 }
 
+func (c *AuthClient) Registration(ctx context.Context, req *auth.RegistrationRequest) (*auth.RegistrationResponse, error) {
+	return c.client.Registration(ctx, req)
+}
+
 func (c *AuthClient) Close() error {
 	return c.conn.Close()
 }

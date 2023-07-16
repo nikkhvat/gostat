@@ -4,9 +4,9 @@ package auth;
 
 option go_package = "github.com/nik19ta/gostat/proto/auth";
 
-
 service AuthService {
   rpc Login (LoginRequest) returns (LoginResponse) {}
+  rpc Registration (RegistrationRequest) returns (RegistrationResponse) {}
 }
 
 message LoginRequest {
@@ -14,6 +14,19 @@ message LoginRequest {
   string password = 2;
 }
 
+message RegistrationRequest {
+  string login = 1;
+  string mail = 2;
+  string password = 3;
+  string first_name = 4;
+  string last_name = 5;
+  string middle_name = 6;
+}
+
 message LoginResponse {
+  string token = 1;
+}
+
+message RegistrationResponse {
   string token = 1;
 }
