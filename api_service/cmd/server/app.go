@@ -14,7 +14,8 @@ import (
 	authService "github.com/nik19ta/gostat/api_service/internal/auth/service"
 	statsService "github.com/nik19ta/gostat/api_service/internal/stats/service"
 
-	middleware "github.com/nik19ta/gostat/api_service/middleware/auth"
+	middlewareAuth "github.com/nik19ta/gostat/api_service/middleware/auth"
+	middlewareCors "github.com/nik19ta/gostat/api_service/middleware/cors"
 	env "github.com/nik19ta/gostat/api_service/pkg/env"
 )
 
@@ -36,6 +37,7 @@ func main() {
 	statsHandler := statsHttp.NewStatsHandler(statsService)
 
 	router := gin.Default()
+	router.Use(middlewareCors.CORSMiddleware())
 
 	// * Auth Router
 	authRouter := router.Group("/api/auth")
@@ -54,7 +56,7 @@ func main() {
 		}
 
 		// privateStatsRouter := statsRouter.Group("/get")
-		// privateStatsRouter.Use(middleware.AuthRequired())
+		// privateStatsRouter.Use(middlewareAuth.AuthRequired())
 		// {
 		// 	privateStatsRouter.GET("/visits", h.GetVisits)
 		// 	privateStatsRouter.GET("/links", h.GetLinks)
@@ -62,7 +64,7 @@ func main() {
 	}
 
 	privateRouter := router.Group("/api")
-	privateRouter.Use(middleware.AuthRequired())
+	privateRouter.Use(middlewareAuth.AuthRequired())
 	{
 		privateRouter.GET("/test", func(c *gin.Context) {
 			c.JSON(200, gin.H{"test": "ok"})
