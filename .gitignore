@@ -10,3 +10,4 @@ app
 # for proto files
 /api_service/proto/*
 /auth_service/proto/*
+/stats_service/proto/*
