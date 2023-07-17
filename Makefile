@@ -24,4 +24,5 @@ generate_proto:
 	make generate_proto_stats_service
 
 start:
-	docker-compose up
+	make generate_proto
+	docker-compose up --build
