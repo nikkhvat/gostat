@@ -22,3 +22,6 @@ generate_proto:
 	make generate_proto_api_service
 	make generate_proto_auth_service
 	make generate_proto_stats_service
+
+start:
+	docker-compose up

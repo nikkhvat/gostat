@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  auth_service:
+    build: ./auth_service
+    ports:
+      - 50051:50051
+    volumes:
+      - ./auth_service/.env:/app/.env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api_service:
+    build: ./api_service
+    ports:
+      - 8080:8080
+    volumes:
+      - ./api_service/.env:/app/.env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  stats_service:
+    build: ./stats_service
+    ports:
+      - 50052:50052
+    volumes:
+      - ./stats_service/.env:/app/.env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:13-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: statsdb
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

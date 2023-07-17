@@ -15,6 +15,7 @@ All microservices are written in GoLang and communicate with each other using `g
 - Database: `PostgreSQL`
 - ORM: `GORM`
 - interaction of microservices: `gRPC`
+- `Docker` / `Docker Compose`
 
 ## Prerequisites
 
