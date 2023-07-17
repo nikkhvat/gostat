@@ -25,4 +25,7 @@ generate_proto:
 
 start:
 	make generate_proto
-	docker-compose up --build
+	docker-compose up --build -d
+
+stop:
+	docker compose down
