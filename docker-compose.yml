@@ -9,6 +9,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_PASSWORD=password
 
   api_service:
     build: ./api_service
@@ -19,16 +22,36 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    environment:
+      - AUTH_HOST=auth_service:50051
+      - STATS_HOST=stats_service:50050
+      - APP_HOST=app_service:50052
 
   stats_service:
     build: ./stats_service
     ports:
-      - 50052:50052
+      - 50050:50050
     volumes:
       - ./stats_service/.env:/app/.env
     depends_on:
       db:
         condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_PASSWORD=password
+
+  app_service:
+    build: ./app_service
+    ports:
+      - 50052:50052
+    volumes:
+      - ./app_service/.env:/app/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_PASSWORD=password
 
   db:
     image: postgres:13-alpine
