@@ -12,7 +12,6 @@ import (
 
 func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Получить заголовок Authorization
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is missing"})
@@ -20,17 +19,14 @@ func AuthRequired() gin.HandlerFunc {
 			return
 		}
 
-		// Убедиться, что заголовок начинается с "Bearer "
 		if !strings.HasPrefix(authHeader, "Bearer ") {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header format must be Bearer {token}"})
 			c.Abort()
 			return
 		}
 
-		// Получить токен
 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 
-		// Валидация токена
 		secretKey := env.Get("JWT_SECRET")
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			if jwt.GetSigningMethod("HS256") != token.Method {
@@ -50,6 +46,24 @@ func AuthRequired() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
+
+		claims, ok := token.Claims.(jwt.MapClaims)
+		if !ok {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
+			c.Abort()
+			return
+		}
+
+		rawID, ok := claims["user_id"].(float64)
+		if !ok {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
+			c.Abort()
+			return
+		}
+
+		id := uint64(rawID)
+
+		c.Set("id", id)
 
 		c.Next()
 	}

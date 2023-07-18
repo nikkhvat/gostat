@@ -4,7 +4,6 @@ import (
 	"time"
 )
 
-// Ваша модель пользователя
 type Visits struct {
 	UId         string    `json:"uid"`          // Unique identifier
 	Session     string    `json:"session"`      // User's Session

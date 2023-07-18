@@ -72,13 +72,12 @@ func (s StatsService) SetVisits(ip, userAgent, utm, httpReferer, url, title stri
 		URL:         url,
 		Title:       title,
 		HTTPReferer: httpReferer,
-		AppId:       "APP_ID_TEMP",
+		AppId:       "APP_ID_TEMP", // ! REMOVE APP_ID_TEMP when make app_service
 	}
 
 	err := s.repo.AddVisit(data)
 
 	return userSession, err
-
 }
 
 func (s StatsService) VisitExtend(session string) error {

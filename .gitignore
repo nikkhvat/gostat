@@ -11,3 +11,7 @@ app
 /api_service/proto/*
 /auth_service/proto/*
 /stats_service/proto/*
+/app_service/proto/*
+
+# For GoLand
+.idea

@@ -1,40 +1,61 @@
 package main
 
 import (
+	middlewareAuth "github.com/nik19ta/gostat/api_service/middleware/auth"
 	"log"
 
 	gin "github.com/gin-gonic/gin"
 
+	appGrpc "github.com/nik19ta/gostat/api_service/internal/app/repository/grpc"
 	authGrpc "github.com/nik19ta/gostat/api_service/internal/auth/repository/grpc"
 	statsGrpc "github.com/nik19ta/gostat/api_service/internal/stats/repository/grpc"
 
+	appHttp "github.com/nik19ta/gostat/api_service/internal/app/delivery/http"
 	authHttp "github.com/nik19ta/gostat/api_service/internal/auth/delivery/http"
 	statsHttp "github.com/nik19ta/gostat/api_service/internal/stats/delivery/http"
 
+	appService "github.com/nik19ta/gostat/api_service/internal/app/service"
 	authService "github.com/nik19ta/gostat/api_service/internal/auth/service"
 	statsService "github.com/nik19ta/gostat/api_service/internal/stats/service"
 
-	middlewareAuth "github.com/nik19ta/gostat/api_service/middleware/auth"
 	middlewareCors "github.com/nik19ta/gostat/api_service/middleware/cors"
 	env "github.com/nik19ta/gostat/api_service/pkg/env"
 )
 
 func main() {
 	authClient, err := authGrpc.NewAuthClient(env.Get("AUTH_HOST"))
+
 	if err != nil {
-		log.Fatalf("Failed to connect to auth service: %v", err)
+		log.Fatalf("❌ Failed to connect to auth service: %v", err)
+	} else {
+		log.Println("✅ Successful connect to auth service")
 	}
 
 	statsClient, err := statsGrpc.NewStatsClient(env.Get("STATS_HOST"))
 	if err != nil {
-		log.Fatalf("Failed to connect to auth service: %v", err)
+		log.Fatalf("❌ Failed to connect to stats service: %v", err)
+	} else {
+		log.Println("✅ Successful connect to stats service")
 	}
 
-	authService := authService.NewAuthService(authClient)
-	authHandler := authHttp.NewAuthHandler(authService)
+	appClient, err := appGrpc.NewAppClient(env.Get("APP_HOST"))
+	if err != nil {
+		log.Fatalf("❌ Failed to connect to app service: %v", err)
+	} else {
+		log.Println("✅ Successful connect to app service")
+	}
 
-	statsService := statsService.NewStatsService(statsClient)
-	statsHandler := statsHttp.NewStatsHandler(statsService)
+	// Auth service
+	newAuthService := authService.NewAuthService(authClient)
+	authHandler := authHttp.NewAuthHandler(newAuthService)
+
+	// Stats service
+	newStatsService := statsService.NewStatsService(statsClient)
+	statsHandler := statsHttp.NewStatsHandler(newStatsService)
+
+	// Apps service
+	newAppService := appService.NewAppService(appClient)
+	appHandler := appHttp.NewAppHandler(newAppService)
 
 	router := gin.Default()
 	router.Use(middlewareCors.CORSMiddleware())
@@ -63,12 +84,11 @@ func main() {
 		// }
 	}
 
-	privateRouter := router.Group("/api")
-	privateRouter.Use(middlewareAuth.AuthRequired())
+	// * Apps Router
+	appRouter := router.Group("/api/app")
+	appRouter.Use(middlewareAuth.AuthRequired())
 	{
-		privateRouter.GET("/test", func(c *gin.Context) {
-			c.JSON(200, gin.H{"test": "ok"})
-		})
+		appRouter.POST("/", appHandler.CreateApp)
 	}
 
 	router.Run(env.Get("PORT"))
