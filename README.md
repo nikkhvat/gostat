@@ -2,7 +2,7 @@
 
 gostat is a microservice-based application for handling HTTP requests authentication and stats. It consists of the following main microservices:
 
-- `api_service`: This microservice is responsible for handling HTTP requests and interacting with other services. (Api Getway)
+- `api_service`: This microservice is responsible for handling HTTP requests and interacting with other services. (Api GateWay)
 - `auth_service`: This microservice provides authentication functionality.
 - `stat_service`: This microservice provides statistics functionality.
 - `app_service`: This microservice provides functionality for working with added applications
