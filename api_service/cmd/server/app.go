@@ -76,12 +76,11 @@ func main() {
 			publicStatsRouter.PUT("/visit/extend", statsHandler.VisitExtend)
 		}
 
-		// privateStatsRouter := statsRouter.Group("/get")
-		// privateStatsRouter.Use(middlewareAuth.AuthRequired())
-		// {
-		// 	privateStatsRouter.GET("/visits", h.GetVisits)
-		// 	privateStatsRouter.GET("/links", h.GetLinks)
-		// }
+		privateStatsRouter := statsRouter.Group("/get")
+		privateStatsRouter.Use(middlewareAuth.AuthRequired())
+		{
+			privateStatsRouter.GET("/visits", statsHandler.GetVisits)
+		}
 	}
 
 	// * Apps Router

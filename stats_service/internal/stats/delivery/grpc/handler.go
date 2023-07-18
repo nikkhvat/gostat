@@ -40,3 +40,38 @@ func (h *StatsServiceHandler) VisitExtend(ctx context.Context, req *pb.VisitExte
 
 	return &pb.VisitExtendResponse{Session: req.Session}, err
 }
+
+func (h *StatsServiceHandler) GetVisits(ctx context.Context, req *pb.GetVisitsRequest) (*pb.GetVisitsResponse, error) {
+	data, err := h.service.GetVisits(req.AppId)
+
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "internal error")
+	}
+
+	pages := data.TopPages // []URLCountPair
+	ptrs := make([]*pb.URLCountPair, len(pages))
+
+	for i := range pages {
+		ptrs[i] = &pb.URLCountPair{
+			Url:   pages[i].URL,
+			Title: pages[i].Title,
+			Count: pages[i].Count,
+		}
+	}
+
+	return &pb.GetVisitsResponse{
+		Stats: &pb.SiteStats{
+			TotalVisits:    data.TotalVisits,
+			TotalBots:      data.TotalBots,
+			AvgDuration:    data.AvgDuration,
+			FirstVisits:    data.FirstVisits,
+			TopPages:       ptrs,
+			TopBrowsers:    nil,
+			TopCountries:   nil,
+			TopOs:          nil,
+			VisitsByDay:    nil,
+			TotalVisitsBot: nil,
+			VisitsByHour:   nil,
+		},
+	}, err
+}

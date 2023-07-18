@@ -7,18 +7,77 @@ option go_package = "github.com/nik19ta/gostat/proto/stats";
 service StatsService {
   rpc SetVisit (SetVisitRequest) returns (SetVisitResponse) {}
   rpc VisitExtend (VisitExtendRequest) returns (VisitExtendResponse) {}
+  rpc GetVisits (GetVisitsRequest) returns (GetVisitsResponse) {}
+}
+
+message GetVisitsRequest {
+  string app_id = 1;
+}
+
+message GetVisitsResponse {
+  SiteStats stats = 1;
+}
+
+message SiteStats {
+  int32 total_visits = 1;
+  int32 total_bots = 2;
+  int64 avg_duration = 3;
+  int32 first_visits = 4;
+  repeated URLCountPair top_pages = 5;
+  repeated BrowserCount top_browsers = 6;
+  repeated NameCountPair top_countries = 7;
+  repeated NameCountPair top_os = 8;
+  repeated DateCountPair visits_by_day = 9;
+  repeated Bot total_visits_bot = 10;
+  repeated TimeCountPair visits_by_hour = 11;
+}
+
+message URLCountPair {
+  string url = 1;
+  string title = 2;
+  int32 count = 3;
+}
+
+message DateCountPair {
+  string date = 1;
+  int32 count = 2;
+}
+
+message BrowserCount {
+  string name = 1;
+  int32 count = 2;
+}
+
+message NameCountPair {
+  string name = 1;
+  int32 count = 2;
+}
+
+message Bot {
+  string date = 1;
+  repeated Entry details = 2;
+  int32 total = 3;
+}
+
+message Entry {
+  // Specify your Entry fields here
+}
+
+message TimeCountPair {
+  string time = 1;
+  int32 count = 2;
 }
 
 message SetVisitRequest {
   string ip = 1;
-	string user_agent = 2;
-	string utm = 3;
-	string http_referer = 4;
-	string url = 5;
-	string title = 6;
-	string session = 7;
-	bool unique = 8;
-	string app_id = 9;
+  string user_agent = 2;
+  string utm = 3;
+  string http_referer = 4;
+  string url = 5;
+  string title = 6;
+  string session = 7;
+  bool unique = 8;
+  string app_id = 9;
 }
 
 message VisitExtendRequest {

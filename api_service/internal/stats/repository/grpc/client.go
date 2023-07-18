@@ -29,6 +29,10 @@ func (c *StatsClient) VisitExtend(ctx context.Context, req *stats.VisitExtendReq
 	return c.client.VisitExtend(ctx, req)
 }
 
+func (c *StatsClient) GetVisits(ctx context.Context, req *stats.GetVisitsRequest) (*stats.GetVisitsResponse, error) {
+	return c.client.GetVisits(ctx, req)
+}
+
 func (c *StatsClient) Close() error {
 	return c.conn.Close()
 }

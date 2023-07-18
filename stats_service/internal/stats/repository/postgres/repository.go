@@ -15,11 +15,11 @@ func NewStatsRepository(db *gorm.DB) StatsRepository {
 	return StatsRepository{db: db}
 }
 
-func (r StatsRepository) GetVisits() ([]model.Visits, error) {
+func (r StatsRepository) GetVisits(app_id string) ([]model.Visits, error) {
 	timeBoundary := time.Now().AddDate(0, 0, -30)
 
 	var visits []model.Visits
-	r.db.Where("time_entry > ?", timeBoundary).Find(&visits)
+	r.db.Where("time_entry > ?", timeBoundary).Where("app_id = ?", app_id).Find(&visits)
 
 	return visits, nil
 }

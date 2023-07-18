@@ -1,6 +1,7 @@
 package http
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -65,4 +66,26 @@ func (h *StatsHandler) VisitExtend(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{"message": "successfully"})
+}
+
+func (h StatsHandler) GetVisits(c *gin.Context) {
+	app := c.DefaultQuery("app", "")
+
+	if app == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "app cannot be empty"})
+		return
+	}
+
+	log.Println(app)
+
+	data, err := h.service.GetVisits(c.Request.Context(), service.GetVisitRequest{
+		AppId: app,
+	})
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.JSON(200, gin.H{"data": data})
 }

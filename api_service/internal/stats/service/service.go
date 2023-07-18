@@ -31,6 +31,10 @@ type VisitExtendRequest struct {
 	Session string `json:"session"`
 }
 
+type GetVisitRequest struct {
+	AppId string `json:"app_id"`
+}
+
 func (s *StatsService) AddVisit(ctx context.Context, req AddVisitRequest) (string, error) {
 	resp, err := s.client.AddVisit(ctx, &stats.SetVisitRequest{
 		Ip:          req.IP,
@@ -56,4 +60,12 @@ func (s *StatsService) VisitExtend(ctx context.Context, req VisitExtendRequest) 
 	})
 
 	return err
+}
+
+func (s *StatsService) GetVisits(ctx context.Context, req GetVisitRequest) (interface{}, error) {
+	data, err := s.client.GetVisits(ctx, &stats.GetVisitsRequest{
+		AppId: req.AppId,
+	})
+
+	return data, err
 }
