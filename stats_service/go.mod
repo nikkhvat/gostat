@@ -9,15 +9,15 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/mssola/useragent v1.0.0
 	google.golang.org/grpc v1.56.2
-	google.golang.org/protobuf v1.31.0
 )
 
+require google.golang.org/protobuf v1.31.0 // indirect
+
 require (
-	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/lib/pq v1.1.1 // indirect
-	golang.org/x/crypto v0.0.0-20210915214749-c084706c2272 // indirect
+	golang.org/x/crypto v0.1.0 // indirect
 	golang.org/x/net v0.9.0 // indirect
 	golang.org/x/sys v0.7.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
