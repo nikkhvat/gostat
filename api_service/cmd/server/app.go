@@ -1,8 +1,9 @@
 package main
 
 import (
-	middlewareAuth "github.com/nik19ta/gostat/api_service/middleware/auth"
 	"log"
+
+	middlewareAuth "github.com/nik19ta/gostat/api_service/middleware/auth"
 
 	gin "github.com/gin-gonic/gin"
 
@@ -28,21 +29,21 @@ func main() {
 	if err != nil {
 		log.Fatalf("❌ Failed to connect to auth service: %v", err)
 	} else {
-		log.Println("✅ Successful connect to auth service")
+		log.Println("✅ Successful connect to auth service %s", env.Get("AUTH_HOST"))
 	}
 
 	statsClient, err := statsGrpc.NewStatsClient(env.Get("STATS_HOST"))
 	if err != nil {
 		log.Fatalf("❌ Failed to connect to stats service: %v", err)
 	} else {
-		log.Println("✅ Successful connect to stats service")
+		log.Println("✅ Successful connect to stats service %s", env.Get("STATS_HOST"))
 	}
 
 	appClient, err := appGrpc.NewAppClient(env.Get("APP_HOST"))
 	if err != nil {
 		log.Fatalf("❌ Failed to connect to app service: %v", err)
 	} else {
-		log.Println("✅ Successful connect to app service")
+		log.Println("✅ Successful connect to app service %s", env.Get("APP_HOST"))
 	}
 
 	// Auth service
