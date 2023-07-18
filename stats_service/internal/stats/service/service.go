@@ -40,7 +40,7 @@ func countryDefinition(ip string) string {
 	return results.Country_short
 }
 
-func (s StatsService) SetVisits(ip, userAgent, utm, httpReferer, url, title string, session string, unique bool) (string, error) {
+func (s StatsService) SetVisits(ip, userAgent, utm, httpReferer, url, title string, session string, unique bool, appId string) (string, error) {
 	ua := useragent.New(userAgent)
 
 	var userSession string
@@ -57,14 +57,16 @@ func (s StatsService) SetVisits(ip, userAgent, utm, httpReferer, url, title stri
 
 	ua.Model()
 
+	timeNow := time.Now()
+
 	data := model.Visits{
 		UId:         uuid.New().String(),
 		Session:     userSession,
-		TimeEntry:   time.Now(),
+		TimeEntry:   timeNow,
 		Browser:     browserName,
 		Platform:    ua.Platform(),
 		Os:          ua.OS(),
-		TimeLeaving: time.Now(),
+		TimeLeaving: timeNow,
 		Country:     country,
 		Unique:      unique,
 		Ip:          ip,
@@ -72,7 +74,7 @@ func (s StatsService) SetVisits(ip, userAgent, utm, httpReferer, url, title stri
 		URL:         url,
 		Title:       title,
 		HTTPReferer: httpReferer,
-		AppId:       "APP_ID_TEMP", // ! REMOVE APP_ID_TEMP when make app_service
+		AppId:       appId,
 	}
 
 	err := s.repo.AddVisit(data)

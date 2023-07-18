@@ -24,6 +24,7 @@ type AddVisitRequest struct {
 	Title       string `json:"title"`
 	Session     string `json:"session"`
 	Unique      bool   `json:"unique"`
+	AppId       string `json:"appId"`
 }
 
 type VisitExtendRequest struct {
@@ -40,6 +41,7 @@ func (s *StatsService) AddVisit(ctx context.Context, req AddVisitRequest) (strin
 		Title:       req.Title,
 		Session:     req.Session,
 		Unique:      req.Unique,
+		AppId:       req.AppId,
 	})
 
 	if err != nil {

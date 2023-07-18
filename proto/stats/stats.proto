@@ -18,6 +18,7 @@ message SetVisitRequest {
 	string title = 6;
 	string session = 7;
 	bool unique = 8;
+	string app_id = 9;
 }
 
 message VisitExtendRequest {

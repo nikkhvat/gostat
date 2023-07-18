@@ -21,6 +21,11 @@ func (h *StatsHandler) SetVisit(c *gin.Context) {
 	url := c.DefaultQuery("url", "/")
 	title := c.DefaultQuery("title", "untitled")
 	session := c.DefaultQuery("session", "")
+	appId := c.DefaultQuery("app_id", "")
+
+	if appId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "app id cannot be empty"})
+	}
 
 	unique := un == "1"
 
@@ -36,6 +41,7 @@ func (h *StatsHandler) SetVisit(c *gin.Context) {
 		Title:       title,
 		Session:     session,
 		Unique:      unique,
+		AppId:       appId,
 	})
 
 	if err != nil {

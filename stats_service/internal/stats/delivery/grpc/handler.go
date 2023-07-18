@@ -22,7 +22,7 @@ func NewAuthServiceHandler(s service.StatsService) *StatsServiceHandler {
 
 func (h *StatsServiceHandler) SetVisit(ctx context.Context, req *pb.SetVisitRequest) (*pb.SetVisitResponse, error) {
 	session, err := h.service.SetVisits(req.Ip, req.UserAgent, req.Utm, req.HttpReferer,
-		req.Url, req.Title, req.Session, req.Unique)
+		req.Url, req.Title, req.Session, req.Unique, req.AppId)
 
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "internal error")
