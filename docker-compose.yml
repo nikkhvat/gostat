@@ -1,18 +1,5 @@
 version: '3.8'
 services:
-  auth_service:
-    build: ./auth_service
-    ports:
-      - 50051:50051
-    volumes:
-      - ./auth_service/.env:/app/.env
-    depends_on:
-      db:
-        condition: service_healthy
-    environment:
-      - DB_HOST=db
-      - DB_PASSWORD=password
-
   api_service:
     build: ./api_service
     ports:
@@ -23,9 +10,28 @@ services:
       db:
         condition: service_healthy
     environment:
+      - PORT=:8080
       - AUTH_HOST=auth_service:50051
       - STATS_HOST=stats_service:50050
       - APP_HOST=app_service:50052
+      - GIN_MODE=release
+
+  auth_service:
+    build: ./auth_service
+    ports:
+      - 50051:50051
+    volumes:
+      - ./auth_service/.env:/app/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - PORT=:50051
+      - DB_HOST=db
+      - DB_USER=author
+      - DB_PASSWORD=password
+      - DB_NAME=gostat_auth_service
+      - DB_SSLMODE=disable
 
   stats_service:
     build: ./stats_service
@@ -37,8 +43,12 @@ services:
       db:
         condition: service_healthy
     environment:
+      - PORT=:50050
       - DB_HOST=db
+      - DB_USER=author
       - DB_PASSWORD=password
+      - DB_NAME=gostat_stats_service
+      - DB_SSLMODE=disable
 
   app_service:
     build: ./app_service
@@ -50,8 +60,12 @@ services:
       db:
         condition: service_healthy
     environment:
+      - PORT=:50052
       - DB_HOST=db
+      - DB_USER=author
       - DB_PASSWORD=password
+      - DB_NAME=gostat_app_service
+      - DB_SSLMODE=disable
 
   db:
     image: postgres:13-alpine
@@ -62,7 +76,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: statsdb
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./deploy/init.sql:/docker-entrypoint-initdb.d/init.sql
       - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
