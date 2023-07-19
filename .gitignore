@@ -1,6 +1,5 @@
 # For build
 build
-app
 
 # For .env files
 .env

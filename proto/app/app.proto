@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package app;
+
+option go_package = "github.com/nik19ta/gostat/proto/app";
+
+service AppService {
+  rpc CreateApp (CreateAppRequest) returns (CreateAppResponse) {}
+  rpc GetApp (GetAppRequest) returns (GetAppResponse) {}
+  rpc GetAppsByUserId (GetAppsByUserIdRequest) returns (GetAppsByUserIdResponse) {}
+}
+
+// CreateApp
+message CreateAppRequest {
+  string name = 1;
+  string url = 2;
+  uint64 user_id = 3;
+}
+
+message CreateAppResponse {
+  string app_id = 1;
+}
+
+// GetApp
+message GetAppRequest {
+  string id = 1;
+  string user_id = 2;
+}
+
+message GetAppResponse {
+  string id = 1;
+  string user_id = 2;
+  string image = 3;
+  string name = 4;
+  string url = 5;
+  string created_at = 6;
+}
+
+// * GetAppsByUserId
+message GetAppsByUserIdRequest {
+  string user_id = 1;
+}
+
+message GetAppsByUserIdResponse {
+  repeated GetAppResponse apps = 1;
+}
