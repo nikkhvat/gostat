@@ -21,7 +21,7 @@ func main() {
 	user := env.Get("DB_USER")
 	dbname := env.Get("DB_NAME")
 	password := env.Get("DB_PASSWORD")
-	sslMode := env.Get("DB_SSL_MODE")
+	sslMode := env.Get("DB_SSLMODE")
 
 	dsn := fmt.Sprintf("host=%s user=%s dbname=%s password=%s sslmode=%s", host, user, dbname, password, sslMode)
 

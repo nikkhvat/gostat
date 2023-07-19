@@ -34,5 +34,9 @@ start:
 	make generate_proto
 	docker-compose up --build -d
 
+start_with_out_backgroud:
+	make generate_proto
+	docker-compose up --build
+
 stop:
 	docker compose down
