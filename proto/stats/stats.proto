@@ -60,7 +60,8 @@ message Bot {
 }
 
 message Entry {
-  // Specify your Entry fields here
+  string name = 1;
+  int32 count = 2;
 }
 
 message TimeCountPair {

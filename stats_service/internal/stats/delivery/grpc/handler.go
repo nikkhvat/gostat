@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"context"
+	"log"
 
 	"github.com/nik19ta/gostat/stats_service/internal/stats/service"
 	pb "github.com/nik19ta/gostat/stats_service/proto/stats"
@@ -48,16 +49,100 @@ func (h *StatsServiceHandler) GetVisits(ctx context.Context, req *pb.GetVisitsRe
 		return nil, status.Errorf(codes.Internal, "internal error")
 	}
 
+	// * convertedPages data.TopPages
 	pages := data.TopPages // []URLCountPair
-	ptrs := make([]*pb.URLCountPair, len(pages))
+	convertedPages := make([]*pb.URLCountPair, len(pages))
 
 	for i := range pages {
-		ptrs[i] = &pb.URLCountPair{
+		convertedPages[i] = &pb.URLCountPair{
 			Url:   pages[i].URL,
 			Title: pages[i].Title,
 			Count: pages[i].Count,
 		}
 	}
+
+	// * convertedTopBrowsers data.TopBrowsers
+	browsers := data.TopBrowsers
+	convertedTopBrowsers := make([]*pb.BrowserCount, len(browsers))
+
+	for i := range browsers {
+		convertedTopBrowsers[i] = &pb.BrowserCount{
+			Name:  browsers[i].Name,
+			Count: browsers[i].Count,
+		}
+	}
+
+	// * convertedTopCountries data.TopCountries
+	countries := data.TopCountries
+	convertedTopCountries := make([]*pb.NameCountPair, len(countries))
+
+	for i := range countries {
+		convertedTopCountries[i] = &pb.NameCountPair{
+			Name:  countries[i].Name,
+			Count: int32(countries[i].Count),
+		}
+	}
+
+	// * convertedTopOs data.TopOs
+	os := data.TopOS
+	convertedTopOs := make([]*pb.NameCountPair, len(os))
+
+	for i := range os {
+		convertedTopOs[i] = &pb.NameCountPair{
+			Name:  os[i].Name,
+			Count: int32(os[i].Count),
+		}
+	}
+
+	//* convertedDayVisits data.VisitsByDay
+	dayVisits := data.FirstVisitsByDay
+	convertedDayVisits := make([]*pb.DateCountPair, len(dayVisits))
+
+	//log.Println("dayVisits", dayVisits)
+
+	for i := range dayVisits {
+		convertedDayVisits[i] = &pb.DateCountPair{
+			Date:  dayVisits[i].Date,
+			Count: dayVisits[i].Count,
+		}
+	}
+
+	// * convertedBotDayVisits data.VisitsBotByDay
+	dayBotVisits := data.VisitsBotByDay
+	convertedBotDayVisits := make([]*pb.Bot, len(dayBotVisits))
+
+	for i := range dayBotVisits {
+		var details []*pb.Entry
+
+		for j := range dayBotVisits[i].Details {
+			log.Println(dayBotVisits[i].Details[j].Name)
+			details = append(details, &pb.Entry{
+				Count: dayBotVisits[i].Details[j].Count,
+				Name:  dayBotVisits[i].Details[j].Name,
+			})
+		}
+
+		convertedBotDayVisits[i] = &pb.Bot{
+			Date:    dayBotVisits[i].Date,
+			Details: details,
+			Total:   dayBotVisits[i].Total,
+		}
+	}
+
+	// date.VisitsByHour
+	VisitsByHour := data.VisitsByHour
+	convertedVisitsByHour := make([]*pb.TimeCountPair, len(VisitsByHour))
+
+	for i := range VisitsByHour {
+		convertedVisitsByHour[i] = &pb.TimeCountPair{
+			Time:  VisitsByHour[i].Time,
+			Count: VisitsByHour[i].Count,
+		}
+	}
+
+	log.Println("convertedDayVisits", convertedDayVisits)
+	log.Println("convertedBotDayVisits", convertedBotDayVisits)
+	log.Println("convertedVisitsByHour", convertedVisitsByHour)
 
 	return &pb.GetVisitsResponse{
 		Stats: &pb.SiteStats{
@@ -65,13 +150,13 @@ func (h *StatsServiceHandler) GetVisits(ctx context.Context, req *pb.GetVisitsRe
 			TotalBots:      data.TotalBots,
 			AvgDuration:    data.AvgDuration,
 			FirstVisits:    data.FirstVisits,
-			TopPages:       ptrs,
-			TopBrowsers:    nil,
-			TopCountries:   nil,
-			TopOs:          nil,
-			VisitsByDay:    nil,
-			TotalVisitsBot: nil,
-			VisitsByHour:   nil,
+			TopPages:       convertedPages,
+			TopBrowsers:    convertedTopBrowsers,
+			TopCountries:   convertedTopCountries,
+			TopOs:          convertedTopOs,
+			VisitsByDay:    convertedDayVisits,
+			TotalVisitsBot: convertedBotDayVisits,
+			VisitsByHour:   convertedVisitsByHour,
 		},
 	}, err
 }
