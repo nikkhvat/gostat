@@ -12,6 +12,7 @@ import (
 
 	"github.com/nik19ta/gostat/stats_service/internal/stats/model"
 	"github.com/nik19ta/gostat/stats_service/internal/stats/repository/postgres"
+	"github.com/nik19ta/gostat/stats_service/pkg/env"
 )
 
 type StatsService struct {
@@ -27,7 +28,7 @@ func countryDefinition(ip string) string {
 		return "-"
 	}
 
-	db, err := ip2location.OpenDB("")
+	db, err := ip2location.OpenDB(env.Get("IP_DATABASE_PATH"))
 
 	if err != nil {
 		return "-"
