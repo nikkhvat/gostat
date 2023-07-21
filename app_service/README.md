@@ -16,7 +16,7 @@ DB_HOST="db"  # for connect to the database
 DB_USER="author"  # for connect to the database
 DB_NAME="gostat_app_service"  # for connect to the database
 DB_PASSWORD="password"  # for connect to the database
-DB_SSL_MODE="disable"  # for connect to the database
+DB_SSLMODE="disable"  # for connect to the database
 
 ```
 
