@@ -22,7 +22,6 @@ All microservices are written in GoLang and communicate with each other using `g
 
 To run gostat locally (macos/linux), you need to have the following installed:
 
-- PostgreSQL (version 14.8)
 - Docker / Docker Compose
 
 ## Run 
