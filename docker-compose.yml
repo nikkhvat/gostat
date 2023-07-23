@@ -18,8 +18,6 @@ services:
 
   auth_service:
     build: ./auth_service
-    ports:
-      - 50051:50051
     volumes:
       - ./auth_service/.env:/app/.env
     depends_on:
@@ -35,8 +33,6 @@ services:
 
   stats_service:
     build: ./stats_service
-    ports:
-      - 50050:50050
     volumes:
       - ./stats_service/.env:/app/.env
     depends_on:
@@ -52,8 +48,6 @@ services:
 
   app_service:
     build: ./app_service
-    ports:
-      - 50052:50052
     volumes:
       - ./app_service/.env:/app/.env
     depends_on:
@@ -69,8 +63,6 @@ services:
 
   db:
     image: postgres:13-alpine
-    ports:
-      - 5433:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres

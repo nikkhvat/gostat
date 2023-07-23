@@ -30,13 +30,45 @@ generate_proto:
 	make generate_proto_stats_service
 	make generate_proto_app_service
 
+stop_api_service:
+	docker-compose stop api_service
+	docker-compose rm -f api_service
+
+stop_auth_service:
+	docker-compose stop auth_service
+	docker-compose rm -f auth_service
+
+stop_stats_service:
+	docker-compose stop stats_service
+	docker-compose rm -f stats_service
+
+stop_app_service:
+	docker-compose stop app_service
+	docker-compose rm -f app_service
+
+stop_db:
+	docker-compose stop db
+	docker-compose rm -f db
+
+stop:
+	make stop_api_service
+	make stop_auth_service
+	make stop_stats_service
+	make stop_app_service
+	make stop_db
+
 start:
-	make generate_proto
+	cp -r ./proto ./api_service/proto
+	cp -r ./proto ./auth_service/proto
+	cp -r ./proto ./stats_service/proto
+	cp -r ./proto ./app_service/proto
+
 	docker-compose up --build -d
 
 start_with_out_backgroud:
-	make generate_proto
-	docker-compose up --build
+	cp -r ./proto ./api_service/proto
+	cp -r ./proto ./auth_service/proto
+	cp -r ./proto ./stats_service/proto
+	cp -r ./proto ./app_service/proto
 
-stop:
-	docker compose down
+	docker-compose up --build
