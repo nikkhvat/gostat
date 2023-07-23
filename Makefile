@@ -4,6 +4,12 @@ delete_proto_files:
 	rm -rf stats_service/proto
 	rm -rf app_service/proto
 
+copy_proto_files:
+	cp -r ./proto ./api_service/proto
+	cp -r ./proto ./auth_service/proto
+	cp -r ./proto ./stats_service/proto
+	cp -r ./proto ./app_service/proto
+
 generate_proto_api_service:
 	mkdir api_service/proto
 	protoc --go_out=./api_service --go_opt=paths=source_relative --go-grpc_out=./api_service --go-grpc_opt=paths=source_relative proto/auth/auth.proto
@@ -58,17 +64,13 @@ stop:
 	make stop_db
 
 start:
-	cp -r ./proto ./api_service/proto
-	cp -r ./proto ./auth_service/proto
-	cp -r ./proto ./stats_service/proto
-	cp -r ./proto ./app_service/proto
-
+	make delete_proto_files
+	make copy_proto_files
+	
 	docker-compose up --build -d
 
 start_with_out_backgroud:
-	cp -r ./proto ./api_service/proto
-	cp -r ./proto ./auth_service/proto
-	cp -r ./proto ./stats_service/proto
-	cp -r ./proto ./app_service/proto
+	make delete_proto_files
+	make copy_proto_files
 
 	docker-compose up --build
