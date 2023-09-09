@@ -1,0 +1,24 @@
+
+.menu {
+  padding: 20px;
+  background-color: var(--block-backgroud-color);
+  border-radius: 15px;
+}
+
+.logo {
+  cursor: pointer;
+}
+
+
+.list {
+  margin-top: 30px;
+}
+
+.list__item {
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.item_icon {
+  cursor: pointer;
+}
