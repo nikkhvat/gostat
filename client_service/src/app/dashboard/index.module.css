@@ -1,0 +1,16 @@
+
+.page {
+  background-color: var(--backgroud-color);
+  min-height: 100vh;
+  min-width: 100vw;
+
+  padding: var(--page-padding);
+
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.content {
+  width: 100%;
+}
