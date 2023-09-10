@@ -11,9 +11,10 @@ services:
         condition: service_healthy
     environment:
       - PORT=:8080
-      - AUTH_HOST=auth_service:50051
       - STATS_HOST=stats_service:50050
+      - AUTH_HOST=auth_service:50051
       - APP_HOST=app_service:50052
+      - MAIL_HOST=auth_service:50053
       - GIN_MODE=release
 
   auth_service:
@@ -60,7 +61,14 @@ services:
       - DB_PASSWORD=password
       - DB_NAME=gostat_app_service
       - DB_SSLMODE=disable
-
+  
+  mail_service:
+    build: ./mail_service
+    volumes:
+      - ./app_service/.env:/app/.env
+    environment:
+      - PORT=:50053
+      
   db:
     image: postgres:13-alpine
     environment:

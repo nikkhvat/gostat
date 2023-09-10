@@ -9,6 +9,7 @@ import (
 
 	appGrpc "github.com/nik19ta/gostat/api_service/internal/app/repository/grpc"
 	authGrpc "github.com/nik19ta/gostat/api_service/internal/auth/repository/grpc"
+	mailGrpc "github.com/nik19ta/gostat/api_service/internal/mail/repository/grpc"
 	statsGrpc "github.com/nik19ta/gostat/api_service/internal/stats/repository/grpc"
 
 	appHttp "github.com/nik19ta/gostat/api_service/internal/app/delivery/http"
@@ -29,25 +30,32 @@ func main() {
 	if err != nil {
 		log.Fatalf("❌ Failed to connect to auth service: %v", err)
 	} else {
-		log.Println("✅ Successful connect to auth service %s", env.Get("AUTH_HOST"))
+		log.Println("✅ Successful connect to auth service: %s", env.Get("AUTH_HOST"))
 	}
 
 	statsClient, err := statsGrpc.NewStatsClient(env.Get("STATS_HOST"))
 	if err != nil {
 		log.Fatalf("❌ Failed to connect to stats service: %v", err)
 	} else {
-		log.Println("✅ Successful connect to stats service %s", env.Get("STATS_HOST"))
+		log.Println("✅ Successful connect to stats service: %s", env.Get("STATS_HOST"))
 	}
 
 	appClient, err := appGrpc.NewAppClient(env.Get("APP_HOST"))
 	if err != nil {
 		log.Fatalf("❌ Failed to connect to app service: %v", err)
 	} else {
-		log.Println("✅ Successful connect to app service %s", env.Get("APP_HOST"))
+		log.Println("✅ Successful connect to app service: %s", env.Get("APP_HOST"))
+	}
+
+	mailClient, err := mailGrpc.NewMailClient(env.Get("MAIL_HOST"))
+	if err != nil {
+		log.Fatalf("❌ Failed to connect to mail service: %v", err)
+	} else {
+		log.Println("✅ Successful connect to mail service: %s", env.Get("APP_HOST"))
 	}
 
 	// Auth service
-	newAuthService := authService.NewAuthService(authClient)
+	newAuthService := authService.NewAuthService(authClient, mailClient)
 	authHandler := authHttp.NewAuthHandler(newAuthService)
 
 	// Stats service

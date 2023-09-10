@@ -1,6 +1,8 @@
 package http
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nik19ta/gostat/api_service/internal/auth/service"
 )
@@ -45,7 +47,6 @@ func (h *AuthHandler) Registration(c *gin.Context) {
 
 	token, err := h.service.Registration(c.Request.Context(), req)
 	if err != nil {
-
 		if err.Error() == "rpc error: code = AlreadyExists desc = User with the same email already exists" {
 			c.JSON(409, gin.H{"error": "User with the same email already exists"})
 			return
@@ -56,9 +57,21 @@ func (h *AuthHandler) Registration(c *gin.Context) {
 			return
 		}
 
-		c.JSON(500, gin.H{"error": err.Error()})
+		if err.Error() == "duplicate key value violates unique constraint uix_users_email" {
+			c.JSON(409, gin.H{"error": "duplicate key value violates unique constraint uix_users_email"})
+			return
+		}
+
+		if err.Error() == "duplicate key value violates unique constraint uix_users_login" {
+			c.JSON(409, gin.H{"error": "duplicate key value violates unique constraint uix_users_login"})
+			return
+		}
+
+		c.JSON(400, gin.H{"error": "any error"})
 		return
 	}
 
-	c.JSON(200, gin.H{"token": token})
+	log.Println(err)
+
+	c.JSON(200, gin.H{"token": *token})
 }

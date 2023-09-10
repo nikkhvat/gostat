@@ -34,11 +34,14 @@ func (h *AuthServiceHandler) Login(ctx context.Context, req *pb.LoginRequest) (*
 }
 
 func (h *AuthServiceHandler) Registration(ctx context.Context, req *pb.RegistrationRequest) (*pb.RegistrationResponse, error) {
-	token, err := h.service.Registration(req.Login, req.Mail, req.Password,
+	credentials, err := h.service.Registration(req.Login, req.Mail, req.Password,
 		req.FirstName, req.LastName, req.MiddleName)
 
-	if err != nil {
+	if credentials.Status != true {
+		return &pb.RegistrationResponse{Status: false, Text: credentials.Text}, err
+	}
 
+	if err != nil {
 		if err.Error() == "pq: duplicate key value violates unique constraint \"uix_users_email\"" {
 			return nil, status.Errorf(codes.AlreadyExists, "User with the same email already exists")
 		}
@@ -50,5 +53,5 @@ func (h *AuthServiceHandler) Registration(ctx context.Context, req *pb.Registrat
 		return nil, status.Errorf(codes.Internal, "internal error")
 	}
 
-	return &pb.RegistrationResponse{Token: token}, err
+	return &pb.RegistrationResponse{Token: credentials.Token, Code: credentials.ConfirmCode, Status: true}, err
 }

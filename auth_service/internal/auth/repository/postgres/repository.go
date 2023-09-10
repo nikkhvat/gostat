@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	"github.com/nik19ta/gostat/auth_service/internal/auth/model"
 )
@@ -22,17 +23,20 @@ func (r UserRepository) GetUserByLoginAndPassword(login, password string) (model
 }
 
 func (r UserRepository) RegistrationUser(login, mail, password, firstName, lastName, middleName string) (model.User, error) {
+
 	user := model.User{
-		Email:      mail,
-		Login:      login,
-		Password:   password,
-		FirstName:  firstName,
-		LastName:   lastName,
-		MiddleName: middleName,
+		Email:            mail,
+		Login:            login,
+		Password:         password,
+		FirstName:        firstName,
+		LastName:         lastName,
+		MiddleName:       middleName,
+		Code:             uuid.New().String(),
+		AccountConfirmed: false,
 	}
 
 	if err := r.db.Create(&user).Error; err != nil {
-		return model.User{}, err
+		return user, err
 	}
 
 	return user, nil

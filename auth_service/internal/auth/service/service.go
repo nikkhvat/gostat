@@ -1,6 +1,8 @@
 package service
 
 import (
+	"strings"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/nik19ta/gostat/auth_service/internal/auth/repository/postgres"
 	"github.com/nik19ta/gostat/auth_service/pkg/env"
@@ -28,19 +30,45 @@ func (s AuthService) Authenticate(login, password string) (string, error) {
 	return token, nil
 }
 
-func (s AuthService) Registration(login, mail, password, firstName, lastName, middleName string) (string, error) {
+type RegResponse struct {
+	Token       string
+	ConfirmCode string
+	Status      bool
+	Text        string
+}
+
+func (s AuthService) Registration(login, mail, password, firstName, lastName, middleName string) (*RegResponse, error) {
 	user, err := s.repo.RegistrationUser(login, mail, password, firstName, lastName, middleName)
 
 	if err != nil {
-		return "", err
+		if strings.Contains(err.Error(), "uix_users_email") {
+			return &RegResponse{
+				Status: false,
+				Text:   "duplicate key value violates unique constraint uix_users_email",
+			}, nil
+		} else if strings.Contains(err.Error(), "uix_users_login") {
+			return &RegResponse{
+				Status: false,
+				Text:   "duplicate key value violates unique constraint uix_users_login",
+			}, nil
+		} else {
+			return &RegResponse{
+				Status: false,
+				Text:   "any error",
+			}, nil
+		}
 	}
 
-	token, err := generateToken(user.ID, user.Login)
-	if err != nil {
-		return "", err
+	token, tokenErr := generateToken(user.ID, user.Login)
+
+	if tokenErr != nil {
+		return &RegResponse{
+			Status: false,
+			Text:   "create token error",
+		}, nil
 	}
 
-	return token, nil
+	return &RegResponse{Token: token, ConfirmCode: user.Code, Status: true}, nil
 }
 
 func generateToken(userID uint, login string) (string, error) {
