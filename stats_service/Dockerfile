@@ -12,7 +12,7 @@ COPY . .
 RUN unset GOBIN && go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.27.1
 RUN unset GOBIN && go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1.0
 
-RUN protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative proto/stats/stats.proto
+RUN protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative proto/stats/service.proto
 RUN go build -ldflags="-s -w" -o /app/app cmd/api_stats/app.go
 
 

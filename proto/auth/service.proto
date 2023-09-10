@@ -29,4 +29,7 @@ message LoginResponse {
 
 message RegistrationResponse {
   string token = 1;
+  string code = 2;
+  bool status = 3;
+  string text = 4;
 }

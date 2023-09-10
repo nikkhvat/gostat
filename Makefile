@@ -1,76 +1,61 @@
+# * Proto Generation
+# services with proto
+SERVICES := api_service auth_service stats_service app_service mail_service
+# all proto dirs
+PROTO_DIRS := auth stats app mail
+
 delete_proto_files:
-	rm -rf api_service/proto
-	rm -rf auth_service/proto
-	rm -rf stats_service/proto
-	rm -rf app_service/proto
+	for svc in $(SERVICES); do \
+		rm -rf $$svc/proto; \
+	done
 
 copy_proto_files:
-	cp -r ./proto ./api_service/proto
-	cp -r ./proto ./auth_service/proto
-	cp -r ./proto ./stats_service/proto
-	cp -r ./proto ./app_service/proto
+	make delete_proto_files
+	for svc in $(SERVICES); do \
+		cp -r ./proto $$svc/proto; \
+	done
+
+generate_proto_services:
+	for svc in $(filter-out api_service,$(SERVICES)); do \
+		mkdir -p $$svc/proto; \
+		proto_dir=$$(echo $$svc | sed -e 's/_service//'); \
+		protoc --go_out=$$svc --go_opt=paths=source_relative --go-grpc_out=$$svc --go-grpc_opt=paths=source_relative proto/$$proto_dir/service.proto; \
+	done
 
 generate_proto_api_service:
-	mkdir api_service/proto
-	protoc --go_out=./api_service --go_opt=paths=source_relative --go-grpc_out=./api_service --go-grpc_opt=paths=source_relative proto/auth/auth.proto
-	protoc --go_out=./api_service --go_opt=paths=source_relative --go-grpc_out=./api_service --go-grpc_opt=paths=source_relative proto/stats/stats.proto
-	protoc --go_out=./api_service --go_opt=paths=source_relative --go-grpc_out=./api_service --go-grpc_opt=paths=source_relative proto/app/app.proto
+	mkdir -p api_service/proto; \
+	for proto_dir in $(PROTO_DIRS); do \
+		protoc --go_out=./api_service --go_opt=paths=source_relative --go-grpc_out=./api_service --go-grpc_opt=paths=source_relative proto/$$proto_dir/service.proto; \
+	done
 
-generate_proto_auth_service:
-	mkdir auth_service/proto
-	protoc --go_out=./auth_service --go_opt=paths=source_relative --go-grpc_out=./auth_service --go-grpc_opt=paths=source_relative proto/auth/auth.proto
+generate_proto: delete_proto_files generate_proto_services generate_proto_api_service
 
-generate_proto_stats_service:
-	mkdir stats_service/proto
-	protoc --go_out=./stats_service --go_opt=paths=source_relative --go-grpc_out=./stats_service --go-grpc_opt=paths=source_relative proto/stats/stats.proto
+# * Docker
+DOCKER_SERVICES := api_service auth_service stats_service app_service mail_service db
 
-generate_proto_app_service:
-	mkdir app_service/proto
-	protoc --go_out=./app_service --go_opt=paths=source_relative --go-grpc_out=./app_service --go-grpc_opt=paths=source_relative proto/app/app.proto
+define stop_service
+	@docker-compose stop $(1)
+	@docker-compose rm -f $(1)
+endef
 
-generate_proto:
-	make delete_proto_files
+define start_service
+	@docker-compose up --build -d $(1)
+endef
 
-	make generate_proto_api_service
-	make generate_proto_auth_service
-	make generate_proto_stats_service
-	make generate_proto_app_service
+stop_%:
+	$(call stop_service,$*)
 
-stop_api_service:
-	docker-compose stop api_service
-	docker-compose rm -f api_service
+start_%:
+	$(call start_service,$*)
 
-stop_auth_service:
-	docker-compose stop auth_service
-	docker-compose rm -f auth_service
-
-stop_stats_service:
-	docker-compose stop stats_service
-	docker-compose rm -f stats_service
-
-stop_app_service:
-	docker-compose stop app_service
-	docker-compose rm -f app_service
-
-stop_db:
-	docker-compose stop db
-	docker-compose rm -f db
-
-stop:
-	make stop_api_service
-	make stop_auth_service
-	make stop_stats_service
-	make stop_app_service
-	make stop_db
+stop: $(foreach service,$(DOCKER_SERVICES),stop_$(service))
 
 start:
 	make delete_proto_files
 	make copy_proto_files
-	
 	docker-compose up --build -d
 
 start_with_out_backgroud:
 	make delete_proto_files
 	make copy_proto_files
-
 	docker-compose up --build

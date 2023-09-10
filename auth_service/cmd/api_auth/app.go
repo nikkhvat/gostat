@@ -27,7 +27,7 @@ func main() {
 
 	db, err := gorm.Open("postgres", dsn)
 	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
+		log.Fatalf("failed to connect to database: %v", err)
 	}
 	defer db.Close()
 
@@ -46,7 +46,7 @@ func main() {
 	s := grpc.NewServer()
 	pb.RegisterAuthServiceServer(s, authHandler)
 
-	log.Printf("Server is running on port %s", env.Get("PORT"))
+	log.Printf("server is running on port %s", env.Get("PORT"))
 
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

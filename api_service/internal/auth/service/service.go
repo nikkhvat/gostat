@@ -2,17 +2,24 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	"github.com/nik19ta/gostat/api_service/internal/auth/repository/grpc"
-	"github.com/nik19ta/gostat/api_service/proto/auth"
+	grpcMail "github.com/nik19ta/gostat/api_service/internal/mail/repository/grpc"
+	auth "github.com/nik19ta/gostat/api_service/proto/auth"
+	mail "github.com/nik19ta/gostat/api_service/proto/mail"
 )
 
 type AuthService struct {
-	client *grpc.AuthClient
+	client     *grpc.AuthClient
+	mailClient *grpcMail.MailClient
 }
 
-func NewAuthService(client *grpc.AuthClient) *AuthService {
-	return &AuthService{client: client}
+func NewAuthService(client *grpc.AuthClient, mailClient *grpcMail.MailClient) *AuthService {
+	return &AuthService{
+		client:     client,
+		mailClient: mailClient,
+	}
 }
 
 type LoginRequest struct {
@@ -40,7 +47,7 @@ func (s *AuthService) Login(ctx context.Context, req LoginRequest) (string, erro
 	return resp.GetToken(), nil
 }
 
-func (s *AuthService) Registration(ctx context.Context, req RegistrationRequest) (string, error) {
+func (s *AuthService) Registration(ctx context.Context, req RegistrationRequest) (*string, error) {
 	resp, err := s.client.Registration(ctx, &auth.RegistrationRequest{
 		Login:      req.Login,
 		Mail:       req.Mail,
@@ -50,8 +57,26 @@ func (s *AuthService) Registration(ctx context.Context, req RegistrationRequest)
 		MiddleName: req.MiddleName,
 	})
 
-	if err != nil {
-		return "", err
+	if resp.Status != true {
+		return nil, errors.New(resp.Text)
 	}
-	return resp.GetToken(), nil
+
+	mailStatus, err := s.mailClient.SendMail(ctx, &mail.SendMailRequest{
+		Email:      req.Mail,
+		FirstName:  req.FirstName,
+		SecondName: req.LastName,
+		SecretCode: resp.GetCode(),
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if mailStatus.Status != true {
+		return nil, errors.New("error send email")
+	}
+
+	token := resp.GetToken()
+
+	return &token, nil
 }

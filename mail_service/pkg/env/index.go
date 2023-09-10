@@ -13,7 +13,7 @@ var doOnce sync.Once
 func Load() {
 	doOnce.Do(func() {
 		if err := godotenv.Load(); err != nil {
-			log.Print("no .env file found")
+			log.Print("No .env file found")
 		}
 	})
 }
