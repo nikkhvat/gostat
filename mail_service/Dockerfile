@@ -2,12 +2,11 @@ FROM golang:alpine AS builder
 
 RUN apk update --no-cache && apk add --no-cache tzdata protobuf
 
-
 WORKDIR /build
-COPY go.mod .
-COPY go.sum .
-RUN go mod download
 
+ADD go.mod .
+ADD go.sum .
+RUN go mod download
 COPY . .
 
 RUN unset GOBIN && go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.27.1
