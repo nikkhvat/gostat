@@ -1,5 +1,12 @@
 version: '3.8'
 services:
+  client:
+    build: ./client_service
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_BACKEND_HOST=https://gostat.app
+
   api_service:
     build: ./api_service
     ports:
