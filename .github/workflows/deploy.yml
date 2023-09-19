@@ -13,9 +13,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Setup SSH and known_hosts
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
     - name: Deploy to Server
       run: |
-        ssh-keyscan ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-        ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "cd ~/gostat; git pull; make stop; make start"
+        ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "cd /home/nikkhvat/gostat; git pull; make stop; make start"
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
