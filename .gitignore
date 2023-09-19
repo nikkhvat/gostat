@@ -1,33 +1,26 @@
-# For build
-build
-
-# For .env files
+# .env file
 .env
-.env.prod
-.env.dev
 
-# for proto files
+# proto files
 /api_service/proto/*
 /auth_service/proto/*
 /stats_service/proto/*
 /app_service/proto/*
 /mail_service/proto/*
 
-# For GoLand
+# for goLand
 .idea
 
-# Ip Database
+# ip database
 IP_DATABASE.BIN
 DATABASE.BIN
 
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# see https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
 node_modules
 /.pnp
 .pnp.js
-
-
 
 # testing
 coverage
