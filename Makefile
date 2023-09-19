@@ -53,7 +53,7 @@ stop:
 
 start:
 	@if [ -f ./.env ]; then \
-		ENV_FILE="./config/.env"; \
+		ENV_FILE="./.env"; \
 	else \
 		ENV_FILE="./config/.env.prod"; \
 	fi; \
