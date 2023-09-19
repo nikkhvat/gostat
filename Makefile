@@ -48,14 +48,15 @@ stop_%:
 start_%:
 	$(call start_service,$*)
 
-stop: $(foreach service,$(DOCKER_SERVICES),stop_$(service))
+stop: 
+	docker-compose --env-file ./config/.env.prod down
 
 start:
 	make delete_proto_files
 	make copy_proto_files
-	docker-compose up --build -d
+	docker-compose --env-file ./config/.env.prod up --build -d
 
-start_with_out_backgroud:
+dev:
 	make delete_proto_files
 	make copy_proto_files
-	docker-compose up --build
+	docker-compose --env-file ./config/.env.dev up --build -d

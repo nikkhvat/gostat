@@ -1,95 +1,89 @@
 version: '3.8'
 services:
   client:
-    build: ./client_service
+    build: 
+      context: ./client_service
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_BACKEND_HOST=https://gostat.app
+    restart: on-failure
 
   api_service:
     build: ./api_service
     ports:
-      - 8080:8080
-    volumes:
-      - ./api_service/.env:/app/.env
+      - "8080:8080"
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     environment:
-      - PORT=:8080
-      - STATS_HOST=stats_service:50050
-      - AUTH_HOST=auth_service:50051
-      - APP_HOST=app_service:50052
-      - MAIL_HOST=auth_service:50053
-      - GIN_MODE=release
+      - PORT=${API_SERVICE_PORT}
+      - STATS_HOST=${STATS_HOST}
+      - AUTH_HOST=${AUTH_HOST}
+      - APP_HOST=${APP_HOST}
+      - MAIL_HOST=${MAIL_HOST}
+      - GIN_MODE=${GIN_MODE}
+      - JWT_SECRET=${JWT_SECRET}
+    restart: on-failure
 
   auth_service:
     build: ./auth_service
-    volumes:
-      - ./auth_service/.env:/app/.env
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     environment:
-      - PORT=:50051
-      - DB_HOST=db
-      - DB_USER=author
-      - DB_PASSWORD=password
-      - DB_NAME=gostat_auth_service
-      - DB_SSLMODE=disable
+      - PORT=${AUTH_PORT}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${AUTH_DB_NAME}
+      - DB_SSLMODE=${DB_SSLMODE}
+      - JWT_SECRET=${JWT_SECRET}
+    restart: on-failure
 
   stats_service:
     build: ./stats_service
-    volumes:
-      - ./stats_service/.env:/app/.env
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     environment:
-      - PORT=:50050
-      - DB_HOST=db
-      - DB_USER=author
-      - DB_PASSWORD=password
-      - DB_NAME=gostat_stats_service
-      - DB_SSLMODE=disable
+      - PORT=${STATS_PORT}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${STAT_DB_NAME}
+      - DB_SSLMODE=${DB_SSLMODE}
+    restart: on-failure
 
   app_service:
     build: ./app_service
-    volumes:
-      - ./app_service/.env:/app/.env
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     environment:
-      - PORT=:50052
-      - DB_HOST=db
-      - DB_USER=author
-      - DB_PASSWORD=password
-      - DB_NAME=gostat_app_service
-      - DB_SSLMODE=disable
+      - PORT=${APP_PORT}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${APP_DB_NAME}
+      - DB_SSLMODE=${DB_SSLMODE}
+    restart: on-failure
   
   mail_service:
     build: ./mail_service
-    volumes:
-      - ./app_service/.env:/app/.env
     environment:
-      - PORT=:50053
+      - PORT=${MAIL_PORT}
+      - MAIL_LOGIN=${MAIL_LOGIN}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MAIL_SMTP=${MAIL_SMTP}
+      - MAIL_HOST=${MAIL_HOST}
+    restart: on-failure
       
   db:
     image: postgres:13-alpine
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: statsdb
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - ./deploy/init.sql:/docker-entrypoint-initdb.d/init.sql
       - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    restart: on-failure
 
 volumes:
   pgdata:
