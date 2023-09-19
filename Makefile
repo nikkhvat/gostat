@@ -52,9 +52,14 @@ stop:
 	docker-compose --env-file ./config/.env.prod down
 
 start:
-	make delete_proto_files
-	make copy_proto_files
-	docker-compose --env-file ./config/.env.prod up --build -d
+	@if [ -f ./.env ]; then \
+		ENV_FILE="./config/.env"; \
+	else \
+		ENV_FILE="./config/.env.prod"; \
+	fi; \
+	make delete_proto_files; \
+	make copy_proto_files; \
+	docker-compose --env-file $$ENV_FILE up --build -d
 
 dev:
 	make delete_proto_files
