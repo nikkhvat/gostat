@@ -1,0 +1,326 @@
+definitions:
+  http.CreateAppRequest:
+    properties:
+      name:
+        description: |-
+          Application name
+          example: "My App"
+        type: string
+      url:
+        description: |-
+          Application URL
+          example: "https://myapp.com"
+        type: string
+    type: object
+  http.ErrorAppCreateResponse:
+    properties:
+      detail:
+        description: |-
+          Detailed error message
+          example: "detailed error message"
+        type: string
+      error:
+        description: |-
+          Indicates an error occurred
+          example: true
+        type: boolean
+    type: object
+  http.ErrorAuthResponse:
+    properties:
+      error:
+        description: |-
+          Detailed error message
+          in: body
+          example: "login or password is not correct"
+        type: string
+    type: object
+  http.ErrorGetVisitResponse:
+    properties:
+      detail:
+        description: |-
+          Detailed error message
+          example: "Detailed error message"
+        type: string
+      error:
+        description: |-
+          Indicates an error occurred
+          example: true
+        type: boolean
+    type: object
+  http.ErrorSetVisitResponse:
+    properties:
+      detail:
+        description: |-
+          Detailed error message
+          example: "Detailed error message"
+        type: string
+      error:
+        description: |-
+          Indicates an error occurred
+          example: true
+        type: boolean
+    type: object
+  http.ErrorVisitExtendResponse:
+    properties:
+      detail:
+        description: |-
+          Detailed error message
+          example: "Detailed error message"
+        type: string
+      error:
+        description: |-
+          Indicates an error occurred
+          example: true
+        type: boolean
+    type: object
+  http.SuccessAppCreateResponse:
+    properties:
+      app:
+        description: |-
+          New application ID
+          example: "new_app_id"
+        type: string
+      successfully:
+        description: |-
+          Indicates successful app creation
+          example: true
+        type: boolean
+    type: object
+  http.SuccessAuthResponse:
+    properties:
+      token:
+        description: |-
+          The generated JWT
+          in: body
+          example: "your_generated_token"
+        type: string
+    type: object
+  http.SuccessSetVisitResponse:
+    properties:
+      session:
+        description: |-
+          Session ID for the visit
+          example: "session_id"
+        type: string
+      successfully:
+        description: |-
+          Indicates successful visit setting or extending
+          example: true
+        type: boolean
+    type: object
+  http.SuccessVisitExtendResponse:
+    properties:
+      successfully:
+        description: |-
+          Indicates successful visit extension
+          example: true
+        type: boolean
+    type: object
+  service.LoginRequest:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    type: object
+  service.RegistrationRequest:
+    properties:
+      first_name:
+        type: string
+      last_name:
+        type: string
+      login:
+        type: string
+      mail:
+        type: string
+      middle_name:
+        type: string
+      password:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: GoStat API
+paths:
+  /api/apps/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new application with the given details
+      parameters:
+      - description: Create App payload
+        in: body
+        name: CreateAppRequest
+        required: true
+        schema:
+          $ref: '#/definitions/http.CreateAppRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Example: {\"successfully\": true, \"app\": \"new_app_id\"}'
+          schema:
+            $ref: '#/definitions/http.SuccessAppCreateResponse'
+        "400":
+          description: 'Example: {\"error\": true, \"detail\": \"detailed error message\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAppCreateResponse'
+      summary: Create a new application
+      tags:
+      - apps
+  /api/stats/get/visits:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves visits data for a specific application
+      parameters:
+      - description: Application ID
+        in: query
+        name: app
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved data. The structure of the data depends
+            on the application.
+          schema:
+            type: object
+        "400":
+          description: 'Example: {\"error\": true, \"detail\": \"Detailed error message\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorGetVisitResponse'
+      summary: Retrieve visits for an application
+      tags:
+      - stats
+  /api/stats/set/visit:
+    put:
+      consumes:
+      - application/json
+      description: Registers a new visit or extends an existing session
+      parameters:
+      - description: Unique (1 or 0)
+        in: query
+        name: un
+        type: string
+      - description: UTM parameters
+        in: query
+        name: utm
+        type: string
+      - description: Visited URL
+        in: query
+        name: url
+        type: string
+      - description: Page Title
+        in: query
+        name: title
+        type: string
+      - description: Session ID
+        in: query
+        name: session
+        type: string
+      - description: Application ID
+        in: query
+        name: app_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Example: {\"successfully\": true, \"session\": \"session_id\"}'
+          schema:
+            $ref: '#/definitions/http.SuccessSetVisitResponse'
+        "400":
+          description: 'Example: {\"error\": true, \"detail\": \"Detailed error message\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorSetVisitResponse'
+      summary: Set a new visit session
+      tags:
+      - stats
+  /api/stats/set/visit/extend:
+    put:
+      consumes:
+      - application/json
+      description: Extends the session for a particular visit
+      parameters:
+      - description: Visit Session ID
+        in: query
+        name: session
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Example: {\"successfully\": true}'
+          schema:
+            $ref: '#/definitions/http.SuccessVisitExtendResponse'
+        "400":
+          description: 'Example: {\"error\": true, \"detail\": \"Detailed error message\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorVisitExtendResponse'
+      summary: Extend a visit session
+      tags:
+      - stats
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Uses login and password for authentication to get an access token
+      parameters:
+      - description: Login payload
+        in: body
+        name: LoginRequest
+        required: true
+        schema:
+          $ref: '#/definitions/service.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.SuccessAuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+      summary: Authenticate a user and get an access token
+      tags:
+      - authentication
+  /auth/registration:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with the given details
+      parameters:
+      - description: Registration payload
+        in: body
+        name: RegistrationRequest
+        required: true
+        schema:
+          $ref: '#/definitions/service.RegistrationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Example: {\"token\":\"YOUR_GENERATED_TOKEN\"}'
+          schema:
+            $ref: '#/definitions/http.SuccessAuthResponse'
+        "400":
+          description: 'Example: {\"error\":\"any error\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+        "409":
+          description: 'Example: {\"error\":\"User with the same email already exists\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+      summary: Register a new user
+      tags:
+      - authentication
+swagger: "2.0"

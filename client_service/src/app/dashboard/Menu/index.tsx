@@ -48,9 +48,9 @@ export default function Menu() {
 
       <div className={styles.list}>
         {tabs.map((tab) => (
-          <div 
-            key={tab.id} 
-            className={styles.list__item} 
+          <div
+            key={tab.id}
+            className={styles.list__item}
             onClick={() => clickTab(tab)}
           >
             <Image

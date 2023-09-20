@@ -22,36 +22,42 @@ import (
 
 	middlewareCors "github.com/nik19ta/gostat/api_service/middleware/cors"
 	env "github.com/nik19ta/gostat/api_service/pkg/env"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	docs "github.com/nik19ta/gostat/api_service/docs"
 )
 
+// @title     GoStat API
 func main() {
 	authClient, err := authGrpc.NewAuthClient(env.Get("AUTH_HOST"))
 
 	if err != nil {
 		log.Fatalf("❌ Failed to connect to auth service: %v", err)
 	} else {
-		log.Println("✅ Successful connect to auth service: %s", env.Get("AUTH_HOST"))
+		log.Printf("✅ Successful connect to auth service: %s", env.Get("AUTH_HOST"))
 	}
 
 	statsClient, err := statsGrpc.NewStatsClient(env.Get("STATS_HOST"))
 	if err != nil {
 		log.Fatalf("❌ Failed to connect to stats service: %v", err)
 	} else {
-		log.Println("✅ Successful connect to stats service: %s", env.Get("STATS_HOST"))
+		log.Printf("✅ Successful connect to stats service: %s", env.Get("STATS_HOST"))
 	}
 
 	appClient, err := appGrpc.NewAppClient(env.Get("APP_HOST"))
 	if err != nil {
 		log.Fatalf("❌ Failed to connect to app service: %v", err)
 	} else {
-		log.Println("✅ Successful connect to app service: %s", env.Get("APP_HOST"))
+		log.Printf("✅ Successful connect to app service: %s", env.Get("APP_HOST"))
 	}
 
 	mailClient, err := mailGrpc.NewMailClient(env.Get("MAIL_HOST"))
 	if err != nil {
 		log.Fatalf("❌ Failed to connect to mail service: %v", err)
 	} else {
-		log.Println("✅ Successful connect to mail service: %s", env.Get("APP_HOST"))
+		log.Printf("✅ Successful connect to mail service: %s", env.Get("APP_HOST"))
 	}
 
 	// Auth service
@@ -93,11 +99,16 @@ func main() {
 	}
 
 	// * Apps Router
-	appRouter := router.Group("/api/app")
+	appRouter := router.Group("/api/apps")
 	appRouter.Use(middlewareAuth.AuthRequired())
 	{
-		appRouter.POST("/", appHandler.CreateApp)
+		appRouter.POST("/create", appHandler.CreateApp)
 	}
+
+	// * Docs Router
+	router.GET("/api/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	docs.SwaggerInfo.BasePath = "/api"
 
 	router.Run(env.Get("PORT"))
 }
