@@ -1,6 +1,8 @@
 package http
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nik19ta/gostat/api_service/internal/auth/service"
 )
@@ -19,7 +21,11 @@ type SuccessAuthResponse struct {
 	// The generated JWT
 	// in: body
 	// example: "your_generated_token"
-	Token string `json:"token"`
+	AccessToken string `json:"access_token"`
+	// The generated Refresh
+	// in: body
+	// example: "your_refresh_token"
+	RefreshToken string `json:"refresh_token"`
 }
 
 // ErrorAuthResponse defines a response for an error
@@ -61,7 +67,37 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, SuccessAuthResponse{Token: token})
+	c.JSON(200, SuccessAuthResponse{AccessToken: token.AccessToken, RefreshToken: token.RefreshToekn})
+}
+
+// RefreshToken                godoc
+// @Summary                    Refresh the access token
+// @Description                Uses the refresh token to generate a new access token
+// @Tags                       authentication
+// @Accept                     json
+// @Produce                    json
+// @Param                      Authorization header string true "Refresh token"
+// @Success                    200 {object} SuccessAuthResponse "Example: {\"access_token\":\"your_new_generated_token\", \"refresh_token\":\"your_refresh_token\"}"
+// @Failure                    401 {object} ErrorAuthResponse "Example: {\"error\":\"Invalid refresh token\"}"
+// @Router                     /auth/refresh [post]
+func (h *AuthHandler) RefreshToken(c *gin.Context) {
+	refreshToken := c.GetHeader("Authorization")
+
+	if len(refreshToken) == 0 {
+		c.JSON(401, ErrorAuthResponse{Error: "Invalid refresh token"})
+		return
+	}
+
+	log.Println(refreshToken)
+
+	token, err := h.service.RefreshToken(c.Request.Context(), refreshToken)
+
+	if err != nil {
+		c.JSON(401, ErrorAuthResponse{Error: "Invalid refresh token"})
+		return
+	}
+
+	c.JSON(200, SuccessAuthResponse{AccessToken: *token, RefreshToken: refreshToken})
 }
 
 // Registration                godoc
@@ -109,5 +145,5 @@ func (h *AuthHandler) Registration(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, SuccessAuthResponse{Token: *token})
+	c.JSON(200, SuccessAuthResponse{AccessToken: token.AccessToken, RefreshToken: token.RefreshToekn})
 }

@@ -3,6 +3,8 @@ package service
 import (
 	"strings"
 
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/nik19ta/gostat/auth_service/internal/auth/repository/postgres"
 	"github.com/nik19ta/gostat/auth_service/pkg/env"
@@ -16,25 +18,42 @@ func NewAuthService(r postgres.UserRepository) AuthService {
 	return AuthService{repo: r}
 }
 
-func (s AuthService) Authenticate(login, password string) (string, error) {
-	user, err := s.repo.GetUserByLoginAndPassword(login, password)
+func (s AuthService) RefreshToken(token string) (string, error) {
+	user, err := s.repo.RefreshToken(token)
+
 	if err != nil {
 		return "", err
 	}
 
-	token, err := generateToken(user.ID, user.Login)
+	tokens, err := generateToken(uint(user.Id), user.Login)
+
 	if err != nil {
 		return "", err
+	}
+
+	return tokens.JWTToken, err
+}
+
+func (s AuthService) Authenticate(login, password string) (*TokenResponse, error) {
+	user, err := s.repo.GetUserByLoginAndPassword(login, password)
+	if err != nil {
+		return nil, err
+	}
+
+	token, err := generateToken(user.ID, user.Login)
+	if err != nil {
+		return nil, err
 	}
 
 	return token, nil
 }
 
 type RegResponse struct {
-	Token       string
-	ConfirmCode string
-	Status      bool
-	Text        string
+	Token        string
+	RefreshToken string
+	ConfirmCode  string
+	Status       bool
+	Text         string
 }
 
 func (s AuthService) Registration(login, mail, password, firstName, lastName, middleName string) (*RegResponse, error) {
@@ -68,19 +87,45 @@ func (s AuthService) Registration(login, mail, password, firstName, lastName, mi
 		}, nil
 	}
 
-	return &RegResponse{Token: token, ConfirmCode: user.Code, Status: true}, nil
+	return &RegResponse{
+		Token:        token.JWTToken,
+		RefreshToken: token.RefreshToken,
+		ConfirmCode:  user.Code,
+		Status:       true,
+	}, nil
 }
 
-func generateToken(userID uint, login string) (string, error) {
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
+type TokenResponse struct {
+	JWTToken     string `json:"jwt_token"`
+	RefreshToken string `json:"refresh_token"`
+}
+
+func generateToken(userID uint, login string) (*TokenResponse, error) {
+	accessToken := jwt.New(jwt.SigningMethodHS256)
+	claims := accessToken.Claims.(jwt.MapClaims)
 	claims["user_id"] = userID
 	claims["user_login"] = login
+	claims["exp"] = time.Now().Add(time.Hour * 1).Unix()
 
-	t, err := token.SignedString([]byte(env.Get("JWT_SECRET")))
+	t, err := accessToken.SignedString([]byte(env.Get("JWT_SECRET")))
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return t, nil
+	refreshToken := jwt.New(jwt.SigningMethodHS256)
+	rtClaims := refreshToken.Claims.(jwt.MapClaims)
+	rtClaims["user_id"] = userID
+	rtClaims["user_login"] = login
+	rtClaims["type"] = "refresh"
+	rtClaims["exp"] = time.Now().Add(time.Hour * (24 * 7)).Unix()
+
+	rt, err := refreshToken.SignedString([]byte(env.Get("REFRESH_SECRET")))
+	if err != nil {
+		return nil, err
+	}
+
+	return &TokenResponse{
+		JWTToken:     t,
+		RefreshToken: rt,
+	}, nil
 }

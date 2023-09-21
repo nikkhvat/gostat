@@ -7,6 +7,7 @@ option go_package = "github.com/nik19ta/gostat/proto/auth";
 service AuthService {
   rpc Login (LoginRequest) returns (LoginResponse) {}
   rpc Registration (RegistrationRequest) returns (RegistrationResponse) {}
+  rpc RefreshToken (RefreshTokenRequest) returns (RefreshTokenResponse) {}
 }
 
 message LoginRequest {
@@ -23,13 +24,24 @@ message RegistrationRequest {
   string middle_name = 6;
 }
 
+message RefreshTokenRequest {
+  string refresh_token = 1;
+}
+
+
 message LoginResponse {
   string token = 1;
+  string refresh_token = 2;
 }
 
 message RegistrationResponse {
   string token = 1;
-  string code = 2;
-  bool status = 3;
-  string text = 4;
+  string refresh_token = 2;
+  string code = 3;
+  bool status = 4;
+  string text = 5;
+}
+
+message RefreshTokenResponse {
+  string new_token = 1;
 }
