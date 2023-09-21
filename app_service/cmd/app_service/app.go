@@ -5,8 +5,6 @@ import (
 	"log"
 	"net"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 	grpcDelivery "github.com/nik19ta/gostat/app_service/internal/app/delivery/grpc"
 	"github.com/nik19ta/gostat/app_service/internal/app/model"
 	"github.com/nik19ta/gostat/app_service/internal/app/repository/postgres"
@@ -14,6 +12,8 @@ import (
 	"github.com/nik19ta/gostat/app_service/pkg/env"
 	pb "github.com/nik19ta/gostat/app_service/proto/app"
 	"google.golang.org/grpc"
+	postgresDriver "gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 func main() {
@@ -25,11 +25,14 @@ func main() {
 
 	dsn := fmt.Sprintf("host=%s user=%s dbname=%s password=%s sslmode=%s", host, user, dbname, password, sslMode)
 
-	db, err := gorm.Open("postgres", dsn)
+	db, err := gorm.Open(postgresDriver.New(postgresDriver.Config{
+		DSN:                  dsn,
+		PreferSimpleProtocol: true,
+	}), &gorm.Config{})
+
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
-	defer db.Close()
 
 	// Auto Migrate tables
 	db.AutoMigrate(&model.App{})

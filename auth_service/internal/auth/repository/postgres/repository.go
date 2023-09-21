@@ -6,8 +6,8 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
-	"github.com/jinzhu/gorm"
 	"github.com/nik19ta/gostat/auth_service/internal/auth/model"
+	"gorm.io/gorm"
 )
 
 type UserRepository struct {

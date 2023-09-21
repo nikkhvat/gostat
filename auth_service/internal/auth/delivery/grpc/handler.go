@@ -2,12 +2,13 @@ package grpc
 
 import (
 	"context"
+	"errors"
 
-	"github.com/jinzhu/gorm"
 	"github.com/nik19ta/gostat/auth_service/internal/auth/service"
 	pb "github.com/nik19ta/gostat/auth_service/proto/auth"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"gorm.io/gorm"
 )
 
 type AuthServiceHandler struct {
@@ -34,7 +35,7 @@ func (h *AuthServiceHandler) RefreshToken(ctx context.Context, req *pb.RefreshTo
 func (h *AuthServiceHandler) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
 	token, err := h.service.Authenticate(req.GetLogin(), req.GetPassword())
 	if err != nil {
-		if gorm.IsRecordNotFoundError(err) {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, status.Errorf(codes.NotFound, "user not found")
 		}
 		return nil, status.Errorf(codes.Internal, "internal error")
