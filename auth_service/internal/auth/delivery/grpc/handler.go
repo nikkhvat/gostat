@@ -21,6 +21,16 @@ func NewAuthServiceHandler(s service.AuthService) *AuthServiceHandler {
 	}
 }
 
+func (h *AuthServiceHandler) RefreshToken(ctx context.Context, req *pb.RefreshTokenRequest) (*pb.RefreshTokenResponse, error) {
+	token, err := h.service.RefreshToken(req.GetRefreshToken())
+
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "internal error")
+	}
+
+	return &pb.RefreshTokenResponse{NewToken: token}, nil
+}
+
 func (h *AuthServiceHandler) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
 	token, err := h.service.Authenticate(req.GetLogin(), req.GetPassword())
 	if err != nil {
@@ -30,7 +40,7 @@ func (h *AuthServiceHandler) Login(ctx context.Context, req *pb.LoginRequest) (*
 		return nil, status.Errorf(codes.Internal, "internal error")
 	}
 
-	return &pb.LoginResponse{Token: token}, nil
+	return &pb.LoginResponse{Token: token.JWTToken, RefreshToken: token.RefreshToken}, nil
 }
 
 func (h *AuthServiceHandler) Registration(ctx context.Context, req *pb.RegistrationRequest) (*pb.RegistrationResponse, error) {
@@ -53,5 +63,10 @@ func (h *AuthServiceHandler) Registration(ctx context.Context, req *pb.Registrat
 		return nil, status.Errorf(codes.Internal, "internal error")
 	}
 
-	return &pb.RegistrationResponse{Token: credentials.Token, Code: credentials.ConfirmCode, Status: true}, err
+	return &pb.RegistrationResponse{
+		Token:        credentials.Token,
+		RefreshToken: credentials.RefreshToken,
+		Code:         credentials.ConfirmCode,
+		Status:       true,
+	}, err
 }

@@ -80,6 +80,7 @@ func main() {
 	{
 		authRouter.POST("/login", authHandler.Login)
 		authRouter.POST("/registration", authHandler.Registration)
+		authRouter.POST("/refresh", authHandler.RefreshToken)
 	}
 
 	// * Stats Router

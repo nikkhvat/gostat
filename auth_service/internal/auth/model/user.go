@@ -4,7 +4,6 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// Ваша модель пользователя
 type User struct {
 	gorm.Model
 	Email            string `gorm:"type:varchar(100);unique_index"`
@@ -16,4 +15,9 @@ type User struct {
 	MiddleName       string `gorm:"type:varchar(100)"`
 	Code             string `gorm:"type:varchar(100)"`
 	AccountConfirmed bool   `gorm:"default:false"`
+}
+
+type UserClaims struct {
+	Id    float64 `json:"id"`
+	Login string  `json:"login"`
 }

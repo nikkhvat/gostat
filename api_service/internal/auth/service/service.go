@@ -36,18 +36,40 @@ type RegistrationRequest struct {
 	MiddleName string `json:"middle_name"`
 }
 
-func (s *AuthService) Login(ctx context.Context, req LoginRequest) (string, error) {
+type Token struct {
+	AccessToken  string
+	RefreshToekn string
+}
+
+func (s *AuthService) Login(ctx context.Context, req LoginRequest) (*Token, error) {
 	resp, err := s.client.Login(ctx, &auth.LoginRequest{
 		Login:    req.Login,
 		Password: req.Password,
 	})
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return resp.GetToken(), nil
+	return &Token{
+		AccessToken:  resp.GetToken(),
+		RefreshToekn: resp.GetRefreshToken(),
+	}, nil
 }
 
-func (s *AuthService) Registration(ctx context.Context, req RegistrationRequest) (*string, error) {
+func (s *AuthService) RefreshToken(ctx context.Context, token string) (*string, error) {
+	resp, err := s.client.RefreshToken(ctx, &auth.RefreshTokenRequest{
+		RefreshToken: token,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	newToken := resp.GetNewToken()
+
+	return &newToken, nil
+}
+
+func (s *AuthService) Registration(ctx context.Context, req RegistrationRequest) (*Token, error) {
 	resp, err := s.client.Registration(ctx, &auth.RegistrationRequest{
 		Login:      req.Login,
 		Mail:       req.Mail,
@@ -76,7 +98,8 @@ func (s *AuthService) Registration(ctx context.Context, req RegistrationRequest)
 		return nil, errors.New("error send email")
 	}
 
-	token := resp.GetToken()
-
-	return &token, nil
+	return &Token{
+		AccessToken:  resp.GetToken(),
+		RefreshToekn: resp.GetRefreshToken(),
+	}, nil
 }
