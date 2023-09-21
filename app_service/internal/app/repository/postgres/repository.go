@@ -1,10 +1,11 @@
 package postgres
 
 import (
-	"github.com/google/uuid"
-	"github.com/jinzhu/gorm"
-	"github.com/nik19ta/gostat/app_service/internal/app/model"
 	"time"
+
+	"github.com/google/uuid"
+	"github.com/nik19ta/gostat/app_service/internal/app/model"
+	"gorm.io/gorm"
 )
 
 type AppRepository struct {

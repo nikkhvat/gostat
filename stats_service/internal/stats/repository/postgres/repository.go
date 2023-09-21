@@ -3,8 +3,8 @@ package postgres
 import (
 	"time"
 
-	"github.com/jinzhu/gorm"
 	"github.com/nik19ta/gostat/stats_service/internal/stats/model"
+	"gorm.io/gorm"
 )
 
 type StatsRepository struct {
