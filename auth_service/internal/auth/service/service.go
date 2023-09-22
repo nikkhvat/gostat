@@ -34,6 +34,10 @@ func (s AuthService) RefreshToken(token string) (string, error) {
 	return tokens.JWTToken, err
 }
 
+func (s AuthService) ConfirmAccount(secret string) error {
+	return s.repo.AccountConfirm(secret)
+}
+
 func (s AuthService) Authenticate(login, password string) (*TokenResponse, error) {
 	user, err := s.repo.GetUserByLoginAndPassword(login, password)
 	if err != nil {

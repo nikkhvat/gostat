@@ -33,6 +33,10 @@ func (c *AuthClient) RefreshToken(ctx context.Context, req *auth.RefreshTokenReq
 	return c.client.RefreshToken(ctx, req)
 }
 
+func (c *AuthClient) ConfirmAccount(ctx context.Context, req *auth.ConfirmAccountRequest) (*auth.ConfirmAccountResponse, error) {
+	return c.client.ConfirmAccount(ctx, req)
+}
+
 func (c *AuthClient) Close() error {
 	return c.conn.Close()
 }

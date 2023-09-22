@@ -198,6 +198,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/confirm": {
+            "post": {
+                "description": "Uses the secret provided in the URL to confirm the email of an account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Confirm the email of an account",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Secret key for account confirmation",
+                        "name": "secret",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Example: {\\\"successful\\\":true}",
+                        "schema": {
+                            "$ref": "#/definitions/http.SuccessAuthConfirmResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Example: {\\\"error\\\":\\\"Unexpected error, failed to verify account\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/login": {
             "post": {
                 "description": "Uses (login or email) and password for authentication to get access and refresh tokens",
@@ -413,6 +451,15 @@ const docTemplate = `{
                 },
                 "successfully": {
                     "description": "Indicates successful app creation\nexample: true",
+                    "type": "boolean"
+                }
+            }
+        },
+        "http.SuccessAuthConfirmResponse": {
+            "type": "object",
+            "properties": {
+                "successful": {
+                    "description": "Indicates whether the confirmation was successful\nexample: true",
                     "type": "boolean"
                 }
             }

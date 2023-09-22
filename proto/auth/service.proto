@@ -8,11 +8,20 @@ service AuthService {
   rpc Login (LoginRequest) returns (LoginResponse) {}
   rpc Registration (RegistrationRequest) returns (RegistrationResponse) {}
   rpc RefreshToken (RefreshTokenRequest) returns (RefreshTokenResponse) {}
+  rpc ConfirmAccount (ConfirmAccountRequest) returns (ConfirmAccountResponse) {}
 }
 
 message LoginRequest {
   string login = 1;
   string password = 2;
+}
+
+message ConfirmAccountRequest {
+  string secret = 1;
+}
+
+message ConfirmAccountResponse  {
+  bool status = 1;
 }
 
 message RegistrationRequest {
