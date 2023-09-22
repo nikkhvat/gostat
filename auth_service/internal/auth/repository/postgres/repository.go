@@ -4,7 +4,7 @@ import (
 	"errors"
 	"os"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
 	"github.com/nik19ta/gostat/auth_service/internal/auth/model"
 	"gorm.io/gorm"

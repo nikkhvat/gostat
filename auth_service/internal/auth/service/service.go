@@ -5,7 +5,7 @@ import (
 
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt"
 	"github.com/nik19ta/gostat/auth_service/internal/auth/repository/postgres"
 	"github.com/nik19ta/gostat/auth_service/pkg/env"
 )
