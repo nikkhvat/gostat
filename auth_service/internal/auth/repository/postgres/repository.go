@@ -106,3 +106,38 @@ func (r UserRepository) RegistrationUser(login, mail, password, firstName, lastN
 
 	return user, nil
 }
+
+func (r UserRepository) PasswordRequest(mail string) (*model.User, error) {
+	var user model.User
+	if err := r.db.Where("email = ?", mail).First(&user).Error; err != nil {
+		return nil, err
+	}
+
+	user.PasswordRecoveryCode = uuid.New().String()
+
+	if err := r.db.Save(&user).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (r UserRepository) PasswordReset(mail, password, secret string) (*model.User, error) {
+	var user model.User
+	if err := r.db.Where("email = ? AND password_recovery_code = ?", mail, secret).First(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("no user found with the provided email and secret code")
+		}
+		return nil, err
+	}
+
+	user.Password = password
+	user.PasswordRecoveryCode = ""
+
+	if err := r.db.Save(&user).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+
+}

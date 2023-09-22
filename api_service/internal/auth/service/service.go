@@ -146,6 +146,17 @@ func (s *AuthService) PasswordRequest(ctx context.Context, req ResetPasswordRequ
 		return err
 	}
 
+	mailStatus, err := s.mailClient.SendMailResetPassword(ctx, &mail.SendMailResetPasswordRequest{
+		Email:      req.Mail,
+		FirstName:  resp.FirstName,
+		SecondName: resp.SocendName,
+		SecretCode: resp.Secret,
+	})
+
+	if mailStatus.Status != true {
+		return errors.New("error send email")
+	}
+
 	return nil
 }
 

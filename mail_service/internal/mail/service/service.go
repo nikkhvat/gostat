@@ -53,8 +53,8 @@ func (s MailService) SendMailResetPassword(email, first_name, second_name, secre
 				{
 					Instructions: "To get started with GoStat, please click here:",
 					Button: hermes.Button{
-						Color: "#22BC66",
-						Text:  "Confirm your account",
+						Color: "#ff5000",
+						Text:  "Reset pasword",
 						Link:  "https://gostat.app/auth/confirm?code=" + secret_code,
 					},
 				},
