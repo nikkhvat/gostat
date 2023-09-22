@@ -200,7 +200,7 @@ const docTemplate = `{
         },
         "/auth/login": {
             "post": {
-                "description": "Uses login and password for authentication to get an access token",
+                "description": "Uses (login or email) and password for authentication to get access and refresh tokens",
                 "consumes": [
                     "application/json"
                 ],
@@ -210,7 +210,7 @@ const docTemplate = `{
                 "tags": [
                     "authentication"
                 ],
-                "summary": "Authenticate a user and get an access token",
+                "summary": "Authenticate a user and get access and refresh tokens",
                 "parameters": [
                     {
                         "description": "Login payload",
