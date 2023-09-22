@@ -36,6 +36,22 @@ type RegistrationRequest struct {
 	MiddleName string `json:"middle_name"`
 }
 
+// ResetPasswordRequest represents the request body for requesting a password reset
+// swagger:parameters PasswordRequest
+type ResetPasswordRequest struct {
+	// The email address associated with the account
+	// required: true
+	// example: user@example.com
+	Mail string `json:"mail"`
+}
+
+// ResetConfirmPasswordRequest represents the request body for confirming a password reset
+type ResetConfirmPasswordRequest struct {
+	Secret      string `json:"secret"`
+	Mail        string `json:"mail"`
+	NewPassword string `json:"password"`
+}
+
 type Token struct {
 	AccessToken  string
 	RefreshToekn string
@@ -113,5 +129,47 @@ func (s *AuthService) Registration(ctx context.Context, req RegistrationRequest)
 	return &Token{
 		AccessToken:  resp.GetToken(),
 		RefreshToekn: resp.GetRefreshToken(),
+	}, nil
+}
+
+func (s *AuthService) PasswordRequest(ctx context.Context, req ResetPasswordRequest) error {
+
+	if len(req.Mail) == 0 {
+		return errors.New("Invalid mail")
+	}
+
+	resp, err := s.client.PasswordRequest(ctx, &auth.PasswordRequestRequest{
+		Mail: req.Mail,
+	})
+
+	if resp.Status != true || err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *AuthService) PasswordReset(ctx context.Context, req ResetConfirmPasswordRequest) (*Token, error) {
+	if len(req.Mail) == 0 {
+		return nil, errors.New("Invalid mail")
+	}
+
+	if len(req.NewPassword) < 8 {
+		return nil, errors.New("Invalid password")
+	}
+
+	token, err := s.client.PasswordReset(ctx, &auth.PasswordResetRequest{
+		Mail:     req.Mail,
+		Password: req.NewPassword,
+		Secret:   req.Secret,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &Token{
+		AccessToken:  token.Token,
+		RefreshToekn: token.RefreshToken,
 	}, nil
 }

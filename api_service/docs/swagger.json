@@ -272,6 +272,86 @@
                 }
             }
         },
+        "/auth/password/request": {
+            "post": {
+                "description": "Sends a password reset email to the user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Request Password Reset",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service.ResetPasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password reset email sent successfully",
+                        "schema": {
+                            "$ref": "#/definitions/http.SuccessAuthConfirmResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body or an error occurred while sending the email",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/password/reset": {
+            "post": {
+                "description": "Resets the user's password using a secret token sent to their email.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Reset Password",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service.ResetConfirmPasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password reset successfully",
+                        "schema": {
+                            "$ref": "#/definitions/http.SuccessAuthResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body or an error occurred while resetting the password",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/refresh": {
             "post": {
                 "description": "Uses the refresh token to generate a new access token",
@@ -519,6 +599,29 @@
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.ResetConfirmPasswordRequest": {
+            "type": "object",
+            "properties": {
+                "mail": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "secret": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.ResetPasswordRequest": {
+            "type": "object",
+            "properties": {
+                "mail": {
+                    "description": "The email address associated with the account\nrequired: true\nexample: user@example.com",
                     "type": "string"
                 }
             }
