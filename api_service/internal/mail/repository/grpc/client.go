@@ -25,6 +25,10 @@ func (c *MailClient) SendMail(ctx context.Context, req *mail.SendMailRequest) (*
 	return c.client.SendMail(ctx, req)
 }
 
+func (c *MailClient) SendMailResetPassword(ctx context.Context, req *mail.SendMailResetPasswordRequest) (*mail.SendMailResetPasswordResponse, error) {
+	return c.client.SendMailResetPassword(ctx, req)
+}
+
 func (c *MailClient) Close() error {
 	return c.conn.Close()
 }

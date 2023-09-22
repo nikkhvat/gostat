@@ -6,6 +6,7 @@ option go_package = "github.com/nik19ta/gostat/proto/mail";
 
 service MailService {
   rpc SendMail (SendMailRequest) returns (SendMailResponse) {}
+  rpc SendMailResetPassword (SendMailResetPasswordRequest) returns (SendMailResetPasswordResponse) {}
 }
 
 message SendMailRequest {
@@ -16,5 +17,16 @@ message SendMailRequest {
 }
 
 message SendMailResponse {
+  bool status = 1;
+}
+
+message SendMailResetPasswordRequest {
+  string email = 1;
+  string first_name = 2;
+  string second_name = 3;
+  string secret_code = 4;
+}
+
+message SendMailResetPasswordResponse {
   bool status = 1;
 }

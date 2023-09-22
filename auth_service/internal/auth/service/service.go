@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
+	"github.com/nik19ta/gostat/auth_service/internal/auth/model"
 	"github.com/nik19ta/gostat/auth_service/internal/auth/repository/postgres"
 	"github.com/nik19ta/gostat/auth_service/pkg/env"
 )
@@ -132,4 +133,31 @@ func generateToken(userID uint, login string) (*TokenResponse, error) {
 		JWTToken:     t,
 		RefreshToken: rt,
 	}, nil
+}
+
+func (s AuthService) PasswordRequest(mail string) (*model.User, error) {
+	user, err := s.repo.PasswordRequest(mail)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (s AuthService) PasswordReset(secret, mail, password string) (*TokenResponse, error) {
+
+	user, err := s.repo.PasswordReset(mail, password, secret)
+
+	if err != nil {
+		return nil, err
+	}
+
+	tokens, err := generateToken(uint(user.ID), user.Login)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return tokens, err
 }

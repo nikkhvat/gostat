@@ -180,3 +180,59 @@ func (h *AuthHandler) Registration(c *gin.Context) {
 
 	c.JSON(200, SuccessAuthResponse{AccessToken: token.AccessToken, RefreshToken: token.RefreshToekn})
 }
+
+// PasswordRequest sends a password reset email to the user
+// @Summary Request Password Reset
+// @Description Sends a password reset email to the user.
+// @Tags authentication
+// @Accept json
+// @Produce json
+// @Param request body service.ResetPasswordRequest true "Request body"
+// @Success 200 {object} SuccessAuthConfirmResponse "Password reset email sent successfully"
+// @Failure 400 {object} ErrorAuthResponse "Invalid request body or an error occurred while sending the email"
+// @Router /auth/password/request [post]
+func (h *AuthHandler) PasswordRequest(c *gin.Context) {
+	var req service.ResetPasswordRequest
+
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, ErrorAuthResponse{Error: err.Error()})
+		return
+	}
+
+	err := h.service.PasswordRequest(c, req)
+
+	if err != nil {
+		c.JSON(400, ErrorAuthResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(200, SuccessAuthConfirmResponse{Successful: true})
+}
+
+// PasswordReset resets the user's password
+// @Summary Reset Password
+// @Description Resets the user's password using a secret token sent to their email.
+// @Tags authentication
+// @Accept json
+// @Produce json
+// @Param request body service.ResetConfirmPasswordRequest true "Request body"
+// @Success 200 {object} SuccessAuthResponse "Password reset successfully"
+// @Failure 400 {object} ErrorAuthResponse "Invalid request body or an error occurred while resetting the password"
+// @Router /auth/password/reset [post]
+func (h *AuthHandler) PasswordReset(c *gin.Context) {
+	var req service.ResetConfirmPasswordRequest
+
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, ErrorAuthResponse{Error: err.Error()})
+		return
+	}
+
+	token, err := h.service.PasswordReset(c, req)
+
+	if err != nil {
+		c.JSON(400, ErrorAuthResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(200, SuccessAuthResponse{AccessToken: token.AccessToken, RefreshToken: token.RefreshToekn})
+}

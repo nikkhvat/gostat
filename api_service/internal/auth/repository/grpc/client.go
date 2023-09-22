@@ -40,3 +40,11 @@ func (c *AuthClient) ConfirmAccount(ctx context.Context, req *auth.ConfirmAccoun
 func (c *AuthClient) Close() error {
 	return c.conn.Close()
 }
+
+func (c *AuthClient) PasswordRequest(ctx context.Context, req *auth.PasswordRequestRequest) (*auth.PasswordRequestResponse, error) {
+	return c.client.PasswordRequest(ctx, req)
+}
+
+func (c *AuthClient) PasswordReset(ctx context.Context, req *auth.PasswordResetRequest) (*auth.PasswordResetResponse, error) {
+	return c.client.PasswordReset(ctx, req)
+}

@@ -22,6 +22,34 @@ func NewAuthServiceHandler(s service.AuthService) *AuthServiceHandler {
 	}
 }
 
+func (h *AuthServiceHandler) PasswordRequest(ctx context.Context, req *pb.PasswordRequestRequest) (*pb.PasswordRequestResponse, error) {
+	user, err := h.service.PasswordRequest(req.Mail)
+
+	if err != nil {
+		return &pb.PasswordRequestResponse{Status: false}, err
+	}
+
+	return &pb.PasswordRequestResponse{
+		Status:     true,
+		Secret:     user.PasswordRecoveryCode,
+		FirstName:  user.FirstName,
+		SocendName: user.LastName,
+	}, nil
+}
+
+func (h *AuthServiceHandler) PasswordReset(ctx context.Context, req *pb.PasswordResetRequest) (*pb.PasswordResetResponse, error) {
+	token, err := h.service.PasswordReset(req.Secret, req.Mail, req.Password)
+
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "internal error")
+	}
+
+	return &pb.PasswordResetResponse{
+		RefreshToken: token.RefreshToken,
+		Token:        token.JWTToken,
+	}, nil
+}
+
 func (h *AuthServiceHandler) RefreshToken(ctx context.Context, req *pb.RefreshTokenRequest) (*pb.RefreshTokenResponse, error) {
 	token, err := h.service.RefreshToken(req.GetRefreshToken())
 

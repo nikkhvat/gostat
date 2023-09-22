@@ -152,6 +152,24 @@ definitions:
       password:
         type: string
     type: object
+  service.ResetConfirmPasswordRequest:
+    properties:
+      mail:
+        type: string
+      password:
+        type: string
+      secret:
+        type: string
+    type: object
+  service.ResetPasswordRequest:
+    properties:
+      mail:
+        description: |-
+          The email address associated with the account
+          required: true
+          example: user@example.com
+        type: string
+    type: object
 info:
   contact: {}
   title: GoStat API
@@ -332,6 +350,60 @@ paths:
           schema:
             $ref: '#/definitions/http.ErrorAuthResponse'
       summary: Authenticate a user and get access and refresh tokens
+      tags:
+      - authentication
+  /auth/password/request:
+    post:
+      consumes:
+      - application/json
+      description: Sends a password reset email to the user.
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/service.ResetPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password reset email sent successfully
+          schema:
+            $ref: '#/definitions/http.SuccessAuthConfirmResponse'
+        "400":
+          description: Invalid request body or an error occurred while sending the
+            email
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+      summary: Request Password Reset
+      tags:
+      - authentication
+  /auth/password/reset:
+    post:
+      consumes:
+      - application/json
+      description: Resets the user's password using a secret token sent to their email.
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/service.ResetConfirmPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password reset successfully
+          schema:
+            $ref: '#/definitions/http.SuccessAuthResponse'
+        "400":
+          description: Invalid request body or an error occurred while resetting the
+            password
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+      summary: Reset Password
       tags:
       - authentication
   /auth/refresh:
