@@ -38,8 +38,8 @@ type ErrorAuthResponse struct {
 }
 
 // Login                   godoc
-// @Summary                Authenticate a user and get an access token
-// @Description            Uses login and password for authentication to get an access token
+// @Summary                Authenticate a user and get access and refresh tokens
+// @Description            Uses (login or email) and password for authentication to get access and refresh tokens
 // @Tags                   authentication
 // @Accept                 json
 // @Produce                json

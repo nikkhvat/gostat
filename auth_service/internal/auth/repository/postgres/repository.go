@@ -59,12 +59,12 @@ func decodeRefreshToken(tokenString string) (jwt.MapClaims, error) {
 	return nil, errors.New("invalid token")
 }
 
-func (r UserRepository) GetUserByLoginAndPassword(login, password string) (model.User, error) {
+func (r UserRepository) GetUserByLoginAndPassword(identifier, password string) (*model.User, error) {
 	var user model.User
-	if err := r.db.Where("login = ? AND password = ?", login, password).First(&user).Error; err != nil {
-		return model.User{}, err
+	if err := r.db.Where("(login = ? OR email = ?) AND password = ?", identifier, identifier, password).First(&user).Error; err != nil {
+		return nil, err
 	}
-	return user, nil
+	return &user, nil
 }
 
 func (r UserRepository) RegistrationUser(login, mail, password, firstName, lastName, middleName string) (model.User, error) {
