@@ -18,6 +18,26 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 	return UserRepository{db: db}
 }
 
+func (r UserRepository) AccountConfirm(secret string) error {
+	tx := r.db.Begin()
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	var user model.User
+	if err := tx.Where("code = ?", secret).First(&user).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	user.AccountConfirmed = true
+	if err := tx.Save(&user).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	return tx.Commit().Error
+}
+
 func (r UserRepository) RefreshToken(token string) (*model.UserClaims, error) {
 	claims, err := decodeRefreshToken(token)
 	if err != nil {

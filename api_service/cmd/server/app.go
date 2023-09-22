@@ -81,6 +81,7 @@ func main() {
 		authRouter.POST("/login", authHandler.Login)
 		authRouter.POST("/registration", authHandler.Registration)
 		authRouter.POST("/refresh", authHandler.RefreshToken)
+		authRouter.POST("/confirm", authHandler.ConfirmAccount)
 	}
 
 	// * Stats Router

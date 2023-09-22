@@ -69,6 +69,18 @@ func (s *AuthService) RefreshToken(ctx context.Context, token string) (*string, 
 	return &newToken, nil
 }
 
+func (s *AuthService) ConfirmAccount(ctx context.Context, secret string) error {
+	resp, err := s.client.ConfirmAccount(ctx, &auth.ConfirmAccountRequest{
+		Secret: secret,
+	})
+
+	if err != nil || resp.Status != true {
+		return err
+	}
+
+	return nil
+}
+
 func (s *AuthService) Registration(ctx context.Context, req RegistrationRequest) (*Token, error) {
 	resp, err := s.client.Registration(ctx, &auth.RegistrationRequest{
 		Login:      req.Login,

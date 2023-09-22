@@ -86,6 +86,14 @@ definitions:
           example: true
         type: boolean
     type: object
+  http.SuccessAuthConfirmResponse:
+    properties:
+      successful:
+        description: |-
+          Indicates whether the confirmation was successful
+          example: true
+        type: boolean
+    type: object
   http.SuccessAuthResponse:
     properties:
       access_token:
@@ -269,6 +277,32 @@ paths:
       summary: Extend a visit session
       tags:
       - stats
+  /auth/confirm:
+    post:
+      consumes:
+      - application/json
+      description: Uses the secret provided in the URL to confirm the email of an
+        account
+      parameters:
+      - description: Secret key for account confirmation
+        in: query
+        name: secret
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Example: {\"successful\":true}'
+          schema:
+            $ref: '#/definitions/http.SuccessAuthConfirmResponse'
+        "401":
+          description: 'Example: {\"error\":\"Unexpected error, failed to verify account\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+      summary: Confirm the email of an account
+      tags:
+      - authentication
   /auth/login:
     post:
       consumes:

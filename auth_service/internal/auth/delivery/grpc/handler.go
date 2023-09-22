@@ -32,6 +32,16 @@ func (h *AuthServiceHandler) RefreshToken(ctx context.Context, req *pb.RefreshTo
 	return &pb.RefreshTokenResponse{NewToken: token}, nil
 }
 
+func (h *AuthServiceHandler) ConfirmAccount(ctx context.Context, req *pb.ConfirmAccountRequest) (*pb.ConfirmAccountResponse, error) {
+	err := h.service.ConfirmAccount(req.Secret)
+
+	if err != nil {
+		return &pb.ConfirmAccountResponse{Status: false}, err
+	}
+
+	return &pb.ConfirmAccountResponse{Status: true}, nil
+}
+
 func (h *AuthServiceHandler) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
 	token, err := h.service.Authenticate(req.GetLogin(), req.GetPassword())
 	if err != nil {

@@ -1,8 +1,6 @@
 package http
 
 import (
-	"log"
-
 	"github.com/gin-gonic/gin"
 	"github.com/nik19ta/gostat/api_service/internal/auth/service"
 )
@@ -88,8 +86,6 @@ func (h *AuthHandler) RefreshToken(c *gin.Context) {
 		return
 	}
 
-	log.Println(refreshToken)
-
 	token, err := h.service.RefreshToken(c.Request.Context(), refreshToken)
 
 	if err != nil {
@@ -98,6 +94,43 @@ func (h *AuthHandler) RefreshToken(c *gin.Context) {
 	}
 
 	c.JSON(200, SuccessAuthResponse{AccessToken: *token, RefreshToken: refreshToken})
+}
+
+// SuccessAuthConfirmResponse defines the response for a successful account confirmation
+// swagger:response SuccessAuthConfirmResponse
+type SuccessAuthConfirmResponse struct {
+	// Indicates whether the confirmation was successful
+	// example: true
+	Successful bool `json:"successful"`
+}
+
+// ConfirmAccount              godoc
+// @Summary                    Confirm the email of an account
+// @Description                Uses the secret provided in the URL to confirm the email of an account
+// @Tags                       authentication
+// @Accept                     json
+// @Produce                    json
+// @Param                      secret query string true "Secret key for account confirmation"
+// @Success                    200 {object} SuccessAuthConfirmResponse "Example: {\"successful\":true}"
+// @Failure                    401 {object} ErrorAuthResponse "Example: {\"error\":\"Invalid secret\"}"
+// @Failure                    401 {object} ErrorAuthResponse "Example: {\"error\":\"Unexpected error, failed to verify account\"}"
+// @Router                     /auth/confirm [post]
+func (h *AuthHandler) ConfirmAccount(c *gin.Context) {
+	secret := c.DefaultQuery("secret", "")
+
+	if len(secret) == 0 {
+		c.JSON(401, ErrorAuthResponse{Error: "Invalid secret"})
+		return
+	}
+
+	err := h.service.ConfirmAccount(c, secret)
+
+	if err != nil {
+		c.JSON(401, ErrorAuthResponse{Error: "Unexpected error, failed to verify account"})
+		return
+	}
+
+	c.JSON(200, SuccessAuthConfirmResponse{Successful: true})
 }
 
 // Registration                godoc
