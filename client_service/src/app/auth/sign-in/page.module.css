@@ -1,0 +1,108 @@
+.registration__container {
+  background-color: #1E1E1E;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.registration__box {
+  padding: 60px 30px;
+  border-radius: 15px;
+  background: #181818;
+}
+
+.registration__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.registration__title {
+  color: #FFF;
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.registration__top__button {
+  color: #999;
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 15px;
+}
+
+.registration__form {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.registration__input {
+  border: 1px solid #3C3C3C;
+  background: #181818;
+  width: 360px;
+  padding: 15px;
+  outline: none;
+  border-radius: 10px;
+}
+
+.registration__input:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.registration__button {
+  padding: 15px;
+  align-self: stretch;
+  border-radius: 10px;
+  background: #FFF;
+  border: none;
+  cursor: pointer;
+  margin-top: 15px;
+
+  color: #181818;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.registration__link {
+  margin-top: 15px;
+  color: #FFF;
+  font-family: Commissioner;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+  text-align: center;
+}
+
+.absolute__element__first {
+  position: absolute;
+  bottom: 59px;
+  left: 58px;
+}
+
+.absolute__element__second {
+  position: absolute;
+  left: 99px;
+  top: -2px;
+}
+
+.absolute__element__third {
+  position: absolute;
+  top: 270px;
+  right: -5px;
+}
