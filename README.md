@@ -1,6 +1,6 @@
-# GOStat
+# GOStat - Open Source Statistics Service
 
-Note: This project is created to showcase my proficiency in frontend and backend development.
+**Note**: This project is created to showcase my proficiency in frontend and backend development.
 
 Welcome to GOStat, a cutting-edge microservice-based application designed to handle HTTP request authentication and statistics with finesse. This project comprises several key microservices, each contributing to its overall functionality and prowess:
 
@@ -11,7 +11,7 @@ Welcome to GOStat, a cutting-edge microservice-based application designed to han
 - **mail_service**: Need to send emails? Look no further, as this microservice has you covered.
 - **client_service**: The frontend, built with next.js, offers an engaging user interface.
 
-All of these microservices are crafted using GoLang and seamlessly communicate through the powerful gRPC protocol. Additionally, they harness the capabilities of the GORM ORM library to interact with a PostgreSQL database, ensuring data integrity and efficiency.
+All of these microservices are crafted using GoLang and seamlessly communicate through the powerful `gRPC` protocol. Additionally, they harness the capabilities of the `GORM` ORM library to interact with a `PostgreSQL` database, ensuring data integrity and efficiency.
 
 ![scheme](./doc/assets/scheme.jpg)
 
@@ -33,6 +33,10 @@ GOStat is developed with several key objectives in mind:
 - **Demonstrate Expertise**: This project serves as a testament to my skills in both frontend and backend development, showcasing my ability to create a seamless and robust application.
 - **Microservices Architecture**: By adopting a microservices architecture, GOStat aims to illustrate the advantages of modularity and scalability in modern application design.
 - **Cutting-Edge Technologies**: GOStat leverages the latest technologies, such as GoLang, TypeScript, and Docker, to provide a state-of-the-art solution for handling HTTP requests and statistics.
+
+## Get Involved
+
+You can actively contribute to the GOStat project by sharing your ideas and feedback. Feel free to propose new features, report issues, or suggest improvements by creating GitHub issues. I value your input and are excited to collaborate with the community to make GOStat even better.
 
 ## Prerequisites
 
