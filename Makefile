@@ -61,6 +61,16 @@ start:
 	make copy_proto_files; \
 	docker-compose --env-file $$ENV_FILE up --build -d
 
+start_live:
+	@if [ -f ./.env ]; then \
+		ENV_FILE="./.env"; \
+	else \
+		ENV_FILE="./config/.env.prod"; \
+	fi; \
+	make delete_proto_files; \
+	make copy_proto_files; \
+	docker-compose --env-file $$ENV_FILE up --build
+
 dev:
 	make delete_proto_files
 	make copy_proto_files

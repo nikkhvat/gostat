@@ -19,7 +19,7 @@ RUN protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_o
 
 RUN go build -ldflags="-s -w" -o /app/app cmd/server/app.go
 
-FROM scratch
+FROM golang:1.20
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder /usr/share/zoneinfo/Asia/Shanghai /usr/share/zoneinfo/Asia/Shanghai
@@ -27,5 +27,7 @@ ENV TZ Asia/Shanghai
 
 WORKDIR /app
 COPY --from=builder /app/app /app/app
+COPY ./wait-for-it.sh /app/wait-for-it.sh
+RUN chmod +x /app/wait-for-it.sh
 
-CMD ["./app"]
+CMD ["/app/wait-for-it.sh", "kafka:9092", "--", "./app"]
