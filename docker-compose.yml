@@ -9,6 +9,8 @@ services:
     image: confluentinc/cp-kafka:latest
     depends_on:
       - zookeeper
+    ports:
+    - "9092:9092"
     environment:
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
@@ -32,7 +34,6 @@ services:
       - STATS_HOST=${STATS_HOST}
       - AUTH_HOST=${AUTH_HOST}
       - APP_HOST=${APP_HOST}
-      - MAIL_HOST=${MAIL_HOST}
       - GIN_MODE=${GIN_MODE}
       - JWT_SECRET=${JWT_SECRET}
     restart: on-failure
@@ -80,7 +81,6 @@ services:
   mail_service:
     build: ./mail_service
     environment:
-      - PORT=${MAIL_PORT}
       - MAIL_LOGIN=${MAIL_LOGIN}
       - MAIL_PASSWORD=${MAIL_PASSWORD}
       - MAIL_SMTP=${MAIL_SMTP}
