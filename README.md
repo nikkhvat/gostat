@@ -23,7 +23,9 @@ All of these microservices are crafted using GoLang. For synchronous communicati
 - **Front-end**: NextJs
 - **Database**: PostgreSQL
 - **ORM**: GORM
-- **Microservice** Communication: gRPC (for synchronous communication), Kafka (for asynchronous communication)
+- **Microservice** Communication: 
+  - **gRPC**: for synchronous communication
+  - **Kafka**:for asynchronous communication
 - **CI/CD**: GitHub Actions
 - **Containerization**: Docker / Docker Compose
 
