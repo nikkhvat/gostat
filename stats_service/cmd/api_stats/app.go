@@ -5,11 +5,14 @@ import (
 	"log"
 	"net"
 
+	"github.com/IBM/sarama"
 	grpcDelivery "github.com/nik19ta/gostat/stats_service/internal/stats/delivery/grpc"
+	kafkaStatService "github.com/nik19ta/gostat/stats_service/internal/stats/delivery/kafka"
 	"github.com/nik19ta/gostat/stats_service/internal/stats/model"
 	"github.com/nik19ta/gostat/stats_service/internal/stats/repository/postgres"
 	"github.com/nik19ta/gostat/stats_service/internal/stats/service"
 	"github.com/nik19ta/gostat/stats_service/pkg/env"
+	kafka "github.com/nik19ta/gostat/stats_service/pkg/kafka"
 	pb "github.com/nik19ta/gostat/stats_service/proto/stats"
 	grpc "google.golang.org/grpc"
 	postgresDriver "gorm.io/driver/postgres"
@@ -51,6 +54,27 @@ func main() {
 	pb.RegisterStatsServiceServer(s, statsHandler)
 
 	log.Printf("Server is running on port %s", env.Get("PORT"))
+
+	kafkaService, err := kafka.NewKafkaService([]string{"kafka:9092"})
+
+	if err != nil {
+		log.Panicln(err)
+	}
+
+	mailService := service.NewStatsService(statsRepo)
+	mailHendler := kafkaStatService.NewStatsKafkaService(mailService, kafkaService)
+
+	listenerError := kafkaService.Subscribe("add_new_visit_request", func(message *sarama.ConsumerMessage) {
+		mailHendler.AddVisit(message)
+	})
+
+	listenerError = kafkaService.Subscribe("extend_visit_request", func(message *sarama.ConsumerMessage) {
+		mailHendler.ExtendVisit(message)
+	})
+
+	if listenerError != nil {
+		log.Fatalf("Failed to subscribe to kafka topic: %v", err)
+	}
 
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

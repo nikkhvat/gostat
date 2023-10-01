@@ -69,7 +69,7 @@ func main() {
 	authHandler := authHttp.NewAuthHandler(newAuthService)
 
 	// Stats service
-	newStatsService := statsService.NewStatsService(statsClient)
+	newStatsService := statsService.NewStatsService(statsClient, kafkaService)
 	statsHandler := statsHttp.NewStatsHandler(newStatsService)
 
 	// Apps service

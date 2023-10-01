@@ -21,27 +21,6 @@ func NewAuthServiceHandler(s service.StatsService) *StatsServiceHandler {
 	}
 }
 
-func (h *StatsServiceHandler) SetVisit(ctx context.Context, req *pb.SetVisitRequest) (*pb.SetVisitResponse, error) {
-	session, err := h.service.SetVisits(req.Ip, req.UserAgent, req.Utm, req.HttpReferer,
-		req.Url, req.Title, req.Session, req.Unique, req.AppId)
-
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "internal error")
-	}
-
-	return &pb.SetVisitResponse{Session: session}, nil
-}
-
-func (h *StatsServiceHandler) VisitExtend(ctx context.Context, req *pb.VisitExtendRequest) (*pb.VisitExtendResponse, error) {
-	err := h.service.VisitExtend(req.Session)
-
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "internal error")
-	}
-
-	return &pb.VisitExtendResponse{Session: req.Session}, err
-}
-
 func (h *StatsServiceHandler) GetVisits(ctx context.Context, req *pb.GetVisitsRequest) (*pb.GetVisitsResponse, error) {
 	data, err := h.service.GetVisits(req.AppId)
 
