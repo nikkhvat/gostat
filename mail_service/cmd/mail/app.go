@@ -2,30 +2,38 @@ package main
 
 import (
 	"log"
-	"net"
 
-	grpcDelivery "github.com/nik19ta/gostat/mail_service/internal/mail/delivery/grpc"
+	"github.com/IBM/sarama"
+	"github.com/nik19ta/gostat/mail_service/internal/mail/delivery/kafka"
 	"github.com/nik19ta/gostat/mail_service/internal/mail/service"
-	"github.com/nik19ta/gostat/mail_service/pkg/env"
-	pb "github.com/nik19ta/gostat/mail_service/proto/mail"
-	"google.golang.org/grpc"
+	"github.com/nik19ta/gostat/mail_service/pkg/kafka_listener"
 )
 
 func main() {
 	mailService := service.NewMailService()
-	mailHandler := grpcDelivery.NewMailService(mailService)
+	mailHendler := kafka.NewMailService(mailService)
 
-	lis, err := net.Listen("tcp", env.Get("PORT"))
+	listener := kafka_listener.NewKafkaListener([]string{"kafka:9092"})
+
+	// Confirm account mail
+	err := listener.Subscribe("confirm_account_send_mail_request", func(message *sarama.ConsumerMessage) {
+		log.Println("confirm_account_send_mail_request")
+		mailHendler.SendMailConfirmAccount(message)
+	})
+
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatalf("Failed to subscribe to topic confirm_account_send_mail_request: %v", err)
 	}
 
-	s := grpc.NewServer()
-	pb.RegisterMailServiceServer(s, mailHandler)
+	// Reset password mail
+	err2 := listener.Subscribe("reset_password_send_mail_request", func(message *sarama.ConsumerMessage) {
+		log.Println("reset_password_send_mail_request")
+		mailHendler.SendMailResetPassword(message)
+	})
 
-	log.Printf("Server is running on port %s", env.Get("PORT"))
-
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+	if err2 != nil {
+		log.Fatalf("Failed to subscribe to topic reset_password_send_mail_request: %v", err)
 	}
+
+	select {}
 }

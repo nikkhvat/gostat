@@ -1,8 +1,8 @@
 # * Proto Generation
 # services with proto
-SERVICES := api_service auth_service stats_service app_service mail_service
+SERVICES := api_service auth_service stats_service app_service
 # all proto dirs
-PROTO_DIRS := auth stats app mail
+PROTO_DIRS := auth stats app
 
 delete_proto_files:
 	for svc in $(SERVICES); do \
@@ -60,6 +60,16 @@ start:
 	make delete_proto_files; \
 	make copy_proto_files; \
 	docker-compose --env-file $$ENV_FILE up --build -d
+
+start_live:
+	@if [ -f ./.env ]; then \
+		ENV_FILE="./.env"; \
+	else \
+		ENV_FILE="./config/.env.prod"; \
+	fi; \
+	make delete_proto_files; \
+	make copy_proto_files; \
+	docker-compose --env-file $$ENV_FILE up --build
 
 dev:
 	make delete_proto_files

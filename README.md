@@ -11,7 +11,8 @@ Welcome to GOStat, a cutting-edge microservice-based application designed to han
 - **mail_service**: Need to send emails? Look no further, as this microservice has you covered.
 - **client_service**: The frontend, built with next.js, offers an engaging user interface.
 
-All of these microservices are crafted using GoLang and seamlessly communicate through the powerful `gRPC` protocol. Additionally, they harness the capabilities of the `GORM` ORM library to interact with a `PostgreSQL` database, ensuring data integrity and efficiency.
+All of these microservices are crafted using GoLang. For synchronous communication, they utilize the powerful `gRPC` protocol, while for asynchronous messaging, they leverage `Kafka`. Additionally, they harness the capabilities of the `GORM` ORM library to interact with a `PostgreSQL` database, ensuring data integrity and efficiency.
+
 
 ![scheme](./doc/assets/scheme.jpg)
 
@@ -22,7 +23,9 @@ All of these microservices are crafted using GoLang and seamlessly communicate t
 - **Front-end**: NextJs
 - **Database**: PostgreSQL
 - **ORM**: GORM
-- **Microservice** Communication: gRPC
+- **Microservice** Communication: 
+  - **gRPC**: for synchronous communication
+  - **Kafka**:for asynchronous communication
 - **CI/CD**: GitHub Actions
 - **Containerization**: Docker / Docker Compose
 

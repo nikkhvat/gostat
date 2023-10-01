@@ -9,7 +9,6 @@ import (
 
 	appGrpc "github.com/nik19ta/gostat/api_service/internal/app/repository/grpc"
 	authGrpc "github.com/nik19ta/gostat/api_service/internal/auth/repository/grpc"
-	mailGrpc "github.com/nik19ta/gostat/api_service/internal/mail/repository/grpc"
 	statsGrpc "github.com/nik19ta/gostat/api_service/internal/stats/repository/grpc"
 
 	appHttp "github.com/nik19ta/gostat/api_service/internal/app/delivery/http"
@@ -22,6 +21,7 @@ import (
 
 	middlewareCors "github.com/nik19ta/gostat/api_service/middleware/cors"
 	env "github.com/nik19ta/gostat/api_service/pkg/env"
+	"github.com/nik19ta/gostat/api_service/pkg/kafka"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -31,6 +31,15 @@ import (
 
 // @title     GoStat API
 func main() {
+
+	kafkaService, err := kafka.NewKafkaService([]string{"kafka:9092"})
+
+	if err != nil {
+		panic(err)
+	} else {
+		log.Printf("✅ Successful connect to kafka")
+	}
+
 	authClient, err := authGrpc.NewAuthClient(env.Get("AUTH_HOST"))
 
 	if err != nil {
@@ -53,19 +62,14 @@ func main() {
 		log.Printf("✅ Successful connect to app service: %s", env.Get("APP_HOST"))
 	}
 
-	mailClient, err := mailGrpc.NewMailClient(env.Get("MAIL_HOST"))
-	if err != nil {
-		log.Fatalf("❌ Failed to connect to mail service: %v", err)
-	} else {
-		log.Printf("✅ Successful connect to mail service: %s", env.Get("APP_HOST"))
-	}
+	defer kafkaService.Close()
 
 	// Auth service
-	newAuthService := authService.NewAuthService(authClient, mailClient)
+	newAuthService := authService.NewAuthService(authClient, kafkaService)
 	authHandler := authHttp.NewAuthHandler(newAuthService)
 
 	// Stats service
-	newStatsService := statsService.NewStatsService(statsClient)
+	newStatsService := statsService.NewStatsService(statsClient, kafkaService)
 	statsHandler := statsHttp.NewStatsHandler(newStatsService)
 
 	// Apps service

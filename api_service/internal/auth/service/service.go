@@ -3,22 +3,26 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
+	"time"
 
 	"github.com/nik19ta/gostat/api_service/internal/auth/repository/grpc"
-	grpcMail "github.com/nik19ta/gostat/api_service/internal/mail/repository/grpc"
+	kafka "github.com/nik19ta/gostat/api_service/pkg/kafka"
 	auth "github.com/nik19ta/gostat/api_service/proto/auth"
-	mail "github.com/nik19ta/gostat/api_service/proto/mail"
 )
 
 type AuthService struct {
-	client     *grpc.AuthClient
-	mailClient *grpcMail.MailClient
+	client       *grpc.AuthClient
+	kafkaService *kafka.KafkaService
 }
 
-func NewAuthService(client *grpc.AuthClient, mailClient *grpcMail.MailClient) *AuthService {
+func NewAuthService(
+	client *grpc.AuthClient,
+	kafkaService *kafka.KafkaService,
+) *AuthService {
 	return &AuthService{
-		client:     client,
-		mailClient: mailClient,
+		client:       client,
+		kafkaService: kafkaService,
 	}
 }
 
@@ -97,6 +101,13 @@ func (s *AuthService) ConfirmAccount(ctx context.Context, secret string) error {
 	return nil
 }
 
+type SendMessageRequest struct {
+	Email      string `json:"email"`
+	FirstName  string `json:"first_name"`
+	SecondName string `json:"second_name"`
+	SecretCode string `json:"secret_code"`
+}
+
 func (s *AuthService) Registration(ctx context.Context, req RegistrationRequest) (*Token, error) {
 	resp, err := s.client.Registration(ctx, &auth.RegistrationRequest{
 		Login:      req.Login,
@@ -107,24 +118,18 @@ func (s *AuthService) Registration(ctx context.Context, req RegistrationRequest)
 		MiddleName: req.MiddleName,
 	})
 
-	if resp.Status != true {
+	if resp.Status != true || err != nil {
 		return nil, errors.New(resp.Text)
 	}
 
-	mailStatus, err := s.mailClient.SendMail(ctx, &mail.SendMailRequest{
+	requestID := fmt.Sprintf("%d", time.Now().UnixNano())
+
+	s.kafkaService.SendMessage("confirm_account_send_mail_request", requestID, SendMessageRequest{
 		Email:      req.Mail,
 		FirstName:  req.FirstName,
 		SecondName: req.LastName,
 		SecretCode: resp.GetCode(),
 	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	if mailStatus.Status != true {
-		return nil, errors.New("error send email")
-	}
 
 	return &Token{
 		AccessToken:  resp.GetToken(),
@@ -138,24 +143,20 @@ func (s *AuthService) PasswordRequest(ctx context.Context, req ResetPasswordRequ
 		return errors.New("Invalid mail")
 	}
 
-	resp, err := s.client.PasswordRequest(ctx, &auth.PasswordRequestRequest{
-		Mail: req.Mail,
-	})
+	resp, err := s.client.PasswordRequest(ctx, &auth.PasswordRequestRequest{Mail: req.Mail})
 
 	if resp.Status != true || err != nil {
 		return err
 	}
 
-	mailStatus, err := s.mailClient.SendMailResetPassword(ctx, &mail.SendMailResetPasswordRequest{
+	requestID := fmt.Sprintf("%d", time.Now().UnixNano())
+
+	s.kafkaService.SendMessage("reset_password_send_mail_request", requestID, SendMessageRequest{
 		Email:      req.Mail,
 		FirstName:  resp.FirstName,
 		SecondName: resp.SocendName,
 		SecretCode: resp.Secret,
 	})
-
-	if mailStatus.Status != true {
-		return errors.New("error send email")
-	}
 
 	return nil
 }
