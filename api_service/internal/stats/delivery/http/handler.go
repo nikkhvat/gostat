@@ -49,7 +49,7 @@ type SuccessSetVisitResponse struct {
 // @Param                        app_id query string true "Application ID"
 // @Success                      200 {object} SuccessSetVisitResponse "Example: {\"successfully\": true, \"session\": \"session_id\"}"
 // @Failure                      400 {object} ErrorSetVisitResponse "Example: {\"error\": true, \"detail\": \"Detailed error message\"}"
-// @Router                       /api/stats/set/visit [put]
+// @Router                       /stats/set/visit [put]
 func (h *StatsHandler) SetVisit(c *gin.Context) {
 	un := c.DefaultQuery("un", "0")
 	utm := c.DefaultQuery("utm", "")
@@ -122,7 +122,7 @@ type ErrorVisitExtendResponse struct {
 // @Param                      session query string false "Visit Session ID"
 // @Success                    200 {object} SuccessVisitExtendResponse "Example: {\"successfully\": true}"
 // @Failure                    400 {object} ErrorVisitExtendResponse "Example: {\"error\": true, \"detail\": \"Detailed error message\"}"
-// @Router                     /api/stats/set/visit/extend [put]
+// @Router                     /stats/set/visit/extend [put]
 func (h *StatsHandler) VisitExtend(c *gin.Context) {
 	session := c.DefaultQuery("session", "")
 
@@ -162,7 +162,7 @@ type ErrorGetVisitResponse struct {
 // @Param                      app query string true "Application ID"
 // @Success                    200 {object} interface{} "Successfully retrieved data. The structure of the data depends on the application."
 // @Failure                    400 {object} ErrorGetVisitResponse "Example: {\"error\": true, \"detail\": \"Detailed error message\"}"
-// @Router                     /api/stats/get/visits [get]
+// @Router                     /stats/get/visits [get]
 func (h StatsHandler) GetVisits(c *gin.Context) {
 	app := c.DefaultQuery("app", "")
 

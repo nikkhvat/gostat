@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/apps/create": {
+        "/apps/create": {
             "post": {
                 "description": "Create a new application with the given details",
                 "consumes": [
@@ -50,149 +50,6 @@ const docTemplate = `{
                         "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"detailed error message\\\"}",
                         "schema": {
                             "$ref": "#/definitions/http.ErrorAppCreateResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/stats/get/visits": {
-            "get": {
-                "description": "Retrieves visits data for a specific application",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "stats"
-                ],
-                "summary": "Retrieve visits for an application",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Application ID",
-                        "name": "app",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully retrieved data. The structure of the data depends on the application.",
-                        "schema": {
-                            "type": "object"
-                        }
-                    },
-                    "400": {
-                        "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"Detailed error message\\\"}",
-                        "schema": {
-                            "$ref": "#/definitions/http.ErrorGetVisitResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/stats/set/visit": {
-            "put": {
-                "description": "Registers a new visit or extends an existing session",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "stats"
-                ],
-                "summary": "Set a new visit session",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Unique (1 or 0)",
-                        "name": "un",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "UTM parameters",
-                        "name": "utm",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Visited URL",
-                        "name": "url",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Page Title",
-                        "name": "title",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Session ID",
-                        "name": "session",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Application ID",
-                        "name": "app_id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Example: {\\\"successfully\\\": true, \\\"session\\\": \\\"session_id\\\"}",
-                        "schema": {
-                            "$ref": "#/definitions/http.SuccessSetVisitResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"Detailed error message\\\"}",
-                        "schema": {
-                            "$ref": "#/definitions/http.ErrorSetVisitResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/stats/set/visit/extend": {
-            "put": {
-                "description": "Extends the session for a particular visit",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "stats"
-                ],
-                "summary": "Extend a visit session",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Visit Session ID",
-                        "name": "session",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Example: {\\\"successfully\\\": true}",
-                        "schema": {
-                            "$ref": "#/definitions/http.SuccessVisitExtendResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"Detailed error message\\\"}",
-                        "schema": {
-                            "$ref": "#/definitions/http.ErrorVisitExtendResponse"
                         }
                     }
                 }
@@ -441,6 +298,149 @@ const docTemplate = `{
                         "description": "Example: {\\\"error\\\":\\\"User with the same email already exists\\\"}",
                         "schema": {
                             "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/stats/get/visits": {
+            "get": {
+                "description": "Retrieves visits data for a specific application",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stats"
+                ],
+                "summary": "Retrieve visits for an application",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Application ID",
+                        "name": "app",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved data. The structure of the data depends on the application.",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"Detailed error message\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorGetVisitResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/stats/set/visit": {
+            "put": {
+                "description": "Registers a new visit or extends an existing session",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stats"
+                ],
+                "summary": "Set a new visit session",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Unique (1 or 0)",
+                        "name": "un",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "UTM parameters",
+                        "name": "utm",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Visited URL",
+                        "name": "url",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page Title",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Session ID",
+                        "name": "session",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Application ID",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Example: {\\\"successfully\\\": true, \\\"session\\\": \\\"session_id\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.SuccessSetVisitResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"Detailed error message\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorSetVisitResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/stats/set/visit/extend": {
+            "put": {
+                "description": "Extends the session for a particular visit",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stats"
+                ],
+                "summary": "Extend a visit session",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Visit Session ID",
+                        "name": "session",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Example: {\\\"successfully\\\": true}",
+                        "schema": {
+                            "$ref": "#/definitions/http.SuccessVisitExtendResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"Detailed error message\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorVisitExtendResponse"
                         }
                     }
                 }
