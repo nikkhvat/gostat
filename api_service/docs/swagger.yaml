@@ -174,7 +174,7 @@ info:
   contact: {}
   title: GoStat API
 paths:
-  /api/apps/create:
+  /apps/create:
     post:
       consumes:
       - application/json
@@ -200,101 +200,6 @@ paths:
       summary: Create a new application
       tags:
       - apps
-  /api/stats/get/visits:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves visits data for a specific application
-      parameters:
-      - description: Application ID
-        in: query
-        name: app
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successfully retrieved data. The structure of the data depends
-            on the application.
-          schema:
-            type: object
-        "400":
-          description: 'Example: {\"error\": true, \"detail\": \"Detailed error message\"}'
-          schema:
-            $ref: '#/definitions/http.ErrorGetVisitResponse'
-      summary: Retrieve visits for an application
-      tags:
-      - stats
-  /api/stats/set/visit:
-    put:
-      consumes:
-      - application/json
-      description: Registers a new visit or extends an existing session
-      parameters:
-      - description: Unique (1 or 0)
-        in: query
-        name: un
-        type: string
-      - description: UTM parameters
-        in: query
-        name: utm
-        type: string
-      - description: Visited URL
-        in: query
-        name: url
-        type: string
-      - description: Page Title
-        in: query
-        name: title
-        type: string
-      - description: Session ID
-        in: query
-        name: session
-        type: string
-      - description: Application ID
-        in: query
-        name: app_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 'Example: {\"successfully\": true, \"session\": \"session_id\"}'
-          schema:
-            $ref: '#/definitions/http.SuccessSetVisitResponse'
-        "400":
-          description: 'Example: {\"error\": true, \"detail\": \"Detailed error message\"}'
-          schema:
-            $ref: '#/definitions/http.ErrorSetVisitResponse'
-      summary: Set a new visit session
-      tags:
-      - stats
-  /api/stats/set/visit/extend:
-    put:
-      consumes:
-      - application/json
-      description: Extends the session for a particular visit
-      parameters:
-      - description: Visit Session ID
-        in: query
-        name: session
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 'Example: {\"successfully\": true}'
-          schema:
-            $ref: '#/definitions/http.SuccessVisitExtendResponse'
-        "400":
-          description: 'Example: {\"error\": true, \"detail\": \"Detailed error message\"}'
-          schema:
-            $ref: '#/definitions/http.ErrorVisitExtendResponse'
-      summary: Extend a visit session
-      tags:
-      - stats
   /auth/confirm:
     post:
       consumes:
@@ -461,4 +366,99 @@ paths:
       summary: Register a new user
       tags:
       - authentication
+  /stats/get/visits:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves visits data for a specific application
+      parameters:
+      - description: Application ID
+        in: query
+        name: app
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved data. The structure of the data depends
+            on the application.
+          schema:
+            type: object
+        "400":
+          description: 'Example: {\"error\": true, \"detail\": \"Detailed error message\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorGetVisitResponse'
+      summary: Retrieve visits for an application
+      tags:
+      - stats
+  /stats/set/visit:
+    put:
+      consumes:
+      - application/json
+      description: Registers a new visit or extends an existing session
+      parameters:
+      - description: Unique (1 or 0)
+        in: query
+        name: un
+        type: string
+      - description: UTM parameters
+        in: query
+        name: utm
+        type: string
+      - description: Visited URL
+        in: query
+        name: url
+        type: string
+      - description: Page Title
+        in: query
+        name: title
+        type: string
+      - description: Session ID
+        in: query
+        name: session
+        type: string
+      - description: Application ID
+        in: query
+        name: app_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Example: {\"successfully\": true, \"session\": \"session_id\"}'
+          schema:
+            $ref: '#/definitions/http.SuccessSetVisitResponse'
+        "400":
+          description: 'Example: {\"error\": true, \"detail\": \"Detailed error message\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorSetVisitResponse'
+      summary: Set a new visit session
+      tags:
+      - stats
+  /stats/set/visit/extend:
+    put:
+      consumes:
+      - application/json
+      description: Extends the session for a particular visit
+      parameters:
+      - description: Visit Session ID
+        in: query
+        name: session
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Example: {\"successfully\": true}'
+          schema:
+            $ref: '#/definitions/http.SuccessVisitExtendResponse'
+        "400":
+          description: 'Example: {\"error\": true, \"detail\": \"Detailed error message\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorVisitExtendResponse'
+      summary: Extend a visit session
+      tags:
+      - stats
 swagger: "2.0"

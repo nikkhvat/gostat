@@ -35,7 +35,7 @@ func main() {
 	kafkaService, err := kafka.NewKafkaService([]string{"kafka:9092"})
 
 	if err != nil {
-		panic(err)
+		log.Fatalf("❌ Failed to connect to kafka: %v", err)
 	} else {
 		log.Printf("✅ Successful connect to kafka")
 	}

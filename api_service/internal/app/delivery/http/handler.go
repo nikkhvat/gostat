@@ -1,9 +1,10 @@
 package http
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nik19ta/gostat/api_service/internal/app/service"
-	"net/http"
 )
 
 type AppHandler struct {
@@ -53,7 +54,7 @@ type ErrorAppCreateResponse struct {
 // @Param                     CreateAppRequest body CreateAppRequest true "Create App payload"
 // @Success                   200 {object} SuccessAppCreateResponse "Example: {\"successfully\": true, \"app\": \"new_app_id\"}"
 // @Failure                   400 {object} ErrorAppCreateResponse "Example: {\"error\": true, \"detail\": \"detailed error message\"}"
-// @Router                    /api/apps/create [post]
+// @Router                    /apps/create [post]
 func (h *AppHandler) CreateApp(c *gin.Context) {
 	var request CreateAppRequest
 
