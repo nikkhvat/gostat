@@ -7,6 +7,7 @@ import (
 	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
 	"github.com/nik19ta/gostat/auth_service/internal/auth/model"
+	"github.com/nik19ta/gostat/auth_service/pkg/argon2"
 	"gorm.io/gorm"
 )
 
@@ -81,18 +82,27 @@ func decodeRefreshToken(tokenString string) (jwt.MapClaims, error) {
 
 func (r UserRepository) GetUserByLoginAndPassword(identifier, password string) (*model.User, error) {
 	var user model.User
-	if err := r.db.Where("(login = ? OR email = ?) AND password = ?", identifier, identifier, password).First(&user).Error; err != nil {
+	if err := r.db.Where("login = ? OR email = ?", identifier, identifier).First(&user).Error; err != nil {
 		return nil, err
 	}
+
+	match := argon2.ComparePasswordAndHash(password, user.Password)
+
+	if !match {
+		return nil, errors.New("invalid password")
+	}
+
 	return &user, nil
 }
 
 func (r UserRepository) RegistrationUser(login, mail, password, firstName, lastName, middleName string) (model.User, error) {
 
+	hashedPassword := argon2.GeneratePasswordHash(password)
+
 	user := model.User{
 		Email:            mail,
 		Login:            login,
-		Password:         password,
+		Password:         hashedPassword,
 		FirstName:        firstName,
 		LastName:         lastName,
 		MiddleName:       middleName,
@@ -131,7 +141,9 @@ func (r UserRepository) PasswordReset(mail, password, secret string) (*model.Use
 		return nil, err
 	}
 
-	user.Password = password
+	hashedPassword := argon2.GeneratePasswordHash(password)
+
+	user.Password = hashedPassword
 	user.PasswordRecoveryCode = ""
 
 	if err := r.db.Save(&user).Error; err != nil {
@@ -139,5 +151,4 @@ func (r UserRepository) PasswordReset(mail, password, secret string) (*model.Use
 	}
 
 	return &user, nil
-
 }

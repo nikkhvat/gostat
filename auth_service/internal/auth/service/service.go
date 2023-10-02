@@ -146,7 +146,6 @@ func (s AuthService) PasswordRequest(mail string) (*model.User, error) {
 }
 
 func (s AuthService) PasswordReset(secret, mail, password string) (*TokenResponse, error) {
-
 	user, err := s.repo.PasswordReset(mail, password, secret)
 
 	if err != nil {
