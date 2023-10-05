@@ -1,4 +1,19 @@
-.registration__input {
+/* :root {
+  --backgroud-color: #1E1E1E;
+  --block-backgroud-color: #181818;
+  --border-color: #3C3C3C;
+  --main-text: #FFFFFF;
+  --grey-text: #999999;
+  --dark-grey-color: #5A5A5A;
+
+  --page-padding: 30px;
+} */
+
+.container {
+  position: relative;
+}
+
+.input {
   border: 1px solid #3C3C3C;
   background: #181818;
   width: 360px;
@@ -6,4 +21,11 @@
   outline: none;
   border-radius: 10px;
   margin-bottom: 15px;
+}
+
+.element {
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  cursor: pointer;
 }
