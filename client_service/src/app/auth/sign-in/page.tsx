@@ -4,11 +4,12 @@ import InputComponent from '@/app/auth/components/Input/index';
 import Image from 'next/image';
 
 import logo from '../../assets/auth/logo.svg';
-
 import absolutepic1 from '../../assets/auth/absolute1.svg';
 import absolutepic2 from '../../assets/auth/absolute2.svg';
 import absolutepic3 from '../../assets/auth/absolute3.svg';
+
 import { useState } from 'react';
+import { singUp } from '../api';
 
 export default function SingIn() {
 
@@ -33,6 +34,20 @@ export default function SingIn() {
     setRepeat(e.target.value);
   }
 
+  const submit = async (e: any) => {
+    e.preventDefault()
+    console.log({name, email, password, repeat})
+    const response = await singUp({
+      first_name: name,
+      last_name: '-',
+      middle_name: '-',
+      mail: email,
+      login: email,
+      password: password
+    })
+    console.log(response.data)
+  }
+
   return (
     <main className={styles.container}>
 
@@ -54,7 +69,7 @@ export default function SingIn() {
           <InputComponent typeProp='email' placeholder='E-mail' onChange={handleEmailChange}/>
           <InputComponent typeProp='password' placeholder='Password' check={true} onChange={handlePasswordChange}/>
           <InputComponent typeProp='password' placeholder='Repeat password' check={true} onChange={handleRepeatChange}/>
-          <button className={styles.registration__button} onClick={() => {console.log({name, email, password, repeat})}}>Sign up</button>
+          <button className={styles.registration__button} onClick={submit}>Sign up</button>
         </form>
 
         <p className={styles.link}>Already have an account?</p>

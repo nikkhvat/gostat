@@ -38,7 +38,6 @@ const Input: React.FC<InputProps> = ({ typeProp, placeholder, check, onChange}) 
         onChange={onChange}
       />
     
-
       {
         (type === 'password' && check) 
         ? 
