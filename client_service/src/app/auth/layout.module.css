@@ -7,23 +7,23 @@
   position: relative;
 }
 
-.absolute__element__first {
+.bottom_left_picture {
   position: fixed;
   bottom: 59px;
   left: 58px;
   z-index: 1;
 }
 
-.absolute__element__second {
+.top_left_picture {
   position: fixed;
   left: 99px;
   top: -2px;
   z-index: 1;
 }
 
-.absolute__element__third {
+.bottom_right_picture {
   position: fixed;
-  bottom: 2.55px;
+  bottom: 0px;
   right: -20px;
   z-index: 1;
 }

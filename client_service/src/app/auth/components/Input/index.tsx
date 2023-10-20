@@ -19,35 +19,30 @@ const Input: React.FC<InputProps> = ({ typeProp, placeholder, check, onChange}) 
   let [type, setType] = useState(typeProp)
 
   const checkFunction = () => {
-    if (type === 'password' && check) {
-      setType('text')
-    } 
-    
-    if (type === 'text' && check) {
-      setType('password')
-    }
-  }
+    setType(type === "password" ? "text" : "password");
+  };
 
   return (
     <div className={styles.container}>
-
       <input
         className={styles.input}
         type={type}
         placeholder={placeholder}
         onChange={onChange}
       />
-    
-      {(type === 'text' && check) &&
-        <div className={styles.element} onClick={checkFunction}>
-          <Image src={eye} alt='eye icon' />
-        </div>}
-        
-      {(type === 'password' && check) &&
-        <div className={styles.element} onClick={checkFunction}>
-          <Image src={eye_off} alt='eye icon' />
-        </div>}
 
+      {check && (
+        <button
+          type="button"
+          className={styles.element}
+          onClick={checkFunction}
+          tabIndex={0}
+          aria-pressed={type === "text"}
+          aria-label={type === "password" ? "Show password" : "Hide password"}
+        >
+          <Image src={type === "text" ? eye : eye_off} alt="eye icon" />
+        </button>
+      )}
     </div>
   );
 }

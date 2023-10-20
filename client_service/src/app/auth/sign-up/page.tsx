@@ -4,7 +4,7 @@ import InputComponent from '@/app/auth/components/Input/index';
 import Image from 'next/image';
 import Link from "next/link";
 
-import logo from '../../assets/auth/logo.svg';
+import logo from '@/app/assets/auth/logo.svg';
 
 import { useEffect, useState } from 'react';
 import { singUp } from '../api';
@@ -46,7 +46,6 @@ export default function SingIn() {
 
   const submit = async (e: any) => {
     e.preventDefault()
-    console.log({name, email, password, repeat})
     const response = await singUp({
       first_name: name,
       last_name: '-',
@@ -67,35 +66,40 @@ export default function SingIn() {
     <div className={styles.box}>
       <div className={styles.top}>
         <div className={styles.logo}>
-          <Image src={logo} alt="Picture of the logo" />
-          <p className={styles.title}>GoStat</p>
+          <Image src={logo} alt="GoStat Logo" />
+          <h1 className={styles.title}>GoStat</h1>
         </div>
-        <p className={styles.top__button}>Create account</p>
+        <h2 className={styles.top__button}>Create account</h2>
       </div>
 
       <form className={styles.form}>
-        <InputComponent
-          typeProp="text"
-          placeholder="Name"
-          onChange={handleNameChange}
-        />
-        <InputComponent
-          typeProp="email"
-          placeholder="E-mail"
-          onChange={handleEmailChange}
-        />
-        <InputComponent
-          typeProp="password"
-          placeholder="Password"
-          check={true}
-          onChange={handlePasswordChange}
-        />
-        <InputComponent
-          typeProp="password"
-          placeholder="Repeat password"
-          check={true}
-          onChange={handleRepeatChange}
-        />
+        <fieldset className={styles.fieldset}>
+          <legend className={styles.legend}>
+            Sign Up Information, name, email and password
+          </legend>
+          <InputComponent
+            typeProp="text"
+            placeholder="Name"
+            onChange={handleNameChange}
+          />
+          <InputComponent
+            typeProp="email"
+            placeholder="E-mail"
+            onChange={handleEmailChange}
+          />
+          <InputComponent
+            typeProp="password"
+            placeholder="Password"
+            check={true}
+            onChange={handlePasswordChange}
+          />
+          <InputComponent
+            typeProp="password"
+            placeholder="Repeat password"
+            check={true}
+            onChange={handleRepeatChange}
+          />
+        </fieldset>
         <button className={styles.registration__button} onClick={submit}>
           Sign up
         </button>
