@@ -1,5 +1,5 @@
 "use client"
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import styles from './index.module.css'
 import Image from 'next/image';
 
@@ -18,14 +18,14 @@ const Input: React.FC<InputProps> = ({ typeProp, placeholder, check, onChange}) 
 
   let [type, setType] = useState(typeProp)
 
-  const checkFunction = (type: string, check: boolean) => {
-
+  const checkFunction = () => {
     if (type === 'password' && check) {
       setType('text')
-    } else if (type === 'text' && check) {
+    } 
+    
+    if (type === 'text' && check) {
       setType('password')
     }
-
   }
 
   return (
@@ -38,27 +38,15 @@ const Input: React.FC<InputProps> = ({ typeProp, placeholder, check, onChange}) 
         onChange={onChange}
       />
     
-      {
-        (type === 'password' && check) 
-        ? 
-        <div className={styles.element} onClick={() => {checkFunction(type, check)}}>
-          <Image 
-            src={eye}
-            alt='eye icon'
-          />
-        </div>
-        : 
-        (type === 'text' && check)
-        ?
-        <div className={styles.element} onClick={() => {checkFunction(type, check)}}>
-          <Image 
-            src={eye_off}
-            alt='eye icon'
-          />
-        </div> 
-        :
-        <></>
-      }
+      {(type === 'text' && check) &&
+        <div className={styles.element} onClick={checkFunction}>
+          <Image src={eye} alt='eye icon' />
+        </div>}
+        
+      {(type === 'password' && check) &&
+        <div className={styles.element} onClick={checkFunction}>
+          <Image src={eye_off} alt='eye icon' />
+        </div>}
 
     </div>
   );

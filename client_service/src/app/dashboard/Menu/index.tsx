@@ -10,6 +10,9 @@ import IconDashboard from "@/app/assets/menu/dashboard.svg";
 import IconDashboardActive from "@/app/assets/menu/dashboard_active.svg";
 import { useState } from "react";
 
+import { useRouter } from "next/navigation";
+import Storage from "@/app/utils/storage";
+
 interface Tab {
   id: number
   name: string
@@ -19,6 +22,7 @@ interface Tab {
 }
 
 export default function Menu() {
+  const router = useRouter();
 
   const tabs: Tab[] = [
     {
@@ -27,13 +31,26 @@ export default function Menu() {
       path: "/dashboard",
       icon: IconDashboard,
       icon_active: IconDashboardActive,
-    }
+    },
+    {
+      id: 0,
+      name: "Exit",
+      path: "/auth",
+      icon: null,
+      icon_active: null,
+    },
   ];
 
   const [activeTab, setActiveTab] = useState(tabs[0].id)
 
   const clickTab = (tab: Tab) => {
-    setActiveTab(tab.id)
+    if (tab.name === "Exit") {
+      router.push("/auth/sign-in", { scroll: false });
+      Storage.delete("access_token")
+      Storage.delete("refresh_token")
+    } else {
+      setActiveTab(tab.id)
+    }
   }
 
   return (
@@ -53,13 +70,15 @@ export default function Menu() {
             className={styles.list__item}
             onClick={() => clickTab(tab)}
           >
-            <Image
-              className={styles.item_icon}
-              src={activeTab === tab.id ? tab.icon_active : tab.icon}
-              alt={"logo"}
-              width={50}
-              height={50}
-            />
+            {tab.icon_active !== null && tab.icon !== null ? (
+              <Image
+                className={styles.item_icon}
+                src={activeTab === tab.id ? tab.icon_active : tab.icon}
+                alt={"logo"}
+                width={50}
+                height={50}
+              />
+            ): <span className={styles.icon_text} >{tab.name}</span>}
           </div>
         ))}
       </div>

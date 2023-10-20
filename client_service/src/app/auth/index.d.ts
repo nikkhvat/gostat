@@ -7,7 +7,12 @@ export interface ISingUpRequest {
   password: string
 }
 
-export interface ISingUpResponse {
+export interface ISingInRequest {
+  login: string
+  password: string
+}
+
+export interface IAuthResponse {
   access_token: string
   refresh_token: string
 }

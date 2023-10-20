@@ -7,8 +7,8 @@ import Link from "next/link";
 import logo from '../../assets/auth/logo.svg';
 
 import { useEffect, useState } from 'react';
-import { singIn } from '../api';
-import Storage from '@/app/utils/storage';
+import { singUp } from '../api';
+import Storage from "@/app/utils/storage";
 
 import { useRouter } from "next/navigation";
 
@@ -23,25 +23,40 @@ export default function SingIn() {
     }
   }, [router]);
 
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [repeat, setRepeat] = useState('')
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
 
   const handlePasswordChange = (e: any) => {
     setPassword(e.target.value);
+  }
+
+  const handleNameChange = (e: any) => {
+    setName(e.target.value);
   }
 
   const handleEmailChange = (e: any) => {
     setEmail(e.target.value);
   }
 
+  const handleRepeatChange = (e: any) => {
+    setRepeat(e.target.value);
+  }
+
   const submit = async (e: any) => {
     e.preventDefault()
-    console.log({email, password})
-    const response = await singIn({
+    console.log({name, email, password, repeat})
+    const response = await singUp({
+      first_name: name,
+      last_name: '-',
+      middle_name: '-',
+      mail: email,
       login: email,
-      password: password,
-    });
+      password: password
+    })
     
+
     Storage.set("access_token", response.data.access_token);
     Storage.set("refresh_token", response.data.refresh_token);
 
@@ -60,6 +75,11 @@ export default function SingIn() {
 
       <form className={styles.form}>
         <InputComponent
+          typeProp="text"
+          placeholder="Name"
+          onChange={handleNameChange}
+        />
+        <InputComponent
           typeProp="email"
           placeholder="E-mail"
           onChange={handleEmailChange}
@@ -70,13 +90,19 @@ export default function SingIn() {
           check={true}
           onChange={handlePasswordChange}
         />
+        <InputComponent
+          typeProp="password"
+          placeholder="Repeat password"
+          check={true}
+          onChange={handleRepeatChange}
+        />
         <button className={styles.registration__button} onClick={submit}>
-          Sign in
+          Sign up
         </button>
       </form>
 
-      <Link className={styles.link} href="/auth/sign-up">
-        Create account
+      <Link className={styles.link} href="/auth/sign-in">
+        Already have an account?
       </Link>
     </div>
   );
