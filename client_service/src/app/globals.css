@@ -23,3 +23,8 @@ p, span, div, input, textarea {
   color: var(--main-text);
   font-size: 16px;
 }
+
+body, html {
+  background-color: var(--backgroud-color);
+  color: var(--main-text);
+}

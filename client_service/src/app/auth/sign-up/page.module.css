@@ -1,0 +1,72 @@
+.box {
+  padding: 60px 30px;
+  border-radius: 15px;
+  background: #181818;
+  height: 584px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.title {
+  color: #FFF;
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.top__button {
+  color: #999;
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 15px;
+}
+
+.form {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.registration__button {
+  padding: 15px;
+  align-self: stretch;
+  border-radius: 10px;
+  background: #FFF;
+  border: none;
+  cursor: pointer;
+  margin-top: 15px;
+
+  color: #181818;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.link {
+  margin-top: 15px;
+  color: #FFF;
+  text-decoration: none;
+  font-family: Commissioner;
+  display: block;
+  width: 100%;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+  text-align: center;
+}

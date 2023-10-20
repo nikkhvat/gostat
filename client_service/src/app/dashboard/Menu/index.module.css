@@ -22,3 +22,12 @@
 .item_icon {
   cursor: pointer;
 }
+
+.icon_text {
+  display: flex;
+  justify-content: center;
+  text-transform: uppercase;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
