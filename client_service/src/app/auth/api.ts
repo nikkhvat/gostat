@@ -1,4 +1,5 @@
 import api from '@/app/utils/axiosInstance'
+
 import { AxiosResponse } from 'axios';
 import { ISingUpRequest, IAuthResponse, ISingInRequest } from './index';
 
