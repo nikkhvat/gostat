@@ -152,3 +152,17 @@ func (r UserRepository) PasswordReset(mail, password, secret string) (*model.Use
 
 	return &user, nil
 }
+
+func (r UserRepository) GetUserById(id uint64) (*model.User, error) {
+	var user model.User
+	result := r.db.First(&user, id)
+
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, errors.New("user not found")
+		}
+		return nil, result.Error
+	}
+
+	return &user, nil
+}

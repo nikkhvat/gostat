@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"context"
+
 	"github.com/nik19ta/gostat/api_service/proto/app"
 	"google.golang.org/grpc"
 )
@@ -22,4 +23,8 @@ func NewAppClient(address string) (*AppClient, error) {
 
 func (c *AppClient) CreateApp(ctx context.Context, req *app.CreateAppRequest) (*app.CreateAppResponse, error) {
 	return c.client.CreateApp(ctx, req)
+}
+
+func (c *AppClient) GetAppsByUserId(ctx context.Context, req *app.GetAppsByUserIdRequest) (*app.GetAppsByUserIdResponse, error) {
+	return c.client.GetAppsByUserId(ctx, req)
 }

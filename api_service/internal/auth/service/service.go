@@ -6,22 +6,27 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/nik19ta/gostat/api_service/internal/auth/repository/grpc"
+	appgrpc "github.com/nik19ta/gostat/api_service/internal/app/repository/grpc"
+	grpc "github.com/nik19ta/gostat/api_service/internal/auth/repository/grpc"
 	kafka "github.com/nik19ta/gostat/api_service/pkg/kafka"
+	app "github.com/nik19ta/gostat/api_service/proto/app"
 	auth "github.com/nik19ta/gostat/api_service/proto/auth"
 )
 
 type AuthService struct {
 	client       *grpc.AuthClient
+	appClient    *appgrpc.AppClient
 	kafkaService *kafka.KafkaService
 }
 
 func NewAuthService(
 	client *grpc.AuthClient,
+	appClient *appgrpc.AppClient,
 	kafkaService *kafka.KafkaService,
 ) *AuthService {
 	return &AuthService{
 		client:       client,
+		appClient:    appClient,
 		kafkaService: kafkaService,
 	}
 }
@@ -184,4 +189,102 @@ func (s *AuthService) PasswordReset(ctx context.Context, req ResetConfirmPasswor
 		AccessToken:  token.Token,
 		RefreshToekn: token.RefreshToken,
 	}, nil
+}
+
+// UserInfo represents detailed information about a user account and associated applications
+// swagger:response UserInfo
+type UserInfo struct {
+	// Unique identifier of the user
+	// example: 168
+	Id uint64 `json:"id"`
+	// First name of the user
+	// example: "Nikita"
+	FirstName string `json:"first_name"`
+	// Avatar URL
+	// example: ""
+	Avatar string `json:"avatar"`
+	// Last name of the user
+	// example: "Khvatov"
+	LastName string `json:"last_name"`
+	// Middle name of the user
+	// example: "Dmitrievich"
+	MiddleName string `json:"middle_name"`
+	// Account confirmation status
+	// example: false
+	AccountConfirmed bool `json:"account_confirmed"`
+	// Email address of the user
+	// example: "nik19ta.me1@gmail.com"
+	Email string `json:"email"`
+	// Login name of the user
+	// example: "nik19ta.me1"
+	Login string `json:"login"`
+	// Timestamp of account creation
+	// example: "2023-10-22 00:49:35"
+	CreatedAt string `json:"created_at"`
+	// List of applications associated with the user
+	Apps []UserApp `json:"apps"`
+}
+
+// UserApp represents an application associated with a user account
+type UserApp struct {
+	// Unique identifier of the application
+	// example: "8d8da463-767a-488c-9cc6-45dc35346507"
+	Id string `json:"id"`
+	// Image or icon of the application
+	// example: "default"
+	Image string `json:"image"`
+	// Name of the application
+	// example: "nikkhvat"
+	Name string `json:"name"`
+	// URL of the application
+	// example: "https://nik.khvat.pro"
+	Url string `json:"url"`
+	// Timestamp of application creation
+	// example: "2023-10-22T01:47:40+04:00"
+	CreatedAt string `json:"created_at"`
+}
+
+func (s *AuthService) GetInfoAccount(ctx context.Context, id uint64) (*UserInfo, error) {
+
+	userData, userErr := s.client.GetUserInfo(ctx, &auth.GetUserInfoRequest{
+		Id: id,
+	})
+
+	if userErr != nil {
+		return nil, userErr
+	}
+
+	apps, appsErr := s.appClient.GetAppsByUserId(ctx, &app.GetAppsByUserIdRequest{
+		UserId: id,
+	})
+
+	var userapps []UserApp
+
+	for _, app := range apps.Apps {
+		userapps = append(userapps, UserApp{
+			Id:        app.Id,
+			Image:     app.Image,
+			Name:      app.Name,
+			Url:       app.Url,
+			CreatedAt: app.CreatedAt,
+		})
+	}
+
+	if appsErr != nil {
+		return nil, userErr
+	}
+
+	resp := UserInfo{
+		Id:               id,
+		FirstName:        userData.FirstName,
+		Avatar:           userData.Avatar,
+		LastName:         userData.LastName,
+		MiddleName:       userData.MiddleName,
+		AccountConfirmed: userData.AccountConfirmed,
+		Email:            userData.Email,
+		Login:            userData.Login,
+		CreatedAt:        userData.CreatedAt,
+		Apps:             userapps,
+	}
+	return &resp, nil
 }

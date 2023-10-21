@@ -236,3 +236,25 @@ func (h *AuthHandler) PasswordReset(c *gin.Context) {
 
 	c.JSON(200, SuccessAuthResponse{AccessToken: token.AccessToken, RefreshToken: token.RefreshToekn})
 }
+
+// GetInfoAccount fetches detailed information about a user account and associated applications
+// @Summary Retrieve user account information
+// @Description Get detailed information about a user's account and their associated applications
+// @Tags authentication
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} service.UserInfo "Successfully retrieved user information"
+// @Failure 400 {object} ErrorAuthResponse "Invalid request parameters or error retrieving user information"
+// @Router /api/auth/info [get]
+func (h *AuthHandler) GetInfoAccount(c *gin.Context) {
+	id := c.GetUint64("id")
+
+	data, err := h.service.GetInfoAccount(c, id)
+
+	if err != nil {
+		c.JSON(400, ErrorAuthResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(200, data)
+}

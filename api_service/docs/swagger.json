@@ -5,6 +5,35 @@
         "contact": {}
     },
     "paths": {
+        "/api/auth/info": {
+            "get": {
+                "description": "Get detailed information about a user's account and their associated applications",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Retrieve user account information",
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved user information",
+                        "schema": {
+                            "$ref": "#/definitions/service.UserInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters or error retrieving user information",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/apps/create": {
             "post": {
                 "description": "Create a new application with the given details",
@@ -622,6 +651,79 @@
             "properties": {
                 "mail": {
                     "description": "The email address associated with the account\nrequired: true\nexample: user@example.com",
+                    "type": "string"
+                }
+            }
+        },
+        "service.UserApp": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "Timestamp of application creation\nexample: \"2023-10-22T01:47:40+04:00\"",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Unique identifier of the application\nexample: \"8d8da463-767a-488c-9cc6-45dc35346507\"",
+                    "type": "string"
+                },
+                "image": {
+                    "description": "Image or icon of the application\nexample: \"default\"",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Name of the application\nexample: \"nikkhvat\"",
+                    "type": "string"
+                },
+                "url": {
+                    "description": "URL of the application\nexample: \"https://nik.khvat.pro\"",
+                    "type": "string"
+                }
+            }
+        },
+        "service.UserInfo": {
+            "type": "object",
+            "properties": {
+                "account_confirmed": {
+                    "description": "Account confirmation status\nexample: false",
+                    "type": "boolean"
+                },
+                "apps": {
+                    "description": "List of applications associated with the user",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/service.UserApp"
+                    }
+                },
+                "avatar": {
+                    "description": "Avatar URL\nexample: \"\"",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "Timestamp of account creation\nexample: \"2023-10-22 00:49:35\"",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Email address of the user\nexample: \"nik19ta.me1@gmail.com\"",
+                    "type": "string"
+                },
+                "first_name": {
+                    "description": "First name of the user\nexample: \"Nikita\"",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Unique identifier of the user\nexample: 168",
+                    "type": "integer"
+                },
+                "last_name": {
+                    "description": "Last name of the user\nexample: \"Khvatov\"",
+                    "type": "string"
+                },
+                "login": {
+                    "description": "Login name of the user\nexample: \"nik19ta.me1\"",
+                    "type": "string"
+                },
+                "middle_name": {
+                    "description": "Middle name of the user\nexample: \"Dmitrievich\"",
                     "type": "string"
                 }
             }
