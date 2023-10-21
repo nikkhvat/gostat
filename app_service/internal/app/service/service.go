@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/google/uuid"
+	"github.com/nik19ta/gostat/app_service/internal/app/model"
 	"github.com/nik19ta/gostat/app_service/internal/app/repository/postgres"
 )
 
@@ -21,4 +22,8 @@ func (s AppService) CreateApp(name, url string, userId uint64) (*uuid.UUID, erro
 	}
 
 	return &app.ID, nil
+}
+
+func (s AppService) GetAppsByUserId(userId uint64) ([]*model.App, error) {
+	return s.repo.GetAppsByUserId(userId)
 }

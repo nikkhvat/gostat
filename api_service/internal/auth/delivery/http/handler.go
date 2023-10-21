@@ -236,3 +236,16 @@ func (h *AuthHandler) PasswordReset(c *gin.Context) {
 
 	c.JSON(200, SuccessAuthResponse{AccessToken: token.AccessToken, RefreshToken: token.RefreshToekn})
 }
+
+func (h *AuthHandler) GetInfoAccount(c *gin.Context) {
+	id := c.GetUint64("id")
+
+	data, err := h.service.GetInfoAccount(c, id)
+
+	if err != nil {
+		c.JSON(400, ErrorAuthResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(200, data)
+}

@@ -32,10 +32,11 @@ import (
 // @title     GoStat API
 func main() {
 
-	kafkaService, err := kafka.NewKafkaService([]string{"kafka:9092"})
+	kafkaService, err := kafka.NewKafkaService([]string{"localhost:9092"})
+	// kafkaService, err := kafka.NewKafkaService([]string{"kafka:9092"})
 
 	if err != nil {
-		log.Fatalf("❌ Failed to connect to kafka: %v", err)
+		log.Printf("❌ Failed to connect to kafka: %v", err)
 	} else {
 		log.Printf("✅ Successful connect to kafka")
 	}
@@ -65,7 +66,7 @@ func main() {
 	defer kafkaService.Close()
 
 	// Auth service
-	newAuthService := authService.NewAuthService(authClient, kafkaService)
+	newAuthService := authService.NewAuthService(authClient, appClient, kafkaService)
 	authHandler := authHttp.NewAuthHandler(newAuthService)
 
 	// Stats service
@@ -88,6 +89,12 @@ func main() {
 		authRouter.POST("/confirm", authHandler.ConfirmAccount)
 		authRouter.POST("/password/request", authHandler.PasswordRequest)
 		authRouter.POST("/password/reset", authHandler.PasswordReset)
+
+		privateAuthRouter := authRouter.Group("/")
+		privateAuthRouter.Use(middlewareAuth.AuthRequired())
+		{
+			privateAuthRouter.GET("/info", authHandler.GetInfoAccount)
+		}
 	}
 
 	// * Stats Router

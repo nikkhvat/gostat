@@ -11,7 +11,24 @@ service AuthService {
   rpc ConfirmAccount (ConfirmAccountRequest) returns (ConfirmAccountResponse) {}
   rpc PasswordRequest (PasswordRequestRequest) returns (PasswordRequestResponse) {}
   rpc PasswordReset (PasswordResetRequest) returns (PasswordResetResponse) {}
+  rpc GetUserinfo (GetUserInfoRequest) returns (GetUserInfoResponse) {}
 }
+
+message GetUserInfoRequest {
+  uint64 id = 1;
+}
+
+message GetUserInfoResponse {
+  string avatar = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string middle_name = 4;
+  bool account_confirmed = 5;
+  string email = 6;
+  string login = 7;
+  string created_at = 8;
+}
+
 
 message PasswordRequestRequest {
   string mail = 1;

@@ -6,22 +6,27 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/nik19ta/gostat/api_service/internal/auth/repository/grpc"
+	appgrpc "github.com/nik19ta/gostat/api_service/internal/app/repository/grpc"
+	grpc "github.com/nik19ta/gostat/api_service/internal/auth/repository/grpc"
 	kafka "github.com/nik19ta/gostat/api_service/pkg/kafka"
+	app "github.com/nik19ta/gostat/api_service/proto/app"
 	auth "github.com/nik19ta/gostat/api_service/proto/auth"
 )
 
 type AuthService struct {
 	client       *grpc.AuthClient
+	appClient    *appgrpc.AppClient
 	kafkaService *kafka.KafkaService
 }
 
 func NewAuthService(
 	client *grpc.AuthClient,
+	appClient *appgrpc.AppClient,
 	kafkaService *kafka.KafkaService,
 ) *AuthService {
 	return &AuthService{
 		client:       client,
+		appClient:    appClient,
 		kafkaService: kafkaService,
 	}
 }
@@ -184,4 +189,50 @@ func (s *AuthService) PasswordReset(ctx context.Context, req ResetConfirmPasswor
 		AccessToken:  token.Token,
 		RefreshToekn: token.RefreshToken,
 	}, nil
+}
+
+type UserInfo struct {
+	Id               uint64                `json:"id"`
+	FirstName        string                `json:"first_name"`
+	Avatar           string                `json:"avatar"`
+	LastName         string                `json:"last_name"`
+	MiddleName       string                `json:"middle_name"`
+	AccountConfirmed bool                  `json:"account_confirmed"`
+	Email            string                `json:"email"`
+	Login            string                `json:"login"`
+	CreatedAt        string                `json:"created_at"`
+	Apps             []*app.GetAppResponse `json:"apps"`
+}
+
+func (s *AuthService) GetInfoAccount(ctx context.Context, id uint64) (*UserInfo, error) {
+
+	userData, userErr := s.client.GetUserInfo(ctx, &auth.GetUserInfoRequest{
+		Id: id,
+	})
+
+	if userErr != nil {
+		return nil, userErr
+	}
+
+	apps, appsErr := s.appClient.GetAppsByUserId(ctx, &app.GetAppsByUserIdRequest{
+		UserId: id,
+	})
+
+	if appsErr != nil {
+		return nil, userErr
+	}
+
+	resp := UserInfo{
+		Id:               id,
+		FirstName:        userData.FirstName,
+		Avatar:           userData.Avatar,
+		LastName:         userData.LastName,
+		MiddleName:       userData.MiddleName,
+		AccountConfirmed: userData.AccountConfirmed,
+		Email:            userData.Email,
+		Login:            userData.Login,
+		CreatedAt:        userData.CreatedAt,
+		Apps:             apps.Apps,
+	}
+	return &resp, nil
 }

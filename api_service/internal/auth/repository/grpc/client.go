@@ -48,3 +48,7 @@ func (c *AuthClient) PasswordRequest(ctx context.Context, req *auth.PasswordRequ
 func (c *AuthClient) PasswordReset(ctx context.Context, req *auth.PasswordResetRequest) (*auth.PasswordResetResponse, error) {
 	return c.client.PasswordReset(ctx, req)
 }
+
+func (c *AuthClient) GetUserInfo(ctx context.Context, req *auth.GetUserInfoRequest) (*auth.GetUserInfoResponse, error) {
+	return c.client.GetUserinfo(ctx, req)
+}

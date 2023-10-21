@@ -35,3 +35,15 @@ func (r AppRepository) CreateApp(name, url string, userId uint64) (*model.App, e
 
 	return &app, nil
 }
+
+func (r AppRepository) GetAppsByUserId(userId uint64) ([]*model.App, error) {
+	var apps []*model.App
+
+	result := r.db.Where("user_id = ?", userId).Find(&apps)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return apps, nil
+}

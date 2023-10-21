@@ -38,7 +38,7 @@ message GetAppResponse {
 
 // * GetAppsByUserId
 message GetAppsByUserIdRequest {
-  string user_id = 1;
+  uint64 user_id = 1;
 }
 
 message GetAppsByUserIdResponse {

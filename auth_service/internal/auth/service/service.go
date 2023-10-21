@@ -160,3 +160,7 @@ func (s AuthService) PasswordReset(secret, mail, password string) (*TokenRespons
 
 	return tokens, err
 }
+
+func (s AuthService) GetUserInfo(id uint64) (*model.User, error) {
+	return s.repo.GetUserById(id)
+}
