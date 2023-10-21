@@ -191,17 +191,57 @@ func (s *AuthService) PasswordReset(ctx context.Context, req ResetConfirmPasswor
 	}, nil
 }
 
+// UserInfo represents detailed information about a user account and associated applications
+// swagger:response UserInfo
 type UserInfo struct {
-	Id               uint64                `json:"id"`
-	FirstName        string                `json:"first_name"`
-	Avatar           string                `json:"avatar"`
-	LastName         string                `json:"last_name"`
-	MiddleName       string                `json:"middle_name"`
-	AccountConfirmed bool                  `json:"account_confirmed"`
-	Email            string                `json:"email"`
-	Login            string                `json:"login"`
-	CreatedAt        string                `json:"created_at"`
-	Apps             []*app.GetAppResponse `json:"apps"`
+	// Unique identifier of the user
+	// example: 168
+	Id uint64 `json:"id"`
+	// First name of the user
+	// example: "Nikita"
+	FirstName string `json:"first_name"`
+	// Avatar URL
+	// example: ""
+	Avatar string `json:"avatar"`
+	// Last name of the user
+	// example: "Khvatov"
+	LastName string `json:"last_name"`
+	// Middle name of the user
+	// example: "Dmitrievich"
+	MiddleName string `json:"middle_name"`
+	// Account confirmation status
+	// example: false
+	AccountConfirmed bool `json:"account_confirmed"`
+	// Email address of the user
+	// example: "nik19ta.me1@gmail.com"
+	Email string `json:"email"`
+	// Login name of the user
+	// example: "nik19ta.me1"
+	Login string `json:"login"`
+	// Timestamp of account creation
+	// example: "2023-10-22 00:49:35"
+	CreatedAt string `json:"created_at"`
+	// List of applications associated with the user
+	Apps []UserApp `json:"apps"`
+}
+
+// UserApp represents an application associated with a user account
+type UserApp struct {
+	// Unique identifier of the application
+	// example: "8d8da463-767a-488c-9cc6-45dc35346507"
+	Id string `json:"id"`
+	// Image or icon of the application
+	// example: "default"
+	Image string `json:"image"`
+	// Name of the application
+	// example: "nikkhvat"
+	Name string `json:"name"`
+	// URL of the application
+	// example: "https://nik.khvat.pro"
+	Url string `json:"url"`
+	// Timestamp of application creation
+	// example: "2023-10-22T01:47:40+04:00"
+	CreatedAt string `json:"created_at"`
 }
 
 func (s *AuthService) GetInfoAccount(ctx context.Context, id uint64) (*UserInfo, error) {
@@ -218,6 +258,18 @@ func (s *AuthService) GetInfoAccount(ctx context.Context, id uint64) (*UserInfo,
 		UserId: id,
 	})
 
+	var userapps []UserApp
+
+	for _, app := range apps.Apps {
+		userapps = append(userapps, UserApp{
+			Id:        app.Id,
+			Image:     app.Image,
+			Name:      app.Name,
+			Url:       app.Url,
+			CreatedAt: app.CreatedAt,
+		})
+	}
+
 	if appsErr != nil {
 		return nil, userErr
 	}
@@ -232,7 +284,7 @@ func (s *AuthService) GetInfoAccount(ctx context.Context, id uint64) (*UserInfo,
 		Email:            userData.Email,
 		Login:            userData.Login,
 		CreatedAt:        userData.CreatedAt,
-		Apps:             apps.Apps,
+		Apps:             userapps,
 	}
 	return &resp, nil
 }
