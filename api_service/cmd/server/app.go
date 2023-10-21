@@ -32,8 +32,7 @@ import (
 // @title     GoStat API
 func main() {
 
-	kafkaService, err := kafka.NewKafkaService([]string{"localhost:9092"})
-	// kafkaService, err := kafka.NewKafkaService([]string{"kafka:9092"})
+	kafkaService, err := kafka.NewKafkaService([]string{"kafka:9092"})
 
 	if err != nil {
 		log.Printf("❌ Failed to connect to kafka: %v", err)
