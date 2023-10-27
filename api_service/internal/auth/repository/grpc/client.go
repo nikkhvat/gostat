@@ -52,3 +52,7 @@ func (c *AuthClient) PasswordReset(ctx context.Context, req *auth.PasswordResetR
 func (c *AuthClient) GetUserInfo(ctx context.Context, req *auth.GetUserInfoRequest) (*auth.GetUserInfoResponse, error) {
 	return c.client.GetUserinfo(ctx, req)
 }
+
+func (c *AuthClient) SetConfirmCode(ctx context.Context, req *auth.SetConfirmCodeRequest) (*auth.SetConfirmCodeResponse, error) {
+	return c.client.SetConfirmCode(ctx, req)
+}

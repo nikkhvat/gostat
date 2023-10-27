@@ -94,6 +94,35 @@ func (s *AuthService) RefreshToken(ctx context.Context, token string) (*string, 
 	return &newToken, nil
 }
 
+func (s *AuthService) SendConfirmMail(ctx context.Context, id uint64) error {
+	data, updateCodeError := s.client.SetConfirmCode(ctx, &auth.SetConfirmCodeRequest{
+		Id: id,
+	})
+
+	if updateCodeError != nil {
+		return updateCodeError
+	}
+
+	userData, userError := s.client.GetUserInfo(ctx, &auth.GetUserInfoRequest{
+		Id: id,
+	})
+
+	if userError != nil {
+		return userError
+	}
+
+	requestID := fmt.Sprintf("%d", time.Now().UnixNano())
+
+	s.kafkaService.SendMessage("confirm_account_send_mail_request", requestID, SendMessageRequest{
+		Email:      userData.Email,
+		FirstName:  userData.FirstName,
+		SecondName: userData.LastName,
+		SecretCode: data.NewSecret,
+	})
+
+	return nil
+}
+
 func (s *AuthService) ConfirmAccount(ctx context.Context, secret string) error {
 	resp, err := s.client.ConfirmAccount(ctx, &auth.ConfirmAccountRequest{
 		Secret: secret,

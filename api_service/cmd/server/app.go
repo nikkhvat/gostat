@@ -98,6 +98,7 @@ func main() {
 		privateAuthRouter := authRouter.Group("/")
 		privateAuthRouter.Use(middlewareAuth.AuthRequired())
 		{
+			privateAuthRouter.POST("/confirm/mail", authHandler.ConfirmSendAccount)
 			privateAuthRouter.GET("/info", authHandler.GetInfoAccount)
 		}
 	}

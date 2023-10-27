@@ -117,6 +117,17 @@ func (r UserRepository) RegistrationUser(login, mail, password, firstName, lastN
 	return user, nil
 }
 
+func (r UserRepository) UpdateConfirmationCode(userID uint64) (*string, error) {
+	newCode := uuid.New().String()
+
+	user := model.User{}
+	if err := r.db.Model(&user).Where("id = ?", userID).Updates(map[string]interface{}{"Code": newCode}).Error; err != nil {
+		return nil, err
+	}
+
+	return &newCode, nil
+}
+
 func (r UserRepository) PasswordRequest(mail string) (*model.User, error) {
 	var user model.User
 	if err := r.db.Where("email = ?", mail).First(&user).Error; err != nil {

@@ -319,6 +319,31 @@ paths:
       summary: Confirm the email of an account
       tags:
       - authentication
+  /auth/confirm/mail:
+    post:
+      consumes:
+      - application/json
+      description: Send an email with a code in order to confirm the account
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Example: {\"successful\":true}'
+          schema:
+            $ref: '#/definitions/http.SuccessAuthConfirmResponse'
+        "400":
+          description: 'Example: {\"error\":\"Unexpected error, failed to send mail\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+        "401":
+          description: 'Example: {\"error\":\"Invalid token\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+      security:
+      - BearerAuth: []
+      summary: Send confirmation email
+      tags:
+      - authentication
   /auth/info:
     get:
       consumes:

@@ -128,3 +128,15 @@ func (h *AuthServiceHandler) GetUserinfo(ctx context.Context, req *pb.GetUserInf
 		CreatedAt:        user.CreatedAt.Format("2006-01-02 15:04:05"),
 	}, nil
 }
+
+func (h *AuthServiceHandler) SetConfirmCode(ctx context.Context, req *pb.SetConfirmCodeRequest) (*pb.SetConfirmCodeResponse, error) {
+	code, err := h.service.SetNewConfirmCode(req.Id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SetConfirmCodeResponse{
+		NewSecret: *code,
+	}, nil
+}
