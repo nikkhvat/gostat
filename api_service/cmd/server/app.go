@@ -22,9 +22,6 @@ import (
 	middlewareCors "github.com/nik19ta/gostat/api_service/middleware/cors"
 	env "github.com/nik19ta/gostat/api_service/pkg/env"
 	"github.com/nik19ta/gostat/api_service/pkg/kafka"
-
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // @title           Gostat
@@ -32,7 +29,7 @@ import (
 // @description     Statistics Service - gostat. A microservice-based service, written in Golang and TypeScript.
 
 // @contact.name   Nikita Khvatov
-// @contact.url    khvat.pro
+// @contact.url    https://khvat.pro
 // @contact.email  nik19ta.me@gmail.com
 
 // @license.name  GNU Affero General Public License v3.0
@@ -131,7 +128,7 @@ func main() {
 
 	// * Docs Router
 	router.Static("/docs", "./docs")
-	router.GET("/api/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL("/docs/doc.json")))
+	router.Static("/api/docs", "./docs/swagger-ui-dist")
 
 	router.Run(env.Get("PORT"))
 }

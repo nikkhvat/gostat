@@ -11,7 +11,7 @@ const docTemplate = `{
         "title": "{{.Title}}",
         "contact": {
             "name": "Nikita Khvatov",
-            "url": "khvat.pro",
+            "url": "https://khvat.pro",
             "email": "nik19ta.me@gmail.com"
         },
         "license": {
@@ -132,13 +132,13 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Example: {\\\"Invalid token\\\"}",
+                        "description": "Invalid request parameters or error retrieving user information",
                         "schema": {
                             "$ref": "#/definitions/http.ErrorAuthResponse"
                         }
                     },
                     "401": {
-                        "description": "Invalid request parameters or error retrieving user information",
+                        "description": "Example: {\\\"Invalid token\\\"}",
                         "schema": {
                             "$ref": "#/definitions/http.ErrorAuthResponse"
                         }

@@ -256,7 +256,7 @@ info:
   contact:
     email: nik19ta.me@gmail.com
     name: Nikita Khvatov
-    url: khvat.pro
+    url: https://khvat.pro
   description: Statistics Service - gostat. A microservice-based service, written
     in Golang and TypeScript.
   license:
@@ -333,11 +333,11 @@ paths:
           schema:
             $ref: '#/definitions/service.UserInfo'
         "400":
-          description: 'Example: {\"Invalid token\"}'
+          description: Invalid request parameters or error retrieving user information
           schema:
             $ref: '#/definitions/http.ErrorAuthResponse'
         "401":
-          description: Invalid request parameters or error retrieving user information
+          description: 'Example: {\"Invalid token\"}'
           schema:
             $ref: '#/definitions/http.ErrorAuthResponse'
       security:
