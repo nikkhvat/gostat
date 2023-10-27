@@ -40,11 +40,11 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Example: {\\\"successfully\\\": true, \\\"app\\\": \\\"new_app_id\\\"}",
+                        "description": "Example: {\\\"successfully\\\": true, \\\"app\\\": \\\"deleted_app_id\\\"}",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/http.SuccessAppCreateResponse"
+                                    "$ref": "#/components/schemas/http.SuccessAppResponse"
                                 }
                             }
                         }
@@ -54,7 +54,54 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/http.ErrorAppCreateResponse"
+                                    "$ref": "#/components/schemas/http.ErrorAppResp"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/apps/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete an application based on the application ID and user ID from the bearer token",
+                "tags": [
+                    "apps"
+                ],
+                "summary": "Delete an application",
+                "parameters": [
+                    {
+                        "description": "Application ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Example: {\\\"successfully\\\": true, \\\"app\\\": \\\"app_id\\\"}",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/http.SuccessAppResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"detailed error message\\\"}",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/http.ErrorAppResp"
                                 }
                             }
                         }
@@ -617,7 +664,7 @@
                     }
                 }
             },
-            "http.ErrorAppCreateResponse": {
+            "http.ErrorAppResp": {
                 "type": "object",
                 "properties": {
                     "detail": {
@@ -678,7 +725,7 @@
                     }
                 }
             },
-            "http.SuccessAppCreateResponse": {
+            "http.SuccessAppResponse": {
                 "type": "object",
                 "properties": {
                     "app": {

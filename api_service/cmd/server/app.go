@@ -123,6 +123,7 @@ func main() {
 	appRouter.Use(middlewareAuth.AuthRequired())
 	{
 		appRouter.POST("/create", appHandler.CreateApp)
+		appRouter.DELETE("/:id", appHandler.DeleteApp)
 	}
 
 	// * Docs Router

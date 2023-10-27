@@ -28,3 +28,7 @@ func (c *AppClient) CreateApp(ctx context.Context, req *app.CreateAppRequest) (*
 func (c *AppClient) GetAppsByUserId(ctx context.Context, req *app.GetAppsByUserIdRequest) (*app.GetAppsByUserIdResponse, error) {
 	return c.client.GetAppsByUserId(ctx, req)
 }
+
+func (c *AppClient) DeleteApp(ctx context.Context, req *app.DeleteAppRequest) (*app.DeleteAppResponse, error) {
+	return c.client.DeleteApp(ctx, req)
+}

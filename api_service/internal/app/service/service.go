@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/nik19ta/gostat/api_service/internal/app/repository/grpc"
 	"github.com/nik19ta/gostat/api_service/proto/app"
 )
@@ -35,4 +36,23 @@ func (s *AppService) CreateApp(ctx context.Context, req CreateAppRequest) (strin
 		return "", err
 	}
 	return resp.GetAppId(), nil
+}
+
+type DeleteAppRequest struct {
+	UserId uint64 `json:"user_id"`
+	AppId  string `json:"app_id"`
+}
+
+func (s *AppService) DeleteApp(ctx context.Context, req DeleteAppRequest) error {
+
+	_, err := s.client.DeleteApp(ctx, &app.DeleteAppRequest{
+		AppId:  req.AppId,
+		UserId: req.UserId,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

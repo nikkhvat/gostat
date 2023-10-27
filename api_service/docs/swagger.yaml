@@ -13,7 +13,7 @@ definitions:
           example: "https://myapp.com"
         type: string
     type: object
-  http.ErrorAppCreateResponse:
+  http.ErrorAppResp:
     properties:
       detail:
         description: |-
@@ -74,7 +74,7 @@ definitions:
           example: true
         type: boolean
     type: object
-  http.SuccessAppCreateResponse:
+  http.SuccessAppResponse:
     properties:
       app:
         description: |-
@@ -265,6 +265,34 @@ info:
   title: Gostat
   version: 1.0.0
 paths:
+  /apps/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an application based on the application ID and user ID from
+        the bearer token
+      parameters:
+      - description: Application ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Example: {\"successfully\": true, \"app\": \"app_id\"}'
+          schema:
+            $ref: '#/definitions/http.SuccessAppResponse'
+        "400":
+          description: 'Example: {\"error\": true, \"detail\": \"detailed error message\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAppResp'
+      security:
+      - BearerAuth: []
+      summary: Delete an application
+      tags:
+      - apps
   /apps/create:
     post:
       consumes:
@@ -281,13 +309,13 @@ paths:
       - application/json
       responses:
         "200":
-          description: 'Example: {\"successfully\": true, \"app\": \"new_app_id\"}'
+          description: 'Example: {\"successfully\": true, \"app\": \"deleted_app_id\"}'
           schema:
-            $ref: '#/definitions/http.SuccessAppCreateResponse'
+            $ref: '#/definitions/http.SuccessAppResponse'
         "400":
           description: 'Example: {\"error\": true, \"detail\": \"detailed error message\"}'
           schema:
-            $ref: '#/definitions/http.ErrorAppCreateResponse'
+            $ref: '#/definitions/http.ErrorAppResp'
       security:
       - BearerAuth: []
       summary: Create a new application
