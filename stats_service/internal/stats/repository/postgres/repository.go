@@ -46,3 +46,12 @@ func (r StatsRepository) VisitExtend(session string) error {
 
 	return result.Error
 }
+
+func (r StatsRepository) DeleteByAppId(appId string) error {
+	result := r.db.Where("app_id = ?", appId).Delete(&model.Visits{})
+
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}

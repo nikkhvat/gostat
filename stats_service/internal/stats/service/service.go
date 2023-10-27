@@ -354,3 +354,9 @@ func (s StatsService) GetVisits(app string) (model.SiteStats, error) {
 
 	return resp, nil
 }
+
+func (s StatsService) DeleteByAppId(app string) error {
+	s.repo.DeleteByAppId(app)
+
+	return nil
+}

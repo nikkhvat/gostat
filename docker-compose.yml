@@ -59,6 +59,7 @@ services:
       - db
     environment:
       - PORT=${STATS_PORT}
+      - KAFKA_HOST=${KAFKA_HOST}
       - DB_HOST=${DB_HOST}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}

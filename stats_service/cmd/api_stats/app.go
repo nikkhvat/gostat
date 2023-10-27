@@ -42,7 +42,7 @@ func main() {
 
 	statsRepo := postgres.NewStatsRepository(db)
 	statsService := service.NewStatsService(statsRepo)
-	statsHandler := grpcDelivery.NewAuthServiceHandler(statsService)
+	statsHandler := grpcDelivery.NewStatsServiceHandler(statsService)
 
 	lis, err := net.Listen("tcp", env.Get("PORT"))
 
@@ -55,7 +55,7 @@ func main() {
 
 	log.Printf("Server is running on port %s", env.Get("PORT"))
 
-	kafkaService, err := kafka.NewKafkaService([]string{"kafka:9092"})
+	kafkaService, err := kafka.NewKafkaService([]string{env.Get("KAFKA_HOST")})
 
 	if err != nil {
 		log.Panicln(err)
