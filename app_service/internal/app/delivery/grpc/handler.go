@@ -53,3 +53,13 @@ func (h *AppServiceHandler) GetAppsByUserId(ctx context.Context, req *pb.GetApps
 
 	return &pb.GetAppsByUserIdResponse{Apps: appsResponse}, nil
 }
+
+func (h *AppServiceHandler) DeleteApp(ctx context.Context, req *pb.DeleteAppRequest) (*pb.DeleteAppResponse, error) {
+	err := h.service.DeleteApp(req.UserId, req.AppId)
+
+	if err != nil {
+		return &pb.DeleteAppResponse{Successful: false}, nil
+	}
+
+	return &pb.DeleteAppResponse{Successful: true}, nil
+}

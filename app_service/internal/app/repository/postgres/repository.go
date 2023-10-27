@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
@@ -46,4 +47,18 @@ func (r AppRepository) GetAppsByUserId(userId uint64) ([]*model.App, error) {
 	}
 
 	return apps, nil
+}
+
+func (r AppRepository) DeleteApp(userId uint64, appId string) error {
+	result := r.db.Where("id = ? AND user_id = ?", appId, userId).Delete(&model.App{})
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return errors.New("no record found for the given user ID and app ID")
+	}
+
+	return nil
 }
