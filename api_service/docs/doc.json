@@ -104,6 +104,52 @@
                 }
             }
         },
+        "/auth/confirm/mail": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Send an email with a code in order to confirm the account",
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Send confirmation email",
+                "responses": {
+                    "200": {
+                        "description": "Example: {\\\"successful\\\":true}",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/http.SuccessAuthConfirmResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"error\\\":\\\"Unexpected error, failed to send mail\\\"}",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/http.ErrorAuthResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Example: {\\\"error\\\":\\\"Invalid token\\\"}",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/http.ErrorAuthResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/auth/info": {
             "get": {
                 "security": [

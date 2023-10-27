@@ -164,3 +164,7 @@ func (s AuthService) PasswordReset(secret, mail, password string) (*TokenRespons
 func (s AuthService) GetUserInfo(id uint64) (*model.User, error) {
 	return s.repo.GetUserById(id)
 }
+
+func (s AuthService) SetNewConfirmCode(id uint64) (*string, error) {
+	return s.repo.UpdateConfirmationCode(id)
+}

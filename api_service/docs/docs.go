@@ -106,6 +106,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/confirm/mail": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Send an email with a code in order to confirm the account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Send confirmation email",
+                "responses": {
+                    "200": {
+                        "description": "Example: {\\\"successful\\\":true}",
+                        "schema": {
+                            "$ref": "#/definitions/http.SuccessAuthConfirmResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"error\\\":\\\"Unexpected error, failed to send mail\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Example: {\\\"error\\\":\\\"Invalid token\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/info": {
             "get": {
                 "security": [

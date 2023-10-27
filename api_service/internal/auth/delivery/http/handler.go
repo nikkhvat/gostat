@@ -1,6 +1,8 @@
 package http
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nik19ta/gostat/api_service/internal/auth/service"
 )
@@ -127,6 +129,32 @@ func (h *AuthHandler) ConfirmAccount(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(401, ErrorAuthResponse{Error: "Unexpected error, failed to verify account"})
+		return
+	}
+
+	c.JSON(200, SuccessAuthConfirmResponse{Successful: true})
+}
+
+// ConfirmAccount              godoc
+// @Summary                    Send confirmation email
+// @Description                Send an email with a code in order to confirm the account
+// @Tags                       authentication
+// @Accept                     json
+// @Produce                    json
+// @Security                   BearerAuth
+// @Success                    200 {object} SuccessAuthConfirmResponse "Example: {\"successful\":true}"
+// @Failure                    401 {object} ErrorAuthResponse "Example: {\"error\":\"Invalid token\"}"
+// @Failure                    400 {object} ErrorAuthResponse "Example: {\"error\":\"Unexpected error, failed to send mail\"}"
+// @Router                     /auth/confirm/mail [post]
+func (h *AuthHandler) ConfirmSendAccount(c *gin.Context) {
+	id := c.GetUint64("id")
+
+	log.Println(id)
+
+	err := h.service.SendConfirmMail(c, id)
+
+	if err != nil {
+		c.JSON(401, ErrorAuthResponse{Error: "Unexpected error, failed to send mail"})
 		return
 	}
 

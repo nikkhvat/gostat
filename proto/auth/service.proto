@@ -12,6 +12,15 @@ service AuthService {
   rpc PasswordRequest (PasswordRequestRequest) returns (PasswordRequestResponse) {}
   rpc PasswordReset (PasswordResetRequest) returns (PasswordResetResponse) {}
   rpc GetUserinfo (GetUserInfoRequest) returns (GetUserInfoResponse) {}
+  rpc SetConfirmCode (SetConfirmCodeRequest) returns (SetConfirmCodeResponse) {}
+}
+
+message SetConfirmCodeRequest {
+  uint64 id = 1;
+}
+
+message SetConfirmCodeResponse {
+  string new_secret = 1;
 }
 
 message GetUserInfoRequest {
