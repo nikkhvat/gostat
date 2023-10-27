@@ -27,3 +27,7 @@ func (s AppService) CreateApp(name, url string, userId uint64) (*uuid.UUID, erro
 func (s AppService) GetAppsByUserId(userId uint64) ([]*model.App, error) {
 	return s.repo.GetAppsByUserId(userId)
 }
+
+func (s AppService) DeleteApp(userId uint64, appId string) error {
+	return s.repo.DeleteApp(userId, appId)
+}

@@ -78,7 +78,7 @@ func main() {
 	statsHandler := statsHttp.NewStatsHandler(newStatsService)
 
 	// Apps service
-	newAppService := appService.NewAppService(appClient)
+	newAppService := appService.NewAppService(appClient, statsClient)
 	appHandler := appHttp.NewAppHandler(newAppService)
 
 	router := gin.Default()
@@ -123,6 +123,7 @@ func main() {
 	appRouter.Use(middlewareAuth.AuthRequired())
 	{
 		appRouter.POST("/create", appHandler.CreateApp)
+		appRouter.DELETE("/:id", appHandler.DeleteApp)
 	}
 
 	// * Docs Router

@@ -15,7 +15,7 @@ type StatsServiceHandler struct {
 	service service.StatsService
 }
 
-func NewAuthServiceHandler(s service.StatsService) *StatsServiceHandler {
+func NewStatsServiceHandler(s service.StatsService) *StatsServiceHandler {
 	return &StatsServiceHandler{
 		service: s,
 	}
@@ -138,4 +138,18 @@ func (h *StatsServiceHandler) GetVisits(ctx context.Context, req *pb.GetVisitsRe
 			VisitsByHour:   convertedVisitsByHour,
 		},
 	}, err
+}
+
+func (h *StatsServiceHandler) DeleteByAppId(ctx context.Context, req *pb.DeleteByAppIdRequest) (*pb.DeleteByAppIdResponse, error) {
+	err := h.service.DeleteByAppId(req.AppId)
+
+	if err != nil {
+		return &pb.DeleteByAppIdResponse{
+			Successful: false,
+		}, err
+	}
+
+	return &pb.DeleteByAppIdResponse{
+		Successful: true,
+	}, nil
 }

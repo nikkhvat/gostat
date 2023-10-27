@@ -54,15 +54,58 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Example: {\\\"successfully\\\": true, \\\"app\\\": \\\"new_app_id\\\"}",
+                        "description": "Example: {\\\"successfully\\\": true, \\\"app\\\": \\\"deleted_app_id\\\"}",
                         "schema": {
-                            "$ref": "#/definitions/http.SuccessAppCreateResponse"
+                            "$ref": "#/definitions/http.SuccessAppResponse"
                         }
                     },
                     "400": {
                         "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"detailed error message\\\"}",
                         "schema": {
-                            "$ref": "#/definitions/http.ErrorAppCreateResponse"
+                            "$ref": "#/definitions/http.ErrorAppResp"
+                        }
+                    }
+                }
+            }
+        },
+        "/apps/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete an application based on the application ID and user ID from the bearer token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "apps"
+                ],
+                "summary": "Delete an application",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Application ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Example: {\\\"successfully\\\": true, \\\"app\\\": \\\"app_id\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.SuccessAppResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"detailed error message\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAppResp"
                         }
                     }
                 }
@@ -559,7 +602,7 @@ const docTemplate = `{
                 }
             }
         },
-        "http.ErrorAppCreateResponse": {
+        "http.ErrorAppResp": {
             "type": "object",
             "properties": {
                 "detail": {
@@ -620,7 +663,7 @@ const docTemplate = `{
                 }
             }
         },
-        "http.SuccessAppCreateResponse": {
+        "http.SuccessAppResponse": {
             "type": "object",
             "properties": {
                 "app": {

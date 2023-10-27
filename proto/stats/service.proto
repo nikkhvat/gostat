@@ -8,6 +8,16 @@ service StatsService {
   rpc SetVisit (SetVisitRequest) returns (SetVisitResponse) {}
   rpc VisitExtend (VisitExtendRequest) returns (VisitExtendResponse) {}
   rpc GetVisits (GetVisitsRequest) returns (GetVisitsResponse) {}
+  rpc DeleteByAppId (DeleteByAppIdRequest) returns (DeleteByAppIdResponse) {}
+}
+
+message DeleteByAppIdRequest {
+  string app_id = 1;
+  uint64 user_id = 2;
+}
+
+message DeleteByAppIdResponse {
+  bool successful = 1;
 }
 
 message GetVisitsRequest {
