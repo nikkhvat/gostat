@@ -1,3 +1,4 @@
+basePath: /api
 definitions:
   http.CreateAppRequest:
     properties:
@@ -252,29 +253,18 @@ definitions:
         type: string
     type: object
 info:
-  contact: {}
-  title: GoStat API
+  contact:
+    email: nik19ta.me@gmail.com
+    name: Nikita Khvatov
+    url: khvat.pro
+  description: Statistics Service - gostat. A microservice-based service, written
+    in Golang and TypeScript.
+  license:
+    name: GNU Affero General Public License v3.0
+    url: https://github.com/nikkhvat/gostat/blob/master/LICENSE
+  title: Gostat
+  version: 1.0.0
 paths:
-  /api/auth/info:
-    get:
-      consumes:
-      - application/json
-      description: Get detailed information about a user's account and their associated
-        applications
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successfully retrieved user information
-          schema:
-            $ref: '#/definitions/service.UserInfo'
-        "400":
-          description: Invalid request parameters or error retrieving user information
-          schema:
-            $ref: '#/definitions/http.ErrorAuthResponse'
-      summary: Retrieve user account information
-      tags:
-      - authentication
   /apps/create:
     post:
       consumes:
@@ -298,6 +288,8 @@ paths:
           description: 'Example: {\"error\": true, \"detail\": \"detailed error message\"}'
           schema:
             $ref: '#/definitions/http.ErrorAppCreateResponse'
+      security:
+      - BearerAuth: []
       summary: Create a new application
       tags:
       - apps
@@ -325,6 +317,32 @@ paths:
           schema:
             $ref: '#/definitions/http.ErrorAuthResponse'
       summary: Confirm the email of an account
+      tags:
+      - authentication
+  /auth/info:
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about a user's account and their associated
+        applications
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved user information
+          schema:
+            $ref: '#/definitions/service.UserInfo'
+        "400":
+          description: 'Example: {\"Invalid token\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+        "401":
+          description: Invalid request parameters or error retrieving user information
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+      security:
+      - BearerAuth: []
+      summary: Retrieve user account information
       tags:
       - authentication
   /auth/login:
@@ -490,6 +508,8 @@ paths:
           description: 'Example: {\"error\": true, \"detail\": \"Detailed error message\"}'
           schema:
             $ref: '#/definitions/http.ErrorGetVisitResponse'
+      security:
+      - BearerAuth: []
       summary: Retrieve visits for an application
       tags:
       - stats

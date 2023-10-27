@@ -25,14 +25,24 @@ import (
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-
-	docs "github.com/nik19ta/gostat/api_service/docs"
 )
 
-// @title     GoStat API
+// @title           Gostat
+// @version         1.0.0
+// @description     Statistics Service - gostat. A microservice-based service, written in Golang and TypeScript.
+
+// @contact.name   Nikita Khvatov
+// @contact.url    khvat.pro
+// @contact.email  nik19ta.me@gmail.com
+
+// @license.name  GNU Affero General Public License v3.0
+// @license.url   https://github.com/nikkhvat/gostat/blob/master/LICENSE
+
+// @BasePath  /api
 func main() {
 
-	kafkaService, err := kafka.NewKafkaService([]string{"kafka:9092"})
+	kafkaService, err := kafka.NewKafkaService([]string{"164.90.209.242:9092"})
+	// kafkaService, err := kafka.NewKafkaService([]string{"kafka:9092"})
 
 	if err != nil {
 		log.Printf("❌ Failed to connect to kafka: %v", err)
@@ -120,9 +130,8 @@ func main() {
 	}
 
 	// * Docs Router
-	router.GET("/api/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
-	docs.SwaggerInfo.BasePath = "/api"
+	router.Static("/docs", "./docs")
+	router.GET("/api/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL("/docs/doc.json")))
 
 	router.Run(env.Get("PORT"))
 }

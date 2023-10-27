@@ -9,43 +9,27 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "contact": {
+            "name": "Nikita Khvatov",
+            "url": "khvat.pro",
+            "email": "nik19ta.me@gmail.com"
+        },
+        "license": {
+            "name": "GNU Affero General Public License v3.0",
+            "url": "https://github.com/nikkhvat/gostat/blob/master/LICENSE"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/auth/info": {
-            "get": {
-                "description": "Get detailed information about a user's account and their associated applications",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "authentication"
-                ],
-                "summary": "Retrieve user account information",
-                "responses": {
-                    "200": {
-                        "description": "Successfully retrieved user information",
-                        "schema": {
-                            "$ref": "#/definitions/service.UserInfo"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters or error retrieving user information",
-                        "schema": {
-                            "$ref": "#/definitions/http.ErrorAuthResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/apps/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a new application with the given details",
                 "consumes": [
                     "application/json"
@@ -115,6 +99,46 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "Example: {\\\"error\\\":\\\"Unexpected error, failed to verify account\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/info": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get detailed information about a user's account and their associated applications",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Retrieve user account information",
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved user information",
+                        "schema": {
+                            "$ref": "#/definitions/service.UserInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"Invalid token\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid request parameters or error retrieving user information",
                         "schema": {
                             "$ref": "#/definitions/http.ErrorAuthResponse"
                         }
@@ -334,6 +358,11 @@ const docTemplate = `{
         },
         "/stats/get/visits": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieves visits data for a specific application",
                 "consumes": [
                     "application/json"
@@ -743,12 +772,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
+	Version:          "1.0.0",
 	Host:             "",
-	BasePath:         "",
+	BasePath:         "/api",
 	Schemes:          []string{},
-	Title:            "GoStat API",
-	Description:      "",
+	Title:            "Gostat",
+	Description:      "Statistics Service - gostat. A microservice-based service, written in Golang and TypeScript.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

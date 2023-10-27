@@ -243,9 +243,11 @@ func (h *AuthHandler) PasswordReset(c *gin.Context) {
 // @Tags authentication
 // @Accept  json
 // @Produce  json
+// @Security BearerAuth
 // @Success 200 {object} service.UserInfo "Successfully retrieved user information"
 // @Failure 400 {object} ErrorAuthResponse "Invalid request parameters or error retrieving user information"
-// @Router /api/auth/info [get]
+// @Failure 401 {object} ErrorAuthResponse "Example: {\"Invalid token\"}"
+// @Router /auth/info [get]
 func (h *AuthHandler) GetInfoAccount(c *gin.Context) {
 	id := c.GetUint64("id")
 

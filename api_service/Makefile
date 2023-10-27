@@ -1,5 +1,7 @@
-swag:
+openapi:
 	swag init --generalInfo ./cmd/server/app.go --output ./docs
+	swagger2openapi ./docs/swagger.json -o ./docs/doc.json
+	python3.11 ./deploy/openapi.py
 
 build:
 	make swag
@@ -9,10 +11,10 @@ start:
 	./build/app
 
 dev:
-	make swag
+	make openapi
 	go build -o ./build/app ./cmd/server/app.go
 	./build/app
 
 run:
-	make swag
+	make openapi
 	go run ./cmd/server/app.go
