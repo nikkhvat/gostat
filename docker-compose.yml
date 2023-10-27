@@ -31,6 +31,7 @@ services:
       - db
     environment:
       - PORT=${API_SERVICE_PORT}
+      - KAFKA_HOST=${KAFKA_HOST}
       - STATS_HOST=${STATS_HOST}
       - AUTH_HOST=${AUTH_HOST}
       - APP_HOST=${APP_HOST}
