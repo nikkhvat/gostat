@@ -38,8 +38,7 @@ import (
 // @BasePath  /api
 func main() {
 
-	kafkaService, err := kafka.NewKafkaService([]string{"164.90.209.242:9092"})
-	// kafkaService, err := kafka.NewKafkaService([]string{"kafka:9092"})
+	kafkaService, err := kafka.NewKafkaService([]string{"kafka:9092"})
 
 	if err != nil {
 		log.Printf("❌ Failed to connect to kafka: %v", err)
