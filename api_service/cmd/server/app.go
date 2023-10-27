@@ -78,7 +78,7 @@ func main() {
 	statsHandler := statsHttp.NewStatsHandler(newStatsService)
 
 	// Apps service
-	newAppService := appService.NewAppService(appClient)
+	newAppService := appService.NewAppService(appClient, statsClient)
 	appHandler := appHttp.NewAppHandler(newAppService)
 
 	router := gin.Default()

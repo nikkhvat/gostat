@@ -5,14 +5,21 @@ import (
 
 	"github.com/nik19ta/gostat/api_service/internal/app/repository/grpc"
 	"github.com/nik19ta/gostat/api_service/proto/app"
+
+	grpcStats "github.com/nik19ta/gostat/api_service/internal/stats/repository/grpc"
+	"github.com/nik19ta/gostat/api_service/proto/stats"
 )
 
 type AppService struct {
-	client *grpc.AppClient
+	client      *grpc.AppClient
+	statsClient *grpcStats.StatsClient
 }
 
-func NewAppService(client *grpc.AppClient) *AppService {
-	return &AppService{client: client}
+func NewAppService(client *grpc.AppClient, statsClient *grpcStats.StatsClient) *AppService {
+	return &AppService{
+		client:      client,
+		statsClient: statsClient,
+	}
 }
 
 type CreateAppRequest struct {
@@ -45,12 +52,21 @@ type DeleteAppRequest struct {
 
 func (s *AppService) DeleteApp(ctx context.Context, req DeleteAppRequest) error {
 
-	_, err := s.client.DeleteApp(ctx, &app.DeleteAppRequest{
+	deleteAppErr, err := s.client.DeleteApp(ctx, &app.DeleteAppRequest{
 		AppId:  req.AppId,
 		UserId: req.UserId,
 	})
 
-	if err != nil {
+	if err != nil || deleteAppErr.Successful == false {
+		return err
+	}
+
+	deleteStatsErr, err := s.statsClient.DeleteApp(ctx, &stats.DeleteByAppIdRequest{
+		AppId:  req.AppId,
+		UserId: req.UserId,
+	})
+
+	if err != nil || deleteStatsErr.Successful == false {
 		return err
 	}
 
