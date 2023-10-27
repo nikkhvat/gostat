@@ -159,6 +159,7 @@ type ErrorGetVisitResponse struct {
 // @Tags                       stats
 // @Accept                     json
 // @Produce                    json
+// @Security                   BearerAuth
 // @Param                      app query string true "Application ID"
 // @Success                    200 {object} interface{} "Successfully retrieved data. The structure of the data depends on the application."
 // @Failure                    400 {object} ErrorGetVisitResponse "Example: {\"error\": true, \"detail\": \"Detailed error message\"}"

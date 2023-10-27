@@ -3,6 +3,7 @@ module github.com/nik19ta/gostat/api_service
 go 1.20
 
 require (
+	github.com/IBM/sarama v1.41.2
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/joho/godotenv v1.5.1
@@ -14,7 +15,6 @@ require (
 )
 
 require (
-	github.com/IBM/sarama v1.41.2 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/bytedance/sonic v1.10.1 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect

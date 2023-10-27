@@ -51,6 +51,7 @@ type ErrorAppCreateResponse struct {
 // @Tags                      apps
 // @Accept                    json
 // @Produce                   json
+// @Security 									BearerAuth
 // @Param                     CreateAppRequest body CreateAppRequest true "Create App payload"
 // @Success                   200 {object} SuccessAppCreateResponse "Example: {\"successfully\": true, \"app\": \"new_app_id\"}"
 // @Failure                   400 {object} ErrorAppCreateResponse "Example: {\"error\": true, \"detail\": \"detailed error message\"}"
