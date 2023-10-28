@@ -131,6 +131,36 @@ definitions:
           example: true
         type: boolean
     type: object
+  http.UTMParams:
+    properties:
+      utm_campaign:
+        type: string
+      utm_content:
+        type: string
+      utm_medium:
+        type: string
+      utm_source:
+        type: string
+      utm_term:
+        type: string
+    type: object
+  http.VisitData:
+    properties:
+      expired:
+        type: boolean
+      hash:
+        type: string
+      host:
+        type: string
+      pathname:
+        type: string
+      resolution:
+        type: string
+      title:
+        type: string
+      utm:
+        $ref: '#/definitions/http.UTMParams'
+    type: object
   service.LoginRequest:
     properties:
       login:
@@ -265,6 +295,31 @@ info:
   title: Gostat
   version: 1.0.0
 paths:
+  /api/stats/visit/{session}:
+    patch:
+      consumes:
+      - application/json
+      description: Endpoint to extend the duration of an active visit session.
+      parameters:
+      - description: Session ID
+        in: path
+        name: session
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.SuccessVisitExtendResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.ErrorVisitExtendResponse'
+      summary: Extend the visit session duration
+      tags:
+      - stats
   /apps/{id}:
     delete:
       consumes:
@@ -566,73 +621,35 @@ paths:
       summary: Retrieve visits for an application
       tags:
       - stats
-  /stats/set/visit:
-    put:
+  /stats/set/visit/{app}:
+    post:
       consumes:
       - application/json
-      description: Registers a new visit or extends an existing session
+      description: Endpoint for registering a new visit or extending an existing session.
       parameters:
-      - description: Unique (1 or 0)
-        in: query
-        name: un
-        type: string
-      - description: UTM parameters
-        in: query
-        name: utm
-        type: string
-      - description: Visited URL
-        in: query
-        name: url
-        type: string
-      - description: Page Title
-        in: query
-        name: title
-        type: string
-      - description: Session ID
-        in: query
-        name: session
-        type: string
       - description: Application ID
-        in: query
-        name: app_id
+        in: path
+        name: app
         required: true
         type: string
+      - description: Visit Details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/http.VisitData'
       produces:
       - application/json
       responses:
         "200":
-          description: 'Example: {\"successfully\": true, \"session\": \"session_id\"}'
+          description: OK
           schema:
             $ref: '#/definitions/http.SuccessSetVisitResponse'
         "400":
-          description: 'Example: {\"error\": true, \"detail\": \"Detailed error message\"}'
+          description: Bad Request
           schema:
             $ref: '#/definitions/http.ErrorSetVisitResponse'
-      summary: Set a new visit session
-      tags:
-      - stats
-  /stats/set/visit/extend:
-    put:
-      consumes:
-      - application/json
-      description: Extends the session for a particular visit
-      parameters:
-      - description: Visit Session ID
-        in: query
-        name: session
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 'Example: {\"successfully\": true}'
-          schema:
-            $ref: '#/definitions/http.SuccessVisitExtendResponse'
-        "400":
-          description: 'Example: {\"error\": true, \"detail\": \"Detailed error message\"}'
-          schema:
-            $ref: '#/definitions/http.ErrorVisitExtendResponse'
-      summary: Extend a visit session
+      summary: Register a new visit or extend an existing session
       tags:
       - stats
 swagger: "2.0"

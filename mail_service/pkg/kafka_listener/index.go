@@ -24,7 +24,7 @@ func (kl *KafkaListener) Subscribe(topic string, callback func(message *sarama.C
 	defer kl.mu.Unlock()
 
 	if _, exists := kl.subscriptions[topic]; exists {
-		return nil // Already subscribed
+		return nil
 	}
 
 	consumer, err := sarama.NewConsumer(kl.brokers, nil)

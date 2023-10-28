@@ -8,18 +8,24 @@ type Visits struct {
 	UId         string    `json:"uid"`          // Unique identifier
 	Session     string    `json:"session"`      // User's Session
 	TimeEntry   time.Time `json:"time_entry"`   // The time at which the person entered
+	TimeLeaving time.Time `json:"time_leaving"` // The time when the user left the site
 	Browser     string    `json:"browser"`      // Browser (Chrome, Firefox, etc.)
 	Platform    string    `json:"platform"`     // Platform (Linux, Macint32osh, iPhone)
 	Os          string    `json:"os"`           // Operating system (Windows, macOS, etc.)
-	TimeLeaving time.Time `json:"time_leaving"` // The time when the user left the site
 	Country     string    `json:"country"`      // Short country code (EE, DE, etc.)
 	Unique      bool      `json:"unique"`       // Has the user already logged in or not
-	URL         string    `json:"url"`          // URL page
-	Title       string    `json:"title"`        // Title of page
-	Ip          string    `json:"ip"`           // The IP address from which
-	Utm         string    `json:"utm"`          // the UTM tag id came in
-	HTTPReferer string    `json:"http_referer"` // Http Refer
-	AppId       string    `json:"app_id"`       // Id app
+	Pathname    string    `json:"pathname"`
+	Host        string    `json:"host"`
+	Hash        string    `json:"hash"`
+	Title       string    `json:"title"`
+	Ip          string    `json:"ip"`
+	Resolution  string    `json:"resolution"`
+	Source      string    `json:"utm_source"`
+	Medium      string    `json:"utm_medium"`
+	Campaign    string    `json:"utm_campaign"`
+	Term        string    `json:"utm_term"`
+	Content     string    `json:"utm_content"`
+	AppId       string    `json:"app_id"`
 }
 
 type Entry struct {

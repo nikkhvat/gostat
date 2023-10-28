@@ -24,15 +24,20 @@ func NewStatsKafkaService(s service.StatsService, kafkaService *kafka.KafkaServi
 }
 
 type SetVisitRequest struct {
-	Ip          string `json:"ip"`
-	UserAgent   string `json:"user_agent"`
-	Utm         string `json:"utm"`
-	HttpReferer string `json:"http_referer"`
-	Url         string `json:"url"`
-	Title       string `json:"title"`
-	Session     string `json:"session"`
-	Unique      bool   `json:"unique"`
-	AppId       string `json:"app_id"`
+	UserAgent  string `json:"user_agent"`
+	IP         string `json:"ip"`
+	App        string `json:"app,omitempty"`
+	Pathname   string `json:"pathname"`
+	Host       string `json:"host"`
+	Hash       string `json:"hash"`
+	Title      string `json:"title"`
+	Resolution string `json:"resolution"`
+	Source     string `json:"utm_source,omitempty"`
+	Medium     string `json:"utm_medium,omitempty"`
+	Campaign   string `json:"utm_campaign,omitempty"`
+	Term       string `json:"utm_term,omitempty"`
+	Content    string `json:"utm_content,omitempty"`
+	Unique     bool   `json:"unique"`
 }
 
 type SetVisitResponse struct {
@@ -48,8 +53,22 @@ func (s *StatsKafkaServiceHandler) AddVisit(message *sarama.ConsumerMessage) err
 		return err
 	}
 
-	session, err := s.service.SetVisits(parsedMessage.Ip, parsedMessage.UserAgent, parsedMessage.Utm, parsedMessage.HttpReferer,
-		parsedMessage.Url, parsedMessage.Title, parsedMessage.Session, parsedMessage.Unique, parsedMessage.AppId)
+	session, err := s.service.SetVisits(
+		parsedMessage.UserAgent,
+		parsedMessage.IP,
+		parsedMessage.App,
+		parsedMessage.Pathname,
+		parsedMessage.Host,
+		parsedMessage.Hash,
+		parsedMessage.Title,
+		parsedMessage.Resolution,
+		parsedMessage.Source,
+		parsedMessage.Medium,
+		parsedMessage.Campaign,
+		parsedMessage.Term,
+		parsedMessage.Content,
+		parsedMessage.Unique,
+	)
 
 	if err != nil {
 		log.Printf("Error add visit: %v\n", err)
