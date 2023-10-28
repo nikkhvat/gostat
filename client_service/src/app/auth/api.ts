@@ -1,7 +1,7 @@
 import api from '@/app/utils/axiosInstance'
 
 import { AxiosResponse } from 'axios';
-import { ISingUpRequest, IAuthResponse, ISingInRequest } from './index';
+import { ISingUpRequest, IAuthResponse, ISingInRequest, IConfirmAccount } from './index';
 
 export const singUp = async (body: ISingUpRequest): Promise<AxiosResponse<IAuthResponse>> => {    
   try {
