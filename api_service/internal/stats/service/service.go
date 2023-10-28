@@ -43,15 +43,20 @@ func NewStatsService(client *grpc.StatsClient, kafkaService *kafka.KafkaService)
 }
 
 type AddVisitRequest struct {
-	IP          string `json:"ip"`
-	UserAgent   string `json:"user_agent"`
-	UTM         string `json:"utm"`
-	HTTPReferer string `json:"httpReferer"`
-	URL         string `json:"url"`
-	Title       string `json:"title"`
-	Session     string `json:"session"`
-	Unique      bool   `json:"unique"`
-	AppId       string `json:"appId"`
+	UserAgent  string `json:"user_agent"`
+	IP         string `json:"ip"`
+	App        string `json:"app,omitempty"`
+	Pathname   string `json:"pathname"`
+	Host       string `json:"host"`
+	Hash       string `json:"hash"`
+	Title      string `json:"title"`
+	Unique     bool   `json:"unique"`
+	Resolution string `json:"resolution"`
+	Source     string `json:"utm_source,omitempty"`
+	Medium     string `json:"utm_medium,omitempty"`
+	Campaign   string `json:"utm_campaign,omitempty"`
+	Term       string `json:"utm_term,omitempty"`
+	Content    string `json:"utm_content,omitempty"`
 }
 
 type GetVisitRequest struct {
@@ -76,37 +81,22 @@ type SetVisitResponse struct {
 	Session string `json:"session"`
 }
 
-func (s *StatsService) AddVisit(ctx context.Context, req AddVisitRequest) (string, error) {
-
+func (s *StatsService) AddVisit(ctx context.Context, req AddVisitRequest) (*string, error) {
 	requestID := fmt.Sprintf("%d", time.Now().UnixNano())
 
-	err := s.kafkaService.SendMessage("add_new_visit_request", requestID, SetVisitRequest{
-		Ip:          req.IP,
-		UserAgent:   req.UserAgent,
-		Utm:         req.UTM,
-		HttpReferer: req.HTTPReferer,
-		Url:         req.URL,
-		Title:       req.Title,
-		Session:     req.Session,
-		Unique:      req.Unique,
-		AppId:       req.AppId,
-	})
+	err := s.kafkaService.SendMessage("add_new_visit_request", requestID, req)
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-
-	log.Println("------------requestID-------------")
-	log.Println(requestID)
-	log.Println("------------requestID-------------")
 
 	session, err := s.kafkaService.Wait("add_new_visit_response", requestID)
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return session, nil
+	return &session, nil
 }
 
 type VisitExtendRequest struct {

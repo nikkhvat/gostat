@@ -23,6 +23,44 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/stats/visit/{session}": {
+            "patch": {
+                "description": "Endpoint to extend the duration of an active visit session.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stats"
+                ],
+                "summary": "Extend the visit session duration",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Session ID",
+                        "name": "session",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/http.SuccessVisitExtendResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorVisitExtendResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/apps/create": {
             "post": {
                 "security": [
@@ -482,9 +520,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/stats/set/visit": {
-            "put": {
-                "description": "Registers a new visit or extends an existing session",
+        "/stats/set/visit/{app}": {
+            "post": {
+                "description": "Endpoint for registering a new visit or extending an existing session.",
                 "consumes": [
                     "application/json"
                 ],
@@ -494,94 +532,36 @@ const docTemplate = `{
                 "tags": [
                     "stats"
                 ],
-                "summary": "Set a new visit session",
+                "summary": "Register a new visit or extend an existing session",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Unique (1 or 0)",
-                        "name": "un",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "UTM parameters",
-                        "name": "utm",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Visited URL",
-                        "name": "url",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Page Title",
-                        "name": "title",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Session ID",
-                        "name": "session",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
                         "description": "Application ID",
-                        "name": "app_id",
-                        "in": "query",
+                        "name": "app",
+                        "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "Visit Details",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.VisitData"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Example: {\\\"successfully\\\": true, \\\"session\\\": \\\"session_id\\\"}",
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/http.SuccessSetVisitResponse"
                         }
                     },
                     "400": {
-                        "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"Detailed error message\\\"}",
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/http.ErrorSetVisitResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/stats/set/visit/extend": {
-            "put": {
-                "description": "Extends the session for a particular visit",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "stats"
-                ],
-                "summary": "Extend a visit session",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Visit Session ID",
-                        "name": "session",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Example: {\\\"successfully\\\": true}",
-                        "schema": {
-                            "$ref": "#/definitions/http.SuccessVisitExtendResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"Detailed error message\\\"}",
-                        "schema": {
-                            "$ref": "#/definitions/http.ErrorVisitExtendResponse"
                         }
                     }
                 }
@@ -717,6 +697,52 @@ const docTemplate = `{
                 "successfully": {
                     "description": "Indicates successful visit extension\nexample: true",
                     "type": "boolean"
+                }
+            }
+        },
+        "http.UTMParams": {
+            "type": "object",
+            "properties": {
+                "utm_campaign": {
+                    "type": "string"
+                },
+                "utm_content": {
+                    "type": "string"
+                },
+                "utm_medium": {
+                    "type": "string"
+                },
+                "utm_source": {
+                    "type": "string"
+                },
+                "utm_term": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.VisitData": {
+            "type": "object",
+            "properties": {
+                "expired": {
+                    "type": "boolean"
+                },
+                "hash": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "pathname": {
+                    "type": "string"
+                },
+                "resolution": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "utm": {
+                    "$ref": "#/definitions/http.UTMParams"
                 }
             }
         },

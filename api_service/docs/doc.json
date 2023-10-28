@@ -15,6 +15,48 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/stats/visit/{session}": {
+            "patch": {
+                "description": "Endpoint to extend the duration of an active visit session.",
+                "tags": [
+                    "stats"
+                ],
+                "summary": "Extend the visit session duration",
+                "parameters": [
+                    {
+                        "description": "Session ID",
+                        "name": "session",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/http.SuccessVisitExtendResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/http.ErrorVisitExtendResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/apps/create": {
             "post": {
                 "security": [
@@ -520,67 +562,38 @@
                 }
             }
         },
-        "/stats/set/visit": {
-            "put": {
-                "description": "Registers a new visit or extends an existing session",
+        "/stats/set/visit/{app}": {
+            "post": {
+                "description": "Endpoint for registering a new visit or extending an existing session.",
                 "tags": [
                     "stats"
                 ],
-                "summary": "Set a new visit session",
+                "summary": "Register a new visit or extend an existing session",
                 "parameters": [
                     {
-                        "description": "Unique (1 or 0)",
-                        "name": "un",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "UTM parameters",
-                        "name": "utm",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Visited URL",
-                        "name": "url",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Page Title",
-                        "name": "title",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Session ID",
-                        "name": "session",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "description": "Application ID",
-                        "name": "app_id",
-                        "in": "query",
+                        "name": "app",
+                        "in": "path",
                         "required": true,
                         "schema": {
                             "type": "string"
                         }
                     }
                 ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/http.VisitData"
+                            }
+                        }
+                    },
+                    "description": "Visit Details",
+                    "required": true
+                },
                 "responses": {
                     "200": {
-                        "description": "Example: {\\\"successfully\\\": true, \\\"session\\\": \\\"session_id\\\"}",
+                        "description": "OK",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -590,52 +603,11 @@
                         }
                     },
                     "400": {
-                        "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"Detailed error message\\\"}",
+                        "description": "Bad Request",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/http.ErrorSetVisitResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/stats/set/visit/extend": {
-            "put": {
-                "description": "Extends the session for a particular visit",
-                "tags": [
-                    "stats"
-                ],
-                "summary": "Extend a visit session",
-                "parameters": [
-                    {
-                        "description": "Visit Session ID",
-                        "name": "session",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Example: {\\\"successfully\\\": true}",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/http.SuccessVisitExtendResponse"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"Detailed error message\\\"}",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/http.ErrorVisitExtendResponse"
                                 }
                             }
                         }
@@ -779,6 +751,52 @@
                     "successfully": {
                         "description": "Indicates successful visit extension\nexample: true",
                         "type": "boolean"
+                    }
+                }
+            },
+            "http.UTMParams": {
+                "type": "object",
+                "properties": {
+                    "utm_campaign": {
+                        "type": "string"
+                    },
+                    "utm_content": {
+                        "type": "string"
+                    },
+                    "utm_medium": {
+                        "type": "string"
+                    },
+                    "utm_source": {
+                        "type": "string"
+                    },
+                    "utm_term": {
+                        "type": "string"
+                    }
+                }
+            },
+            "http.VisitData": {
+                "type": "object",
+                "properties": {
+                    "expired": {
+                        "type": "boolean"
+                    },
+                    "hash": {
+                        "type": "string"
+                    },
+                    "host": {
+                        "type": "string"
+                    },
+                    "pathname": {
+                        "type": "string"
+                    },
+                    "resolution": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "utm": {
+                        "$ref": "#/components/schemas/http.UTMParams"
                     }
                 }
             },

@@ -37,7 +37,6 @@ func main() {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
-	// Auto Migrate tables
 	db.AutoMigrate(&model.Visits{})
 
 	statsRepo := postgres.NewStatsRepository(db)
@@ -64,16 +63,20 @@ func main() {
 	mailService := service.NewStatsService(statsRepo)
 	mailHendler := kafkaStatService.NewStatsKafkaService(mailService, kafkaService)
 
-	listenerError := kafkaService.Subscribe("add_new_visit_request", func(message *sarama.ConsumerMessage) {
+	listenerAddError := kafkaService.Subscribe("add_new_visit_request", func(message *sarama.ConsumerMessage) {
 		mailHendler.AddVisit(message)
 	})
 
-	listenerError = kafkaService.Subscribe("extend_visit_request", func(message *sarama.ConsumerMessage) {
+	if listenerAddError != nil {
+		log.Fatalf("Failed to subscribe to kafka topic (add_new_visit_request): %v", listenerAddError)
+	}
+
+	listenerExtendError := kafkaService.Subscribe("extend_visit_request", func(message *sarama.ConsumerMessage) {
 		mailHendler.ExtendVisit(message)
 	})
 
-	if listenerError != nil {
-		log.Fatalf("Failed to subscribe to kafka topic: %v", err)
+	if listenerExtendError != nil {
+		log.Fatalf("Failed to subscribe to kafka topic (extend_visit_request): %v", listenerExtendError)
 	}
 
 	if err := s.Serve(lis); err != nil {

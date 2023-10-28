@@ -105,13 +105,13 @@ func main() {
 	// * Stats Router
 	statsRouter := router.Group("/api/stats")
 	{
-		publicStatsRouter := statsRouter.Group("/set")
+		publicStatsRouter := statsRouter.Group("/")
 		{
-			publicStatsRouter.PUT("/visit", statsHandler.SetVisit)
-			publicStatsRouter.PUT("/visit/extend", statsHandler.VisitExtend)
+			publicStatsRouter.POST("/visit/:app", statsHandler.SetVisit)
+			publicStatsRouter.PATCH("/visit/:session", statsHandler.VisitExtend)
 		}
 
-		privateStatsRouter := statsRouter.Group("/get")
+		privateStatsRouter := statsRouter.Group("/")
 		privateStatsRouter.Use(middlewareAuth.AuthRequired())
 		{
 			privateStatsRouter.GET("/visits", statsHandler.GetVisits)
