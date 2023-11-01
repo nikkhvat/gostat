@@ -20,3 +20,7 @@ export interface IAuthResponse {
 export interface IConfirmAccount {
   secret_number: string
 }
+
+export interface IConfirmAccountResponse {
+  successful: boolean
+}

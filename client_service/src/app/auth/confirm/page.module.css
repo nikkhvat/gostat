@@ -39,6 +39,7 @@
   line-height: normal;
   margin-top: 15px;
   width: 323px;
+  margin-bottom: 60px;
 }
 
 .box__bottom {
@@ -51,6 +52,10 @@
 
   display: flex;
   justify-content: flex-end;
+}
+
+.box__bottom__close {
+  display: none;
 }
 
 .continue__button {

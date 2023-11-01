@@ -16,3 +16,22 @@ export interface Stat {
     }
   }
 }
+
+export interface IUserData {
+  account_confirmed: boolean,
+  apps: {
+      created_at: string,
+      id: string,
+      image: string,
+      name: string,
+      url: string
+  }[],
+  avatar: string,
+  created_at: string,
+  email: string,
+  first_name: string,
+  id: number,
+  last_name: string,
+  login: string,
+  middle_name: string
+}
