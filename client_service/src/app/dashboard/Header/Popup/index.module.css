@@ -1,0 +1,56 @@
+
+
+.container {
+  position: absolute;
+  top: 60px;
+  right: 0px;
+  width: 180px;
+
+  padding: 15px 0px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+  border-radius: 15px;
+  border: 1px solid #3C3C3C;
+  background: #181818;
+}
+
+.item {
+  width: 100%;
+  padding: 0 15px 15px;
+  border-bottom: 1px solid #3C3C3C;
+
+  text-align: left;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item__last {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.item__button {
+  border: none;
+  background: transparent;
+  color: #FFF;
+  font-family: 'Commissioner';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-align: left;
+  cursor: pointer;
+}
+
+.item__title {
+  color: #FFF;
+  font-family: 'Commissioner';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
