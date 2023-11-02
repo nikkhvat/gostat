@@ -78,7 +78,7 @@ func (s AuthService) Registration(login, mail, password, firstName, lastName, mi
 		} else {
 			return &RegResponse{
 				Status: false,
-				Text:   "any error",
+				Text:   err.Error(),
 			}, nil
 		}
 	}
