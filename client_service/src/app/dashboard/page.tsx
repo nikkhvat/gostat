@@ -10,6 +10,7 @@ import Charts from "./Charts"
 
 import { getStat } from "./api";
 import { Stat } from ".";
+import Header from "./Header";
 
 export default function Dashboard() {
   
@@ -43,6 +44,7 @@ export default function Dashboard() {
     <main className={styles.page}>
       <Menu />
       <div className={styles.content}>
+        <Header />
         <Metro
           activeScreen={activeScreen}
           setActiveScreen={setActiveScreen}

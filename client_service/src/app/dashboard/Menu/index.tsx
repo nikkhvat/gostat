@@ -33,7 +33,7 @@ export default function Menu() {
       icon_active: IconDashboardActive,
     },
     {
-      id: 0,
+      id: 1,
       name: "Exit",
       path: "/auth",
       icon: null,
