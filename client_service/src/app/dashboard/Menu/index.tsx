@@ -10,9 +10,6 @@ import IconDashboard from "@/app/assets/menu/dashboard.svg";
 import IconDashboardActive from "@/app/assets/menu/dashboard_active.svg";
 import { useState } from "react";
 
-import { useRouter } from "next/navigation";
-import Storage from "@/app/utils/storage";
-
 interface Tab {
   id: number
   name: string
@@ -22,8 +19,6 @@ interface Tab {
 }
 
 export default function Menu() {
-  const router = useRouter();
-
   const tabs: Tab[] = [
     {
       id: 0,
@@ -31,26 +26,13 @@ export default function Menu() {
       path: "/dashboard",
       icon: IconDashboard,
       icon_active: IconDashboardActive,
-    },
-    {
-      id: 0,
-      name: "Exit",
-      path: "/auth",
-      icon: null,
-      icon_active: null,
-    },
+    }
   ];
 
   const [activeTab, setActiveTab] = useState(tabs[0].id)
 
   const clickTab = (tab: Tab) => {
-    if (tab.name === "Exit") {
-      router.push("/auth/sign-in", { scroll: false });
-      Storage.delete("access_token")
-      Storage.delete("refresh_token")
-    } else {
-      setActiveTab(tab.id)
-    }
+    setActiveTab(tab.id)
   }
 
   return (
