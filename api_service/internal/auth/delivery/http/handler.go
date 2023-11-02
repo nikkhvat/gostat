@@ -193,15 +193,16 @@ func (h *AuthHandler) Registration(c *gin.Context) {
 		}
 
 		if err.Error() == "duplicate key value violates unique constraint uix_users_email" {
-			c.JSON(409, ErrorAuthResponse{Error: "duplicate key value violates unique constraint uix_users_email"})
+			c.JSON(409, ErrorAuthResponse{Error: "duplicate key value violates unique constraint users_email"})
 			return
 		}
 
 		if err.Error() == "duplicate key value violates unique constraint uix_users_login" {
-			c.JSON(409, ErrorAuthResponse{Error: "duplicate key value violates unique constraint uix_users_login"})
+			c.JSON(409, ErrorAuthResponse{Error: "duplicate key value violates unique constraint users_login"})
 			return
 		}
 
+		log.Println(err)
 		c.JSON(400, ErrorAuthResponse{Error: "any error"})
 		return
 	}
