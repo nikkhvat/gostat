@@ -184,22 +184,22 @@ func (h *AuthHandler) Registration(c *gin.Context) {
 	token, err := h.service.Registration(c.Request.Context(), req)
 	if err != nil {
 		if strings.Contains(err.Error(), "email already exists") {
-			c.JSON(409, ErrorAuthResponse{Error: "User with the same email already exists"})
+			c.JSON(409, ErrorAuthResponse{Error: "email already in use"})
 			return
 		}
 
 		if strings.Contains(err.Error(), "login already exists") {
-			c.JSON(409, ErrorAuthResponse{Error: "User with the same login already exists"})
+			c.JSON(409, ErrorAuthResponse{Error: "login already in use."})
 			return
 		}
 
 		if strings.Contains(err.Error(), "duplicate key value violates unique constraint \"users_email_key\"") {
-			c.JSON(409, ErrorAuthResponse{Error: "duplicate key value violates unique constraint users_email"})
+			c.JSON(409, ErrorAuthResponse{Error: "email already in use"})
 			return
 		}
 
 		if strings.Contains(err.Error(), "duplicate key value violates unique constraint \"uix_users_login\"") {
-			c.JSON(409, ErrorAuthResponse{Error: "duplicate key value violates unique constraint users_login"})
+			c.JSON(409, ErrorAuthResponse{Error: "login already in use."})
 			return
 		}
 
