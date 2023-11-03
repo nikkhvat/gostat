@@ -7,21 +7,21 @@ const LineChart: React.FC<{
     count?: number;
   }[];
 }> = ({ raw }) => {
+  const svgRef: any = useRef();
 
-  const data = raw.map((item) => ({
+  const data = raw?.map((item) => ({
     date: item.date,
     count: item.count ? item.count : 0
   }));
 
-  const svgRef: any = useRef();
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
     const width = svgRef.current.clientWidth;
-    const height = svgRef.current.clientHeight;
+    const height = svgRef.current.clientHeight - 40;
 
     const numLines = 10;
-    const step = height / (numLines - 1);
+    const step = (height - 50) / (numLines - 1);
 
     const marginTop = 10;
     const marginBottom = 40;

@@ -20,9 +20,7 @@ interface IChartsButtonsState {
 }
 
 interface IStat {
-  data?: {
-    stats?: any
-  };
+  stats?: any
 }
 
 interface ICharts {
@@ -82,11 +80,10 @@ const Charts: React.FC<ICharts> = ({ activeScreen, stats }) => {
             </Button>
           ))}
         </div>
-
         <div className={styles.content}>
-          {activeScreen === 1 && stats.data && chartsState[1].activeButton === 0 && (
-              <ChartVisits data={stats.data.stats.visits_by_day} />
-            )}
+          {activeScreen === 1 && stats && chartsState[1].activeButton === 0 && (
+            <ChartVisits data={stats?.stats?.visits_by_day} />
+          )}
         </div>
       </div>
     </div>

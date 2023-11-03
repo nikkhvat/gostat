@@ -15,7 +15,7 @@ const ChartVisits: React.FC<IChartVisits> = ({ data }) => {
 
   return (
     <div className={styles.container}>
-      <LineChart raw={data} />
+      {data && <LineChart raw={data} />}
     </div>
   );
 };
