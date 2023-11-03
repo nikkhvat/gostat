@@ -51,7 +51,17 @@ export default function Dashboard() {
     setActiveApp(app)
 
     const response = await getStat(app)
-    console.log(response.data);    
+
+    const body = response.data.data;
+
+    setSectionStat({
+      visits: body.stats.first_visits,
+      countries: body.stats.top_countries.length,
+      browsers: body.stats.top_browsers.length,
+      bots: 0,
+    });
+
+    setStat(response.data);
   }
 
   return (
