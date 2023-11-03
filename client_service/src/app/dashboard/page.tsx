@@ -32,10 +32,7 @@ export default function Dashboard() {
         setUserInfo(response.data);
 
         if (response.data.apps) {
-          console.log(response.data.apps[0].id);
-          setActiveApp(() => response.data.apps[0].id);
-
-          console.log(activeApp);
+          changeActiveApp(response.data.apps[0].id)
         }
 
         if (response.data.account_confirmed === false) {
@@ -50,6 +47,13 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
+  const changeActiveApp = async (app: string) => {
+    setActiveApp(app)
+
+    const response = await getStat(app)
+    console.log(response.data);    
+  }
+
   return (
     <main className={styles.page}>
       <Menu />
@@ -57,7 +61,7 @@ export default function Dashboard() {
         <Header
           userInfo={userInfo}
           activeApp={activeApp}
-          setActiveApp={setActiveApp}
+          setActiveApp={changeActiveApp}
         />
         <Metro
           activeScreen={activeScreen}
