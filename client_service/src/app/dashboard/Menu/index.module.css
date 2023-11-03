@@ -14,15 +14,6 @@
   margin-top: 30px;
 }
 
-.list__item {
-  cursor: pointer;
-  margin-bottom: 15px;
-}
-
-.item_icon {
-  cursor: pointer;
-}
-
 .icon_text {
   display: flex;
   justify-content: center;

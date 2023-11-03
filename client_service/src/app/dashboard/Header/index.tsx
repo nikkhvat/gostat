@@ -13,6 +13,7 @@ import PopUp from "./Popup";
 
 import { useRouter } from "next/navigation";
 import Storage from "@/app/utils/storage";
+import Button from "../components/Button";
 
 const Header = () => {
   const router = useRouter();
@@ -82,7 +83,7 @@ const Header = () => {
       </search>
 
       <div className={styles.buttons}>
-        <button
+        <Button
           onClick={clickNotifications}
           className={styles.header__bell_button}
         >
@@ -93,8 +94,11 @@ const Header = () => {
             src={bellDark}
             alt="user avatar"
           />
-        </button>
-        <button onClick={clickAvatar} className={styles.header__avatar_button}>
+        </Button>
+        <Button 
+          onClick={clickAvatar} 
+          className={styles.header__avatar_button}
+        >
           <Image
             id="avatar_image"
             className={styles.header__avatar_image}
@@ -103,7 +107,7 @@ const Header = () => {
             src={defaultAvatar}
             alt="user avatar"
           />
-        </button>
+        </Button>
         {openedPopUp && <PopUp name={"User"} singOut={singOut} />}
       </div>
     </div>
