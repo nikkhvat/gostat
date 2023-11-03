@@ -14,13 +14,20 @@ import PopUp from "./Popup";
 import { useRouter } from "next/navigation";
 import Storage from "@/app/utils/storage";
 import Button from "../components/Button";
+import { IUserData } from "..";
 
-const Header = () => {
+interface IHeader {
+  userInfo: IUserData;
+  activeApp: string | null;
+  setActiveApp: Function
+}
+
+const Header: React.FC<IHeader> = ({ userInfo, activeApp, setActiveApp }) => {
   const router = useRouter();
-  
-  const [search, setSearch] = useState("")
 
-  const [openedPopUp, setOpenedPopUp] = useState(false)
+  const [search, setSearch] = useState("");
+
+  const [openedPopUp, setOpenedPopUp] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -47,20 +54,18 @@ const Header = () => {
     console.log(`search: ${search}`);
   };
 
-  const clickAvatar = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-      setOpenedPopUp((prev) => !prev);
+  const clickAvatar = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    setOpenedPopUp((prev) => !prev);
   };
 
   const clickNotifications = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     console.log(e);
-  }
+  };
 
   const singOut = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault()
+    e.preventDefault();
 
     router.push("/auth/sign-in", { scroll: false });
     Storage.delete("access_token");
@@ -95,10 +100,7 @@ const Header = () => {
             alt="user avatar"
           />
         </Button>
-        <Button 
-          onClick={clickAvatar} 
-          className={styles.header__avatar_button}
-        >
+        <Button onClick={clickAvatar} className={styles.header__avatar_button}>
           <Image
             id="avatar_image"
             className={styles.header__avatar_image}
@@ -108,10 +110,18 @@ const Header = () => {
             alt="user avatar"
           />
         </Button>
-        {openedPopUp && <PopUp name={"User"} singOut={singOut} />}
+        {openedPopUp && (
+          <PopUp
+            name={userInfo?.first_name}
+            apps={userInfo?.apps}
+            singOut={singOut}
+            activeApp={activeApp}
+            setActiveApp={setActiveApp}
+          />
+        )}
       </div>
     </div>
   );
-}
+};
 
 export default Header;
