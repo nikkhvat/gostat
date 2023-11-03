@@ -1,5 +1,5 @@
 function createNewToken(session) {
-  return generateJWT(session, 30 * 20 * 1000);
+  return generateJWT(session, (30 * 20 * 100) * 5);
 }
 
 function getUtmParams(urlString) {
@@ -36,8 +36,7 @@ function getScriptParam(scriptName, paramName) {
 }
 
 const HOST = "https://gostat.app"
-// const HOST = "http://localhost:8080"
-const APP_ID = getScriptParam('stat.js', 'app');
+const APP_ID = getScriptParam('go.js', 'app');
 
 function utf8ToBase64(str) {
   return window.btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
