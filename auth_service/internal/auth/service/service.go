@@ -1,6 +1,7 @@
 package service
 
 import (
+	"regexp"
 	"strings"
 
 	"time"
@@ -61,8 +62,48 @@ type RegResponse struct {
 	Text         string
 }
 
+func isValidEmail(email string) bool {
+	re := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
+	return re.MatchString(email)
+}
+
+func hasUpperCase(s string) bool {
+	for _, r := range s {
+		if 'A' <= r && r <= 'Z' {
+			return true
+		}
+	}
+	return false
+}
+
+func hasSpecialCharacter(s string) bool {
+	re := regexp.MustCompile(`[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]`)
+	return re.MatchString(s)
+}
+
 func (s AuthService) Registration(login, mail, password, firstName, lastName, middleName string) (*RegResponse, error) {
 	user, err := s.repo.RegistrationUser(login, mail, password, firstName, lastName, middleName)
+
+	if login == "" || mail == "" || password == "" || firstName == "" || lastName == "" || middleName == "" {
+		return &RegResponse{
+			Status: false,
+			Text:   "all fields are required",
+		}, nil
+	}
+
+	if !isValidEmail(mail) {
+		return &RegResponse{
+			Status: false,
+			Text:   "invalid email format",
+		}, nil
+	}
+
+	if len(password) < 8 || !hasUpperCase(password) || !hasSpecialCharacter(password) {
+		return &RegResponse{
+			Status: false,
+			Text:   "password must be at least 8 characters, include an uppercase letter and a special character",
+		}, nil
+	}
 
 	if err != nil {
 		if strings.Contains(err.Error(), "uix_users_email") {
