@@ -130,5 +130,7 @@ func main() {
 	router.Static("/docs", "./docs")
 	router.Static("/api/docs", "./docs/swagger-ui-dist")
 
+	router.Static("/api/v1/assets", "./front/utils")
+
 	router.Run(env.Get("PORT"))
 }
