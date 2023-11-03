@@ -6,7 +6,7 @@ import { IUserData, Stat } from './index';
 
 export const getStat = async (id: string): Promise<AxiosResponse<Stat>> => {    
   try {
-    const response = await api.get('/api/stats/get/visits', {
+    const response = await api.get(`/api/stats/visits`, {
       params: {
         app: id
       }

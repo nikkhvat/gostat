@@ -14,6 +14,8 @@
   border-radius: 15px;
   border: 1px solid #3C3C3C;
   background: #181818;
+
+  z-index: 999;
 }
 
 .item {
@@ -53,4 +55,25 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+}
+
+.app_buton {
+  width: 150px;
+  text-align: left;
+  padding: 7px 10px;
+  cursor: pointer;
+  color: #181818;
+  font-family: 'Commissioner';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  border: none;
+  border-radius: 5px;
+  background: #FFF;
+}
+
+.app_buton_inactive {
+  background: transparent;
+  color: #FFF;
 }

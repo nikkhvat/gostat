@@ -19,13 +19,7 @@ export interface Stat {
 
 export interface IUserData {
   account_confirmed: boolean,
-  apps: {
-      created_at: string,
-      id: string,
-      image: string,
-      name: string,
-      url: string
-  }[],
+  apps: App[],
   avatar: string,
   created_at: string,
   email: string,
@@ -34,4 +28,12 @@ export interface IUserData {
   last_name: string,
   login: string,
   middle_name: string
+}
+
+export interface App {
+  created_at: string,
+  id: string,
+  image: string,
+  name: string,
+  url: string
 }
