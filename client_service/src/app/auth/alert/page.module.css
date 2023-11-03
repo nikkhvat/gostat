@@ -1,0 +1,48 @@
+.box {
+  padding: 253px 163px 252px 163px;
+  height: 584px;
+  width: 800px;
+  background-color: #181818;
+  text-align: center;
+  border-radius: 15px;
+}
+
+.alertText_one {
+  color: #FFF;
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.alertText_two {
+  color: #5A5A5A;
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 15px;
+}
+
+.send__button {
+  color: #181818;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  border-radius: 10px;
+  background: #FFF;
+
+  display: inline-flex;
+  padding: 10px 15px;
+  align-items: center;
+
+  cursor: pointer;
+  margin-top: 65px;
+}
