@@ -15,9 +15,7 @@ export default function Confirm() {
   const param = useSearchParams().get('code')
 
   const submit = async (code: string) => {
-    const response = await confirmEmail({
-      secret_number: code 
-    })
+    const response = await confirmEmail(code)
     if (response.status === 200) {
       setСonfirmed(true)
     }
