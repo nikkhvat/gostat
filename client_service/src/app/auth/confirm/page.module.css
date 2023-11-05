@@ -1,5 +1,4 @@
 .box {
-  /* padding: 253px 163px 252px 163px; */
   height: 584px;
   width: 800px;
   background-color: #181818;
@@ -19,7 +18,7 @@
   align-items: center;
 }
 
-.alertText_one {
+.title {
   color: #FFF;
   text-align: center;
   font-family: Commissioner;
@@ -29,7 +28,7 @@
   line-height: normal;
 }
 
-.alertText_two {
+.subtitle {
   color: #5A5A5A;
   text-align: center;
   font-family: Commissioner;

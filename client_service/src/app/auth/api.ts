@@ -23,9 +23,11 @@ export const singIn = async (body: ISingInRequest): Promise<AxiosResponse<IAuthR
   }
 }
 
-export const confirmEmail = async (body: IConfirmAccount): Promise<AxiosResponse<IConfirmAccountResponse>> => {
+export const confirmEmail = async (code: string): Promise<AxiosResponse<IConfirmAccountResponse>> => {
   try {
-    const response = await api.post('/api/auth/confirm/mail')
+    const response = await api.post('/api/auth/confirm/mail', {
+      params: {code}
+    })
     return response
   } catch (error) {
     console.log('Error fetching data:', error);

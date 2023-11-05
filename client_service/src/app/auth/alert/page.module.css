@@ -1,13 +1,24 @@
 .box {
-  padding: 253px 163px 252px 163px;
   height: 584px;
   width: 800px;
   background-color: #181818;
   text-align: center;
   border-radius: 15px;
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.alertText_one {
+.texts {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
   color: #FFF;
   text-align: center;
   font-family: Commissioner;
@@ -17,7 +28,7 @@
   line-height: normal;
 }
 
-.alertText_two {
+.subtitle {
   color: #5A5A5A;
   text-align: center;
   font-family: Commissioner;
@@ -35,6 +46,7 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  border: none;
 
   border-radius: 10px;
   background: #FFF;
