@@ -22,20 +22,25 @@ import (
 	middlewareCors "github.com/nik19ta/gostat/api_service/middleware/cors"
 	env "github.com/nik19ta/gostat/api_service/pkg/env"
 	"github.com/nik19ta/gostat/api_service/pkg/kafka"
-
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
-
-	docs "github.com/nik19ta/gostat/api_service/docs"
 )
 
-// @title     GoStat API
-func main() {
+// @title           Gostat
+// @version         1.0.0
+// @description     Statistics Service - gostat. A microservice-based service, written in Golang and TypeScript.
 
-	kafkaService, err := kafka.NewKafkaService([]string{"kafka:9092"})
+// @contact.name   Nikita Khvatov
+// @contact.url    https://khvat.pro
+// @contact.email  nik19ta.me@gmail.com
+
+// @license.name  GNU Affero General Public License v3.0
+// @license.url   https://github.com/nikkhvat/gostat/blob/master/LICENSE
+
+// @BasePath  /api
+func main() {
+	kafkaService, err := kafka.NewKafkaService([]string{env.Get("KAFKA_HOST")})
 
 	if err != nil {
-		log.Fatalf("❌ Failed to connect to kafka: %v", err)
+		log.Printf("❌ Failed to connect to kafka: %v", err)
 	} else {
 		log.Printf("✅ Successful connect to kafka")
 	}
@@ -65,7 +70,7 @@ func main() {
 	defer kafkaService.Close()
 
 	// Auth service
-	newAuthService := authService.NewAuthService(authClient, kafkaService)
+	newAuthService := authService.NewAuthService(authClient, appClient, kafkaService)
 	authHandler := authHttp.NewAuthHandler(newAuthService)
 
 	// Stats service
@@ -73,7 +78,7 @@ func main() {
 	statsHandler := statsHttp.NewStatsHandler(newStatsService)
 
 	// Apps service
-	newAppService := appService.NewAppService(appClient)
+	newAppService := appService.NewAppService(appClient, statsClient)
 	appHandler := appHttp.NewAppHandler(newAppService)
 
 	router := gin.Default()
@@ -88,18 +93,25 @@ func main() {
 		authRouter.POST("/confirm", authHandler.ConfirmAccount)
 		authRouter.POST("/password/request", authHandler.PasswordRequest)
 		authRouter.POST("/password/reset", authHandler.PasswordReset)
+
+		privateAuthRouter := authRouter.Group("/")
+		privateAuthRouter.Use(middlewareAuth.AuthRequired())
+		{
+			privateAuthRouter.POST("/confirm/mail", authHandler.ConfirmSendAccount)
+			privateAuthRouter.GET("/info", authHandler.GetInfoAccount)
+		}
 	}
 
 	// * Stats Router
 	statsRouter := router.Group("/api/stats")
 	{
-		publicStatsRouter := statsRouter.Group("/set")
+		publicStatsRouter := statsRouter.Group("/")
 		{
-			publicStatsRouter.PUT("/visit", statsHandler.SetVisit)
-			publicStatsRouter.PUT("/visit/extend", statsHandler.VisitExtend)
+			publicStatsRouter.POST("/visit/:app", statsHandler.SetVisit)
+			publicStatsRouter.PATCH("/visit/:session", statsHandler.VisitExtend)
 		}
 
-		privateStatsRouter := statsRouter.Group("/get")
+		privateStatsRouter := statsRouter.Group("/")
 		privateStatsRouter.Use(middlewareAuth.AuthRequired())
 		{
 			privateStatsRouter.GET("/visits", statsHandler.GetVisits)
@@ -111,12 +123,12 @@ func main() {
 	appRouter.Use(middlewareAuth.AuthRequired())
 	{
 		appRouter.POST("/create", appHandler.CreateApp)
+		appRouter.DELETE("/:id", appHandler.DeleteApp)
 	}
 
 	// * Docs Router
-	router.GET("/api/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
-	docs.SwaggerInfo.BasePath = "/api"
+	router.Static("/docs", "./docs")
+	router.Static("/api/docs", "./docs/swagger-ui-dist")
 
 	router.Run(env.Get("PORT"))
 }

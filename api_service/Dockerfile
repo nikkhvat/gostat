@@ -8,6 +8,7 @@ COPY go.sum .
 RUN go mod download
 
 COPY . .
+COPY docs .
 
 RUN unset GOBIN && go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.27.1
 RUN unset GOBIN && go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1.0
@@ -26,6 +27,7 @@ ENV TZ Asia/Shanghai
 
 WORKDIR /app
 COPY --from=builder /app/app /app/app
+COPY --from=builder /build/docs /app/docs
 COPY ./wait-for-it.sh /app/wait-for-it.sh
 RUN chmod +x /app/wait-for-it.sh
 

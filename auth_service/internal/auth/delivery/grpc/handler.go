@@ -109,3 +109,34 @@ func (h *AuthServiceHandler) Registration(ctx context.Context, req *pb.Registrat
 		Status:       true,
 	}, err
 }
+
+func (h *AuthServiceHandler) GetUserinfo(ctx context.Context, req *pb.GetUserInfoRequest) (*pb.GetUserInfoResponse, error) {
+	user, err := h.service.GetUserInfo(req.Id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.GetUserInfoResponse{
+		Avatar:           user.Avatar,
+		FirstName:        user.FirstName,
+		LastName:         user.LastName,
+		MiddleName:       user.MiddleName,
+		AccountConfirmed: user.AccountConfirmed,
+		Email:            user.Email,
+		Login:            user.Login,
+		CreatedAt:        user.CreatedAt.Format("2006-01-02 15:04:05"),
+	}, nil
+}
+
+func (h *AuthServiceHandler) SetConfirmCode(ctx context.Context, req *pb.SetConfirmCodeRequest) (*pb.SetConfirmCodeResponse, error) {
+	code, err := h.service.SetNewConfirmCode(req.Id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SetConfirmCodeResponse{
+		NewSecret: *code,
+	}, nil
+}

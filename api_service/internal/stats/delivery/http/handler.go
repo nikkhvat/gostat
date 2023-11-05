@@ -35,51 +35,71 @@ type SuccessSetVisitResponse struct {
 	Session string `json:"session"`
 }
 
-// SetVisit                      godoc
-// @Summary                      Set a new visit session
-// @Description                  Registers a new visit or extends an existing session
-// @Tags                         stats
-// @Accept                       json
-// @Produce                      json
-// @Param                        un query string false "Unique (1 or 0)"
-// @Param                        utm query string false "UTM parameters"
-// @Param                        url query string false "Visited URL"
-// @Param                        title query string false "Page Title"
-// @Param                        session query string false "Session ID"
-// @Param                        app_id query string true "Application ID"
-// @Success                      200 {object} SuccessSetVisitResponse "Example: {\"successfully\": true, \"session\": \"session_id\"}"
-// @Failure                      400 {object} ErrorSetVisitResponse "Example: {\"error\": true, \"detail\": \"Detailed error message\"}"
-// @Router                       /stats/set/visit [put]
-func (h *StatsHandler) SetVisit(c *gin.Context) {
-	un := c.DefaultQuery("un", "0")
-	utm := c.DefaultQuery("utm", "")
-	url := c.DefaultQuery("url", "/")
-	title := c.DefaultQuery("title", "untitled")
-	session := c.DefaultQuery("session", "")
-	appId := c.DefaultQuery("app_id", "")
+type VisitData struct {
+	Pathname   string    `json:"pathname"`
+	Host       string    `json:"host"`
+	Hash       string    `json:"hash"`
+	Title      string    `json:"title"`
+	Expired    bool      `json:"expired"`
+	Resolution string    `json:"resolution"`
+	UTM        UTMParams `json:"utm"`
+}
 
-	if appId == "" {
+type UTMParams struct {
+	Source   string `json:"utm_source,omitempty"`
+	Medium   string `json:"utm_medium,omitempty"`
+	Campaign string `json:"utm_campaign,omitempty"`
+	Term     string `json:"utm_term,omitempty"`
+	Content  string `json:"utm_content,omitempty"`
+}
+
+// SetVisit godoc
+// @Summary Register a new visit or extend an existing session
+// @Description Endpoint for registering a new visit or extending an existing session.
+// @Tags stats
+// @Accept json
+// @Produce json
+// @Param app path string true "Application ID"
+// @Param body body VisitData true "Visit Details"
+// @Success 200 {object} SuccessSetVisitResponse
+// @Failure 400 {object} ErrorSetVisitResponse
+// @Router /stats/set/visit/{app} [post]
+func (h *StatsHandler) SetVisit(c *gin.Context) {
+	app := c.Param("app")
+
+	var data VisitData
+	if err := c.BindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to bind JSON"})
+		return
+	}
+
+	if app == "" {
 		c.JSON(http.StatusBadRequest, ErrorSetVisitResponse{
 			Error:  true,
 			Detail: "app id cannot be empty",
 		})
+		return
 	}
 
-	unique := un == "1"
+	unique := data.Expired == false
 
-	httpReferer := c.Request.Header.Get("Referer")
 	userAgent := c.Request.Header.Get("User-Agent")
 
 	session, err := h.service.AddVisit(c.Request.Context(), service.AddVisitRequest{
-		IP:          c.ClientIP(),
-		UserAgent:   userAgent,
-		UTM:         utm,
-		HTTPReferer: httpReferer,
-		URL:         url,
-		Title:       title,
-		Session:     session,
-		Unique:      unique,
-		AppId:       appId,
+		UserAgent:  userAgent,
+		IP:         c.ClientIP(),
+		App:        app,
+		Pathname:   data.Pathname,
+		Host:       data.Hash,
+		Hash:       data.Hash,
+		Title:      data.Title,
+		Unique:     unique,
+		Resolution: data.Resolution,
+		Source:     data.UTM.Source,
+		Medium:     data.UTM.Medium,
+		Campaign:   data.UTM.Campaign,
+		Term:       data.UTM.Term,
+		Content:    data.UTM.Content,
 	})
 
 	if err != nil {
@@ -92,7 +112,7 @@ func (h *StatsHandler) SetVisit(c *gin.Context) {
 
 	c.JSON(200, SuccessSetVisitResponse{
 		Successfully: true,
-		Session:      session,
+		Session:      *session,
 	})
 }
 
@@ -113,18 +133,18 @@ type ErrorVisitExtendResponse struct {
 	Detail string `json:"detail"`
 }
 
-// VisitExtend                 godoc
-// @Summary                    Extend a visit session
-// @Description                Extends the session for a particular visit
-// @Tags                       stats
-// @Accept                     json
-// @Produce                    json
-// @Param                      session query string false "Visit Session ID"
-// @Success                    200 {object} SuccessVisitExtendResponse "Example: {\"successfully\": true}"
-// @Failure                    400 {object} ErrorVisitExtendResponse "Example: {\"error\": true, \"detail\": \"Detailed error message\"}"
-// @Router                     /stats/set/visit/extend [put]
+// VisitExtend godoc
+// @Summary Extend the visit session duration
+// @Description Endpoint to extend the duration of an active visit session.
+// @Tags stats
+// @Accept json
+// @Produce json
+// @Param session path string true "Session ID"
+// @Success 200 {object} SuccessVisitExtendResponse
+// @Failure 400 {object} ErrorVisitExtendResponse
+// @Router /api/stats/visit/{session} [patch]
 func (h *StatsHandler) VisitExtend(c *gin.Context) {
-	session := c.DefaultQuery("session", "")
+	session := c.Param("session")
 
 	err := h.service.VisitExtend(c.Request.Context(), service.VisitExtendRequest{
 		Session: session,
@@ -159,6 +179,7 @@ type ErrorGetVisitResponse struct {
 // @Tags                       stats
 // @Accept                     json
 // @Produce                    json
+// @Security                   BearerAuth
 // @Param                      app query string true "Application ID"
 // @Success                    200 {object} interface{} "Successfully retrieved data. The structure of the data depends on the application."
 // @Failure                    400 {object} ErrorGetVisitResponse "Example: {\"error\": true, \"detail\": \"Detailed error message\"}"

@@ -8,6 +8,17 @@ service AppService {
   rpc CreateApp (CreateAppRequest) returns (CreateAppResponse) {}
   rpc GetApp (GetAppRequest) returns (GetAppResponse) {}
   rpc GetAppsByUserId (GetAppsByUserIdRequest) returns (GetAppsByUserIdResponse) {}
+  rpc DeleteApp (DeleteAppRequest) returns (DeleteAppResponse) {}
+}
+
+// DeleteApp
+message DeleteAppRequest {
+  string app_id = 1;
+  uint64 user_id = 2;
+}
+
+message DeleteAppResponse {
+  bool successful = 1;
 }
 
 // CreateApp
@@ -38,7 +49,7 @@ message GetAppResponse {
 
 // * GetAppsByUserId
 message GetAppsByUserIdRequest {
-  string user_id = 1;
+  uint64 user_id = 1;
 }
 
 message GetAppsByUserIdResponse {

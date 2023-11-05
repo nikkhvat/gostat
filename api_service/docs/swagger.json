@@ -1,12 +1,66 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "GoStat API",
-        "contact": {}
+        "description": "Statistics Service - gostat. A microservice-based service, written in Golang and TypeScript.",
+        "title": "Gostat",
+        "contact": {
+            "name": "Nikita Khvatov",
+            "url": "https://khvat.pro",
+            "email": "nik19ta.me@gmail.com"
+        },
+        "license": {
+            "name": "GNU Affero General Public License v3.0",
+            "url": "https://github.com/nikkhvat/gostat/blob/master/LICENSE"
+        },
+        "version": "1.0.0"
     },
+    "basePath": "/api",
     "paths": {
+        "/api/stats/visit/{session}": {
+            "patch": {
+                "description": "Endpoint to extend the duration of an active visit session.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stats"
+                ],
+                "summary": "Extend the visit session duration",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Session ID",
+                        "name": "session",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/http.SuccessVisitExtendResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorVisitExtendResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/apps/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a new application with the given details",
                 "consumes": [
                     "application/json"
@@ -31,15 +85,58 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Example: {\\\"successfully\\\": true, \\\"app\\\": \\\"new_app_id\\\"}",
+                        "description": "Example: {\\\"successfully\\\": true, \\\"app\\\": \\\"deleted_app_id\\\"}",
                         "schema": {
-                            "$ref": "#/definitions/http.SuccessAppCreateResponse"
+                            "$ref": "#/definitions/http.SuccessAppResponse"
                         }
                     },
                     "400": {
                         "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"detailed error message\\\"}",
                         "schema": {
-                            "$ref": "#/definitions/http.ErrorAppCreateResponse"
+                            "$ref": "#/definitions/http.ErrorAppResp"
+                        }
+                    }
+                }
+            }
+        },
+        "/apps/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete an application based on the application ID and user ID from the bearer token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "apps"
+                ],
+                "summary": "Delete an application",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Application ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Example: {\\\"successfully\\\": true, \\\"app\\\": \\\"app_id\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.SuccessAppResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"detailed error message\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAppResp"
                         }
                     }
                 }
@@ -76,6 +173,86 @@
                     },
                     "401": {
                         "description": "Example: {\\\"error\\\":\\\"Unexpected error, failed to verify account\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/confirm/mail": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Send an email with a code in order to confirm the account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Send confirmation email",
+                "responses": {
+                    "200": {
+                        "description": "Example: {\\\"successful\\\":true}",
+                        "schema": {
+                            "$ref": "#/definitions/http.SuccessAuthConfirmResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"error\\\":\\\"Unexpected error, failed to send mail\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Example: {\\\"error\\\":\\\"Invalid token\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/info": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get detailed information about a user's account and their associated applications",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Retrieve user account information",
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved user information",
+                        "schema": {
+                            "$ref": "#/definitions/service.UserInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters or error retrieving user information",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Example: {\\\"Invalid token\\\"}",
                         "schema": {
                             "$ref": "#/definitions/http.ErrorAuthResponse"
                         }
@@ -295,6 +472,11 @@
         },
         "/stats/get/visits": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieves visits data for a specific application",
                 "consumes": [
                     "application/json"
@@ -331,9 +513,9 @@
                 }
             }
         },
-        "/stats/set/visit": {
-            "put": {
-                "description": "Registers a new visit or extends an existing session",
+        "/stats/set/visit/{app}": {
+            "post": {
+                "description": "Endpoint for registering a new visit or extending an existing session.",
                 "consumes": [
                     "application/json"
                 ],
@@ -343,94 +525,36 @@
                 "tags": [
                     "stats"
                 ],
-                "summary": "Set a new visit session",
+                "summary": "Register a new visit or extend an existing session",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Unique (1 or 0)",
-                        "name": "un",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "UTM parameters",
-                        "name": "utm",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Visited URL",
-                        "name": "url",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Page Title",
-                        "name": "title",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Session ID",
-                        "name": "session",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
                         "description": "Application ID",
-                        "name": "app_id",
-                        "in": "query",
+                        "name": "app",
+                        "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "Visit Details",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.VisitData"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Example: {\\\"successfully\\\": true, \\\"session\\\": \\\"session_id\\\"}",
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/http.SuccessSetVisitResponse"
                         }
                     },
                     "400": {
-                        "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"Detailed error message\\\"}",
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/http.ErrorSetVisitResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/stats/set/visit/extend": {
-            "put": {
-                "description": "Extends the session for a particular visit",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "stats"
-                ],
-                "summary": "Extend a visit session",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Visit Session ID",
-                        "name": "session",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Example: {\\\"successfully\\\": true}",
-                        "schema": {
-                            "$ref": "#/definitions/http.SuccessVisitExtendResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Example: {\\\"error\\\": true, \\\"detail\\\": \\\"Detailed error message\\\"}",
-                        "schema": {
-                            "$ref": "#/definitions/http.ErrorVisitExtendResponse"
                         }
                     }
                 }
@@ -451,7 +575,7 @@
                 }
             }
         },
-        "http.ErrorAppCreateResponse": {
+        "http.ErrorAppResp": {
             "type": "object",
             "properties": {
                 "detail": {
@@ -512,7 +636,7 @@
                 }
             }
         },
-        "http.SuccessAppCreateResponse": {
+        "http.SuccessAppResponse": {
             "type": "object",
             "properties": {
                 "app": {
@@ -569,6 +693,52 @@
                 }
             }
         },
+        "http.UTMParams": {
+            "type": "object",
+            "properties": {
+                "utm_campaign": {
+                    "type": "string"
+                },
+                "utm_content": {
+                    "type": "string"
+                },
+                "utm_medium": {
+                    "type": "string"
+                },
+                "utm_source": {
+                    "type": "string"
+                },
+                "utm_term": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.VisitData": {
+            "type": "object",
+            "properties": {
+                "expired": {
+                    "type": "boolean"
+                },
+                "hash": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "pathname": {
+                    "type": "string"
+                },
+                "resolution": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "utm": {
+                    "$ref": "#/definitions/http.UTMParams"
+                }
+            }
+        },
         "service.LoginRequest": {
             "type": "object",
             "properties": {
@@ -622,6 +792,79 @@
             "properties": {
                 "mail": {
                     "description": "The email address associated with the account\nrequired: true\nexample: user@example.com",
+                    "type": "string"
+                }
+            }
+        },
+        "service.UserApp": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "Timestamp of application creation\nexample: \"2023-10-22T01:47:40+04:00\"",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Unique identifier of the application\nexample: \"8d8da463-767a-488c-9cc6-45dc35346507\"",
+                    "type": "string"
+                },
+                "image": {
+                    "description": "Image or icon of the application\nexample: \"default\"",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Name of the application\nexample: \"nikkhvat\"",
+                    "type": "string"
+                },
+                "url": {
+                    "description": "URL of the application\nexample: \"https://nik.khvat.pro\"",
+                    "type": "string"
+                }
+            }
+        },
+        "service.UserInfo": {
+            "type": "object",
+            "properties": {
+                "account_confirmed": {
+                    "description": "Account confirmation status\nexample: false",
+                    "type": "boolean"
+                },
+                "apps": {
+                    "description": "List of applications associated with the user",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/service.UserApp"
+                    }
+                },
+                "avatar": {
+                    "description": "Avatar URL\nexample: \"\"",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "Timestamp of account creation\nexample: \"2023-10-22 00:49:35\"",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Email address of the user\nexample: \"nik19ta.me1@gmail.com\"",
+                    "type": "string"
+                },
+                "first_name": {
+                    "description": "First name of the user\nexample: \"Nikita\"",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Unique identifier of the user\nexample: 168",
+                    "type": "integer"
+                },
+                "last_name": {
+                    "description": "Last name of the user\nexample: \"Khvatov\"",
+                    "type": "string"
+                },
+                "login": {
+                    "description": "Login name of the user\nexample: \"nik19ta.me1\"",
+                    "type": "string"
+                },
+                "middle_name": {
+                    "description": "Middle name of the user\nexample: \"Dmitrievich\"",
                     "type": "string"
                 }
             }

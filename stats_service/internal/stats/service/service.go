@@ -44,20 +44,15 @@ func countryDefinition(ip string) string {
 	return results.Country_short
 }
 
-func (s StatsService) SetVisits(ip, userAgent, utm, httpReferer, url, title string, session string, unique bool, appId string) (string, error) {
-	ua := useragent.New(userAgent)
+func (s StatsService) SetVisits(UserAgent, IP, App, Pathname, Host, Hash, Title, Resolution, Source, Medium, Campaign, Term, Content string, Unique bool) (string, error) {
+	ua := useragent.New(UserAgent)
 
 	var userSession string
-
-	if session == "" {
-		userSession = uuid.New().String()
-	} else {
-		userSession = session
-	}
+	userSession = uuid.New().String()
 
 	browserName, _ := ua.Browser()
 
-	country := countryDefinition(ip)
+	country := countryDefinition(IP)
 
 	ua.Model()
 
@@ -65,20 +60,26 @@ func (s StatsService) SetVisits(ip, userAgent, utm, httpReferer, url, title stri
 
 	data := model.Visits{
 		UId:         uuid.New().String(),
+		Platform:    ua.Platform(),
+		Os:          ua.OS(),
 		Session:     userSession,
 		TimeEntry:   timeNow,
 		Browser:     browserName,
-		Platform:    ua.Platform(),
-		Os:          ua.OS(),
 		TimeLeaving: timeNow,
 		Country:     country,
-		Unique:      unique,
-		Ip:          ip,
-		Utm:         utm,
-		URL:         url,
-		Title:       title,
-		HTTPReferer: httpReferer,
-		AppId:       appId,
+		Unique:      Unique,
+		Ip:          IP,
+		Resolution:  Resolution,
+		Source:      Source,
+		Medium:      Medium,
+		Campaign:    Campaign,
+		Term:        Term,
+		Content:     Content,
+		Title:       Title,
+		AppId:       App,
+		Pathname:    Pathname,
+		Host:        Host,
+		Hash:        Hash,
 	}
 
 	err := s.repo.AddVisit(data)
@@ -259,12 +260,12 @@ func calculateSiteStats(visits []model.Visits) model.SiteStats {
 		totalDuration += visit.TimeLeaving.Sub(visit.TimeEntry)
 
 		// * Обновление информации о топ-страницах
-		if page, ok := topPagesMap[visit.URL]; ok {
+		if page, ok := topPagesMap[visit.Pathname]; ok {
 			page.Count++
-			topPagesMap[visit.URL] = page
+			topPagesMap[visit.Pathname] = page
 		} else {
-			topPagesMap[visit.URL] = model.URLCountPair{
-				URL:   visit.URL,
+			topPagesMap[visit.Pathname] = model.URLCountPair{
+				URL:   visit.Pathname,
 				Title: visit.Title,
 				Count: 1,
 			}
@@ -353,4 +354,10 @@ func (s StatsService) GetVisits(app string) (model.SiteStats, error) {
 	resp := calculateSiteStats(data)
 
 	return resp, nil
+}
+
+func (s StatsService) DeleteByAppId(app string) error {
+	s.repo.DeleteByAppId(app)
+
+	return nil
 }

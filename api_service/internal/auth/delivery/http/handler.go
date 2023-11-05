@@ -1,6 +1,8 @@
 package http
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nik19ta/gostat/api_service/internal/auth/service"
 )
@@ -133,6 +135,32 @@ func (h *AuthHandler) ConfirmAccount(c *gin.Context) {
 	c.JSON(200, SuccessAuthConfirmResponse{Successful: true})
 }
 
+// ConfirmAccount              godoc
+// @Summary                    Send confirmation email
+// @Description                Send an email with a code in order to confirm the account
+// @Tags                       authentication
+// @Accept                     json
+// @Produce                    json
+// @Security                   BearerAuth
+// @Success                    200 {object} SuccessAuthConfirmResponse "Example: {\"successful\":true}"
+// @Failure                    401 {object} ErrorAuthResponse "Example: {\"error\":\"Invalid token\"}"
+// @Failure                    400 {object} ErrorAuthResponse "Example: {\"error\":\"Unexpected error, failed to send mail\"}"
+// @Router                     /auth/confirm/mail [post]
+func (h *AuthHandler) ConfirmSendAccount(c *gin.Context) {
+	id := c.GetUint64("id")
+
+	log.Println(id)
+
+	err := h.service.SendConfirmMail(c, id)
+
+	if err != nil {
+		c.JSON(401, ErrorAuthResponse{Error: "Unexpected error, failed to send mail"})
+		return
+	}
+
+	c.JSON(200, SuccessAuthConfirmResponse{Successful: true})
+}
+
 // Registration                godoc
 // @Summary                    Register a new user
 // @Description                Register a new user with the given details
@@ -235,4 +263,28 @@ func (h *AuthHandler) PasswordReset(c *gin.Context) {
 	}
 
 	c.JSON(200, SuccessAuthResponse{AccessToken: token.AccessToken, RefreshToken: token.RefreshToekn})
+}
+
+// GetInfoAccount fetches detailed information about a user account and associated applications
+// @Summary Retrieve user account information
+// @Description Get detailed information about a user's account and their associated applications
+// @Tags authentication
+// @Accept  json
+// @Produce  json
+// @Security BearerAuth
+// @Success 200 {object} service.UserInfo "Successfully retrieved user information"
+// @Failure 400 {object} ErrorAuthResponse "Invalid request parameters or error retrieving user information"
+// @Failure 401 {object} ErrorAuthResponse "Example: {\"Invalid token\"}"
+// @Router /auth/info [get]
+func (h *AuthHandler) GetInfoAccount(c *gin.Context) {
+	id := c.GetUint64("id")
+
+	data, err := h.service.GetInfoAccount(c, id)
+
+	if err != nil {
+		c.JSON(400, ErrorAuthResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(200, data)
 }

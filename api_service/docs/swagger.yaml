@@ -1,3 +1,4 @@
+basePath: /api
 definitions:
   http.CreateAppRequest:
     properties:
@@ -12,7 +13,7 @@ definitions:
           example: "https://myapp.com"
         type: string
     type: object
-  http.ErrorAppCreateResponse:
+  http.ErrorAppResp:
     properties:
       detail:
         description: |-
@@ -73,7 +74,7 @@ definitions:
           example: true
         type: boolean
     type: object
-  http.SuccessAppCreateResponse:
+  http.SuccessAppResponse:
     properties:
       app:
         description: |-
@@ -130,6 +131,36 @@ definitions:
           example: true
         type: boolean
     type: object
+  http.UTMParams:
+    properties:
+      utm_campaign:
+        type: string
+      utm_content:
+        type: string
+      utm_medium:
+        type: string
+      utm_source:
+        type: string
+      utm_term:
+        type: string
+    type: object
+  http.VisitData:
+    properties:
+      expired:
+        type: boolean
+      hash:
+        type: string
+      host:
+        type: string
+      pathname:
+        type: string
+      resolution:
+        type: string
+      title:
+        type: string
+      utm:
+        $ref: '#/definitions/http.UTMParams'
+    type: object
   service.LoginRequest:
     properties:
       login:
@@ -170,10 +201,153 @@ definitions:
           example: user@example.com
         type: string
     type: object
+  service.UserApp:
+    properties:
+      created_at:
+        description: |-
+          Timestamp of application creation
+          example: "2023-10-22T01:47:40+04:00"
+        type: string
+      id:
+        description: |-
+          Unique identifier of the application
+          example: "8d8da463-767a-488c-9cc6-45dc35346507"
+        type: string
+      image:
+        description: |-
+          Image or icon of the application
+          example: "default"
+        type: string
+      name:
+        description: |-
+          Name of the application
+          example: "nikkhvat"
+        type: string
+      url:
+        description: |-
+          URL of the application
+          example: "https://nik.khvat.pro"
+        type: string
+    type: object
+  service.UserInfo:
+    properties:
+      account_confirmed:
+        description: |-
+          Account confirmation status
+          example: false
+        type: boolean
+      apps:
+        description: List of applications associated with the user
+        items:
+          $ref: '#/definitions/service.UserApp'
+        type: array
+      avatar:
+        description: |-
+          Avatar URL
+          example: ""
+        type: string
+      created_at:
+        description: |-
+          Timestamp of account creation
+          example: "2023-10-22 00:49:35"
+        type: string
+      email:
+        description: |-
+          Email address of the user
+          example: "nik19ta.me1@gmail.com"
+        type: string
+      first_name:
+        description: |-
+          First name of the user
+          example: "Nikita"
+        type: string
+      id:
+        description: |-
+          Unique identifier of the user
+          example: 168
+        type: integer
+      last_name:
+        description: |-
+          Last name of the user
+          example: "Khvatov"
+        type: string
+      login:
+        description: |-
+          Login name of the user
+          example: "nik19ta.me1"
+        type: string
+      middle_name:
+        description: |-
+          Middle name of the user
+          example: "Dmitrievich"
+        type: string
+    type: object
 info:
-  contact: {}
-  title: GoStat API
+  contact:
+    email: nik19ta.me@gmail.com
+    name: Nikita Khvatov
+    url: https://khvat.pro
+  description: Statistics Service - gostat. A microservice-based service, written
+    in Golang and TypeScript.
+  license:
+    name: GNU Affero General Public License v3.0
+    url: https://github.com/nikkhvat/gostat/blob/master/LICENSE
+  title: Gostat
+  version: 1.0.0
 paths:
+  /api/stats/visit/{session}:
+    patch:
+      consumes:
+      - application/json
+      description: Endpoint to extend the duration of an active visit session.
+      parameters:
+      - description: Session ID
+        in: path
+        name: session
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.SuccessVisitExtendResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.ErrorVisitExtendResponse'
+      summary: Extend the visit session duration
+      tags:
+      - stats
+  /apps/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an application based on the application ID and user ID from
+        the bearer token
+      parameters:
+      - description: Application ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Example: {\"successfully\": true, \"app\": \"app_id\"}'
+          schema:
+            $ref: '#/definitions/http.SuccessAppResponse'
+        "400":
+          description: 'Example: {\"error\": true, \"detail\": \"detailed error message\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAppResp'
+      security:
+      - BearerAuth: []
+      summary: Delete an application
+      tags:
+      - apps
   /apps/create:
     post:
       consumes:
@@ -190,13 +364,15 @@ paths:
       - application/json
       responses:
         "200":
-          description: 'Example: {\"successfully\": true, \"app\": \"new_app_id\"}'
+          description: 'Example: {\"successfully\": true, \"app\": \"deleted_app_id\"}'
           schema:
-            $ref: '#/definitions/http.SuccessAppCreateResponse'
+            $ref: '#/definitions/http.SuccessAppResponse'
         "400":
           description: 'Example: {\"error\": true, \"detail\": \"detailed error message\"}'
           schema:
-            $ref: '#/definitions/http.ErrorAppCreateResponse'
+            $ref: '#/definitions/http.ErrorAppResp'
+      security:
+      - BearerAuth: []
       summary: Create a new application
       tags:
       - apps
@@ -224,6 +400,57 @@ paths:
           schema:
             $ref: '#/definitions/http.ErrorAuthResponse'
       summary: Confirm the email of an account
+      tags:
+      - authentication
+  /auth/confirm/mail:
+    post:
+      consumes:
+      - application/json
+      description: Send an email with a code in order to confirm the account
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Example: {\"successful\":true}'
+          schema:
+            $ref: '#/definitions/http.SuccessAuthConfirmResponse'
+        "400":
+          description: 'Example: {\"error\":\"Unexpected error, failed to send mail\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+        "401":
+          description: 'Example: {\"error\":\"Invalid token\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+      security:
+      - BearerAuth: []
+      summary: Send confirmation email
+      tags:
+      - authentication
+  /auth/info:
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about a user's account and their associated
+        applications
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved user information
+          schema:
+            $ref: '#/definitions/service.UserInfo'
+        "400":
+          description: Invalid request parameters or error retrieving user information
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+        "401":
+          description: 'Example: {\"Invalid token\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+      security:
+      - BearerAuth: []
+      summary: Retrieve user account information
       tags:
       - authentication
   /auth/login:
@@ -389,76 +616,40 @@ paths:
           description: 'Example: {\"error\": true, \"detail\": \"Detailed error message\"}'
           schema:
             $ref: '#/definitions/http.ErrorGetVisitResponse'
+      security:
+      - BearerAuth: []
       summary: Retrieve visits for an application
       tags:
       - stats
-  /stats/set/visit:
-    put:
+  /stats/set/visit/{app}:
+    post:
       consumes:
       - application/json
-      description: Registers a new visit or extends an existing session
+      description: Endpoint for registering a new visit or extending an existing session.
       parameters:
-      - description: Unique (1 or 0)
-        in: query
-        name: un
-        type: string
-      - description: UTM parameters
-        in: query
-        name: utm
-        type: string
-      - description: Visited URL
-        in: query
-        name: url
-        type: string
-      - description: Page Title
-        in: query
-        name: title
-        type: string
-      - description: Session ID
-        in: query
-        name: session
-        type: string
       - description: Application ID
-        in: query
-        name: app_id
+        in: path
+        name: app
         required: true
         type: string
+      - description: Visit Details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/http.VisitData'
       produces:
       - application/json
       responses:
         "200":
-          description: 'Example: {\"successfully\": true, \"session\": \"session_id\"}'
+          description: OK
           schema:
             $ref: '#/definitions/http.SuccessSetVisitResponse'
         "400":
-          description: 'Example: {\"error\": true, \"detail\": \"Detailed error message\"}'
+          description: Bad Request
           schema:
             $ref: '#/definitions/http.ErrorSetVisitResponse'
-      summary: Set a new visit session
-      tags:
-      - stats
-  /stats/set/visit/extend:
-    put:
-      consumes:
-      - application/json
-      description: Extends the session for a particular visit
-      parameters:
-      - description: Visit Session ID
-        in: query
-        name: session
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 'Example: {\"successfully\": true}'
-          schema:
-            $ref: '#/definitions/http.SuccessVisitExtendResponse'
-        "400":
-          description: 'Example: {\"error\": true, \"detail\": \"Detailed error message\"}'
-          schema:
-            $ref: '#/definitions/http.ErrorVisitExtendResponse'
-      summary: Extend a visit session
+      summary: Register a new visit or extend an existing session
       tags:
       - stats
 swagger: "2.0"

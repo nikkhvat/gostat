@@ -33,6 +33,10 @@ func (c *StatsClient) GetVisits(ctx context.Context, req *stats.GetVisitsRequest
 	return c.client.GetVisits(ctx, req)
 }
 
+func (c *StatsClient) DeleteApp(ctx context.Context, req *stats.DeleteByAppIdRequest) (*stats.DeleteByAppIdResponse, error) {
+	return c.client.DeleteByAppId(ctx, req)
+}
+
 func (c *StatsClient) Close() error {
 	return c.conn.Close()
 }
