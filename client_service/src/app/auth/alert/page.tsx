@@ -7,9 +7,11 @@ export default function Alert() {
 
   return (
     <div className={style.box}>
-      <h2 className={style.alertText_one}>Account verification required</h2>
-      <h3 className={style.alertText_two}>Please check your email for the verification link</h3>
-      <div className={style.send__button}>Send mail again</div>
+      <div className={style.texts}>
+        <h2 className={style.title}>Account verification required</h2>
+        <h3 className={style.subtitle}>Please check your email for the verification link</h3>
+        <button className={style.send__button}>Send mail again</button>
+      </div>
     </div>
   )
 }
