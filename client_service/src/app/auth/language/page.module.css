@@ -1,0 +1,104 @@
+.box {
+  height: 584px;
+  width: 800px;
+  background-color: #181818;
+  text-align: center;
+  border-radius: 15px;
+  position: relative;
+  padding-top: 60px;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+.title {
+  color: #FFF;
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.subTitle {
+  color: #999;
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 15px;
+}
+
+.earthPhoto {
+  position: absolute;
+  top: 104px;
+  left: 0;
+  right: 0;
+}
+
+.mainBlock {
+  margin-top: 89px;
+  margin-bottom: 60px;
+}
+
+.chooseLanguageTitle {
+  color: #FFF;
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.box__bottom {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #1E1E1E;
+
+  display: flex;
+  justify-content: flex-end;
+}
+
+.continue__button {
+  margin: 26px 30px 30px 0;
+  display: inline-flex;
+  padding: 10px 15px;
+  align-items: center;
+  outline: none;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  background: #FFF;
+  color: #181818;
+}
+
+.back__button {
+  padding: 10px 15px;
+  align-items: center;
+  border-radius: 10px;
+  border: 1px solid #1E1E1E;
+  text-decoration: none;
+  color: #3C3C3C;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  margin-right: 15px;
+}
+
+.languageButtons {
+  margin-top: 30px;
+
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 20px;
+}

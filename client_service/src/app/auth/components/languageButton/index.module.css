@@ -1,0 +1,26 @@
+.languageButton {
+  grid-column: 4 span;
+
+  display: flex;
+  cursor: pointer;
+  padding: 10px 15px;
+  gap: 10px;
+  flex: 1 0 0;
+  border-radius: 10px;
+  border: 1px solid #5A5A5A;
+  color: #999;
+}
+
+.languageButtonSelected {
+  grid-column: 4 span;
+
+  display: flex;
+  cursor: pointer;
+  padding: 10px 15px;
+  gap: 10px;
+  flex: 1 0 0;
+  border-radius: 10px;
+  border: 1px solid #5A5A5A;
+  color: #181818;
+  background: #FFF;
+}
