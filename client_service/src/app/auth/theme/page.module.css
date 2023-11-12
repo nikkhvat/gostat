@@ -39,6 +39,67 @@
   width: 411px;
 }
 
+.main__block {
+  margin-top: 60px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.light__button {
+  width: 200px;
+  height: 129px;
+  border-radius: 15px;
+  background: #EFEFEF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.system__button {
+  width: 200px;
+  height: 129px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.system__button__left {
+  background-color: #EFEFEF;
+  width: 50%;
+  height: 100%;
+  border-radius: 15px 0 0 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 48px;
+}
+
+.system__button__right {
+  background-color: #1E1E1E;
+  width: 50%;
+  height: 100%;
+  border-radius: 0 15px 15px 0;
+}
+
+.dark__button {
+  width: 240px;
+  height: 155px;
+  border-radius: 15px;
+  background: #1E1E1E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
 .box__bottom {
   width: 100%;
   position: absolute;
