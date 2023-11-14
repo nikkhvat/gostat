@@ -2,25 +2,31 @@
   grid-column: 4 span;
 
   display: flex;
+  align-items: center;
   cursor: pointer;
-  padding: 10px 15px;
+  padding: 8px 15px;
   gap: 10px;
   flex: 1 0 0;
   border-radius: 10px;
   border: 1px solid #5A5A5A;
   color: #999;
+
+  height: 42px;
 }
 
 .languageButtonSelected {
   grid-column: 4 span;
 
   display: flex;
+  align-items: center;
   cursor: pointer;
-  padding: 10px 15px;
+  padding: 8px 15px;
   gap: 10px;
   flex: 1 0 0;
   border-radius: 10px;
   border: 1px solid #5A5A5A;
   color: #181818;
   background: #FFF;
+  
+  height: 42px;
 }
