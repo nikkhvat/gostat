@@ -18,20 +18,33 @@ export default function Theme() {
       </div>
 
       <div className={style.main__block}>
-        <div className={style.light__button}>
-          <Image src={lightCat} alt="light-cat" />
-        </div>
-        <div className={style.dark__button}>
-          <Image src={darkCat} alt="dark-cat" />
-        </div>
-        <div className={style.system__button}>
-          <div className={style.system__button__left}>
+
+        <div>
+          <div className={style.light__button}>
             <Image src={lightCat} alt="light-cat" />
           </div>
-          <div className={style.system__button__right}>
-            <Image src={halfCat} alt="half-cat" />
-          </div>
+          <p className={style.light__text}>Light</p>
         </div>
+
+        <div>
+          <div className={style.dark__button}>
+            <Image src={darkCat} alt="dark-cat" />
+          </div>
+          <p className={style.dark__text}>Dark</p>
+        </div>
+
+        <div>
+          <div className={style.system__button}>
+            <div className={style.system__button__left}>
+              <Image src={lightCat} alt="light-cat" />
+            </div>
+            <div className={style.system__button__right}>
+              <Image src={halfCat} alt="half-cat" />
+            </div>
+          </div>
+          <p className={style.light__text}>Auto</p>
+        </div>
+
       </div>
 
       <div className={style.box__bottom}>

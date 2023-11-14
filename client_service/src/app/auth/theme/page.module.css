@@ -88,6 +88,28 @@
   border-radius: 0 15px 15px 0;
 }
 
+.light__text {
+  margin-top: 15px;
+  color: #999;
+
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.dark__text {
+  color: #FFF;
+  margin-top: 15px;
+
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
 .dark__button {
   width: 240px;
   height: 155px;
