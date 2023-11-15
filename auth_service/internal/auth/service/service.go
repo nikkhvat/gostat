@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"log"
 	"regexp"
 	"strings"
 
@@ -61,7 +62,7 @@ func (s AuthService) Authenticate(login, password string) (*TokenResponse, error
 
 	newUUID := GenerateUUID()
 	token, err := generateToken(user.ID, user.Login, newUUID)
-	s.repo.RegisterNewSession(newUUID, uint(user.ID))
+	s.repo.RegisterNewSession(newUUID, uint64(user.ID))
 	if err != nil {
 		return nil, err
 	}
@@ -141,7 +142,7 @@ func (s AuthService) Registration(login, mail, password, firstName, lastName, mi
 
 	newUUID := GenerateUUID()
 	token, tokenErr := generateToken(user.ID, user.Login, newUUID)
-	s.repo.RegisterNewSession(newUUID, uint(user.ID))
+	s.repo.RegisterNewSession(newUUID, uint64(user.ID))
 
 	if tokenErr != nil {
 		return &RegResponse{
@@ -214,7 +215,7 @@ func (s AuthService) PasswordReset(secret, mail, password string) (*TokenRespons
 
 	newUUID := GenerateUUID()
 	tokens, err := generateToken(uint(user.ID), user.Login, newUUID)
-	s.repo.RegisterNewSession(newUUID, uint(user.ID))
+	s.repo.RegisterNewSession(newUUID, uint64(user.ID))
 
 	if err != nil {
 		return nil, err
@@ -233,4 +234,33 @@ func (s AuthService) SetNewConfirmCode(id uint64) (*string, error) {
 
 func (s AuthService) RevokeToken(uuid string) error {
 	return s.repo.RevokeToken(uuid)
+}
+
+type UserSession struct {
+	Uuid      string
+	CreatedAt time.Time
+}
+
+func (s AuthService) GetSessions(id uint64) ([]UserSession, error) {
+	data, err := s.repo.GetUserSessions(id)
+
+	log.Println(id)
+	log.Println(data)
+
+	var sessions []UserSession
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, item := range data {
+		if item.Allow {
+			sessions = append(sessions, UserSession{
+				Uuid:      item.UUID,
+				CreatedAt: item.CreatedAt,
+			})
+		}
+	}
+
+	return sessions, nil
 }

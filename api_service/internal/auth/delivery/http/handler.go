@@ -196,6 +196,19 @@ func (h *AuthHandler) RevokeToken(c *gin.Context) {
 	c.JSON(200, SuccessAuthConfirmResponse{Successful: true})
 }
 
+func (h *AuthHandler) Sessions(c *gin.Context) {
+	id := c.GetUint64("id")
+
+	data, err := h.service.GetUserSession(c, id)
+
+	if err != nil {
+		c.JSON(400, ErrorAuthResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(200, data)
+}
+
 // Registration                godoc
 // @Summary                    Register a new user
 // @Description                Register a new user with the given details

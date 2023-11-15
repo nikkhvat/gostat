@@ -329,3 +329,28 @@ func (s *AuthService) GetInfoAccount(ctx context.Context, id uint64) (*UserInfo,
 	}
 	return &resp, nil
 }
+
+type UserSession struct {
+	UUID      string `json:"uuid"`
+	CreatedAt string `json:"created_at"`
+}
+
+func (s *AuthService) GetUserSession(ctx context.Context, id uint64) ([]UserSession, error) {
+
+	var sessions []UserSession
+
+	resp, err := s.client.GetSessions(ctx, &auth.GetSessionsRequest{Id: id})
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, session := range resp.Sessions {
+		sessions = append(sessions, UserSession{
+			UUID:      session.Uuid,
+			CreatedAt: session.CreatedAt,
+		})
+	}
+
+	return sessions, nil
+}

@@ -60,3 +60,7 @@ func (c *AuthClient) SetConfirmCode(ctx context.Context, req *auth.SetConfirmCod
 func (c *AuthClient) RevokeToken(ctx context.Context, req *auth.RevokeTokenRequest) (*auth.RevokeTokenResponse, error) {
 	return c.client.RevokeToken(ctx, req)
 }
+
+func (c *AuthClient) GetSessions(ctx context.Context, req *auth.GetSessionsRequest) (*auth.GetSessionsResponse, error) {
+	return c.client.GetSessions(ctx, req)
+}

@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"os"
 	"time"
 
@@ -26,38 +25,47 @@ func NewUserRepository(db *gorm.DB, rdb *redis.Client) UserRepository {
 }
 
 type SessionData struct {
-	UserId    uint
+	UserId    uint64
 	Allow     bool
 	CreatedAt time.Time
+	UUID      string
 }
 
-func (r *UserRepository) GetUserSessions(userId uint) ([]SessionData, error) {
+func (r *UserRepository) GetUserSessions(userId uint64) ([]SessionData, error) {
 	ctx := context.Background()
-	keys, err := r.rdb.Keys(ctx, fmt.Sprintf("session:%d*", userId)).Result()
+
+	// Получаем все ключи
+	allKeys, err := r.rdb.Keys(ctx, "*").Result()
 	if err != nil {
 		return nil, err
 	}
 
 	var sessions []SessionData
-	for _, key := range keys {
+	for _, key := range allKeys {
 		val, err := r.rdb.Get(ctx, key).Result()
 		if err != nil {
-			return nil, err
+			// Пропускаем ключи, которые не могут быть прочитаны
+			continue
 		}
 
 		var session SessionData
 		err = json.Unmarshal([]byte(val), &session)
 		if err != nil {
-			return nil, err
+			// Пропускаем невалидные данные сессии
+			continue
 		}
 
-		sessions = append(sessions, session)
+		// Добавляем сессию, если UserId совпадает с запрашиваемым
+		if session.UserId == userId {
+			session.UUID = key
+			sessions = append(sessions, session)
+		}
 	}
 
 	return sessions, nil
 }
 
-func (r *UserRepository) RegisterNewSession(uuid string, userId uint) error {
+func (r *UserRepository) RegisterNewSession(uuid string, userId uint64) error {
 	ctx := context.Background()
 	session := SessionData{
 		UserId:    userId,

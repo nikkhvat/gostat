@@ -154,3 +154,22 @@ func (h *AuthServiceHandler) RevokeToken(ctx context.Context, req *pb.RevokeToke
 		return &pb.RevokeTokenResponse{Successful: false}, nil
 	}
 }
+
+func (h *AuthServiceHandler) GetSessions(ctx context.Context, req *pb.GetSessionsRequest) (*pb.GetSessionsResponse, error) {
+	sessions, err := h.service.GetSessions(req.Id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var data pb.GetSessionsResponse
+
+	for _, session := range sessions {
+		data.Sessions = append(data.Sessions, &pb.UserSession{
+			Uuid:      session.Uuid,
+			CreatedAt: session.CreatedAt.String(),
+		})
+	}
+
+	return &data, nil
+}

@@ -14,6 +14,20 @@ service AuthService {
   rpc GetUserinfo (GetUserInfoRequest) returns (GetUserInfoResponse) {}
   rpc SetConfirmCode (SetConfirmCodeRequest) returns (SetConfirmCodeResponse) {}
   rpc RevokeToken (RevokeTokenRequest) returns (RevokeTokenResponse) {}
+  rpc GetSessions (GetSessionsRequest) returns (GetSessionsResponse) {}
+}
+
+message GetSessionsRequest {
+  uint64 id = 1;
+}
+
+message UserSession {
+  string uuid = 1;
+  string created_at = 2;
+}
+
+message GetSessionsResponse {
+  repeated UserSession sessions = 1;
 }
 
 message RevokeTokenRequest {
@@ -46,7 +60,6 @@ message GetUserInfoResponse {
   string login = 7;
   string created_at = 8;
 }
-
 
 message PasswordRequestRequest {
   string mail = 1;
