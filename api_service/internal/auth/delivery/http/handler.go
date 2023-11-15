@@ -202,6 +202,7 @@ func (h *AuthHandler) RevokeToken(c *gin.Context) {
 // @Tags                         authentication
 // @Accept                       json
 // @Produce                      json
+// @Security                     BearerAuth
 // @Success                      200 {array} service.UserSession "List of user sessions with details"
 // @Failure                      400 {object} ErrorAuthResponse "Example: {\"error\":\"error message describing why the retrieval failed\"}"
 // @Router                       /auth/sessions [get]

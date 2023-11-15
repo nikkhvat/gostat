@@ -23,6 +23,13 @@ services:
       - "3000:3000"
     restart: on-failure
 
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    restart: on-failure
+
+
   api_service:
     build: ./api_service
     ports:
@@ -37,6 +44,8 @@ services:
       - APP_HOST=${APP_HOST}
       - GIN_MODE=${GIN_MODE}
       - JWT_SECRET=${JWT_SECRET}
+      - COOKIE_HTTPS=${COOKIE_HTTPS}
+      - DOMAIN=${DOMAIN}
     restart: on-failure
 
   auth_service:
@@ -51,6 +60,7 @@ services:
       - DB_NAME=${AUTH_DB_NAME}
       - DB_SSLMODE=${DB_SSLMODE}
       - JWT_SECRET=${JWT_SECRET}
+      - REDIS_HOST=${REDIS_HOST}
     restart: on-failure
 
   stats_service:

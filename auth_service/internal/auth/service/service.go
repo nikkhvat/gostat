@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"log"
 	"regexp"
 	"strings"
 
@@ -243,9 +242,6 @@ type UserSession struct {
 
 func (s AuthService) GetSessions(id uint64) ([]UserSession, error) {
 	data, err := s.repo.GetUserSessions(id)
-
-	log.Println(id)
-	log.Println(data)
 
 	var sessions []UserSession
 

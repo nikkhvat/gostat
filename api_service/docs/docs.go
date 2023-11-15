@@ -470,6 +470,11 @@ const docTemplate = `{
         },
         "/auth/sessions": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Returns all the sessions associated with a user, identified by their ID",
                 "consumes": [
                     "application/json"

@@ -608,6 +608,8 @@ paths:
             failed\"}'
           schema:
             $ref: '#/definitions/http.ErrorAuthResponse'
+      security:
+      - BearerAuth: []
       summary: Retrieve all sessions of a user
       tags:
       - authentication
