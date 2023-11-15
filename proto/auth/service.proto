@@ -13,6 +13,15 @@ service AuthService {
   rpc PasswordReset (PasswordResetRequest) returns (PasswordResetResponse) {}
   rpc GetUserinfo (GetUserInfoRequest) returns (GetUserInfoResponse) {}
   rpc SetConfirmCode (SetConfirmCodeRequest) returns (SetConfirmCodeResponse) {}
+  rpc RevokeToken (RevokeTokenRequest) returns (RevokeTokenResponse) {}
+}
+
+message RevokeTokenRequest {
+  string uuid = 1;
+}
+
+message RevokeTokenResponse {
+  bool successful = 1;
 }
 
 message SetConfirmCodeRequest {

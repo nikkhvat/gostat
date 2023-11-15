@@ -504,6 +504,53 @@
                 }
             }
         },
+        "/auth/token/revoke/{session}": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Accepts a session identifier in UUID format and revokes it to invalidate the session",
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Revoke a user's session token",
+                "parameters": [
+                    {
+                        "description": "Session Identifier (UUID)",
+                        "name": "session",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Example: {\\\"successful\\\":true}",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/http.SuccessAuthConfirmResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"error\\\":\\\"Unexpected error, failed to revoke token\\\"}",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/http.ErrorAuthResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/stats/get/visits": {
             "get": {
                 "security": [

@@ -19,6 +19,7 @@ type User struct {
 }
 
 type UserClaims struct {
-	Id    float64 `json:"id"`
-	Login string  `json:"login"`
+	Id          float64 `json:"id"`
+	Login       string  `json:"login"`
+	SessionUUID string  `json:"session"`
 }

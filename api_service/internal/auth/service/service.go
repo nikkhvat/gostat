@@ -80,6 +80,18 @@ func (s *AuthService) Login(ctx context.Context, req LoginRequest) (*Token, erro
 	}, nil
 }
 
+func (s *AuthService) RevokeToken(ctx context.Context, session string) error {
+	_, err := s.client.RevokeToken(ctx, &auth.RevokeTokenRequest{
+		Uuid: session,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (s *AuthService) RefreshToken(ctx context.Context, token string) (*string, error) {
 	resp, err := s.client.RefreshToken(ctx, &auth.RefreshTokenRequest{
 		RefreshToken: token,

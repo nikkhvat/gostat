@@ -581,6 +581,34 @@ paths:
       summary: Register a new user
       tags:
       - authentication
+  /auth/token/revoke/{session}:
+    post:
+      consumes:
+      - application/json
+      description: Accepts a session identifier in UUID format and revokes it to invalidate
+        the session
+      parameters:
+      - description: Session Identifier (UUID)
+        in: path
+        name: session
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Example: {\"successful\":true}'
+          schema:
+            $ref: '#/definitions/http.SuccessAuthConfirmResponse'
+        "400":
+          description: 'Example: {\"error\":\"Unexpected error, failed to revoke token\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+      security:
+      - BearerAuth: []
+      summary: Revoke a user's session token
+      tags:
+      - authentication
   /stats/get/visits:
     get:
       consumes:

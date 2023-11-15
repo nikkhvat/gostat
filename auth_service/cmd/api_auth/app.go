@@ -14,6 +14,8 @@ import (
 	"google.golang.org/grpc"
 	postgresDriver "gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"github.com/redis/go-redis/v9"
 )
 
 func main() {
@@ -37,7 +39,15 @@ func main() {
 	// Auto Migrate tables
 	db.AutoMigrate(&model.User{})
 
-	userRepo := postgres.NewUserRepository(db)
+	redisHost := env.Get("REDIS_HOST")
+
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     redisHost,
+		Password: "",
+		DB:       0,
+	})
+
+	userRepo := postgres.NewUserRepository(db, rdb)
 	authService := service.NewAuthService(userRepo)
 	authHandler := grpcDelivery.NewAuthServiceHandler(authService)
 

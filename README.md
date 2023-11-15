@@ -22,6 +22,7 @@ All of these microservices are crafted using GoLang. For synchronous communicati
 - **Web Server**: Gin
 - **Front-end**: NextJs
 - **Database**: PostgreSQL
+- **In-Memory Data Store / Caching**: Redis
 - **ORM**: GORM
 - **Microservice** Communication: 
   - **gRPC**: for synchronous communication
