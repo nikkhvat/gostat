@@ -1,5 +1,7 @@
 # GOStat - Open Source Statistics Service
 
+**[link](https://gostat.app/)** | **[swagger](https://gostat.app/api/docs/)**
+
 **Note**: This project is created to showcase my proficiency in frontend and backend development.
 
 Welcome to GOStat, a cutting-edge microservice-based application designed to handle HTTP request authentication and statistics with finesse. This project comprises several key microservices, each contributing to its overall functionality and prowess:
