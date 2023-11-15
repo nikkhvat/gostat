@@ -468,6 +468,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/sessions": {
+            "get": {
+                "description": "Returns all the sessions associated with a user, identified by their ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Retrieve all sessions of a user",
+                "responses": {
+                    "200": {
+                        "description": "List of user sessions with details",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/service.UserSession"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"error\\\":\\\"error message describing why the retrieval failed\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/token/revoke/{session}": {
             "post": {
                 "security": [
@@ -902,6 +934,17 @@ const docTemplate = `{
                 },
                 "middle_name": {
                     "description": "Middle name of the user\nexample: \"Dmitrievich\"",
+                    "type": "string"
+                }
+            }
+        },
+        "service.UserSession": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "uuid": {
                     "type": "string"
                 }
             }

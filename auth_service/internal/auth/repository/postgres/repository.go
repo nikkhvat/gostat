@@ -34,7 +34,6 @@ type SessionData struct {
 func (r *UserRepository) GetUserSessions(userId uint64) ([]SessionData, error) {
 	ctx := context.Background()
 
-	// Получаем все ключи
 	allKeys, err := r.rdb.Keys(ctx, "*").Result()
 	if err != nil {
 		return nil, err
@@ -44,18 +43,15 @@ func (r *UserRepository) GetUserSessions(userId uint64) ([]SessionData, error) {
 	for _, key := range allKeys {
 		val, err := r.rdb.Get(ctx, key).Result()
 		if err != nil {
-			// Пропускаем ключи, которые не могут быть прочитаны
 			continue
 		}
 
 		var session SessionData
 		err = json.Unmarshal([]byte(val), &session)
 		if err != nil {
-			// Пропускаем невалидные данные сессии
 			continue
 		}
 
-		// Добавляем сессию, если UserId совпадает с запрашиваемым
 		if session.UserId == userId {
 			session.UUID = key
 			sessions = append(sessions, session)

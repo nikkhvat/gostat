@@ -335,7 +335,7 @@ type UserSession struct {
 	CreatedAt string `json:"created_at"`
 }
 
-func (s *AuthService) GetUserSession(ctx context.Context, id uint64) ([]UserSession, error) {
+	func (s *AuthService) GetUserSession(ctx context.Context, id uint64) ([]UserSession, error) {
 
 	var sessions []UserSession
 

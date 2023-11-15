@@ -276,6 +276,13 @@ definitions:
           example: "Dmitrievich"
         type: string
     type: object
+  service.UserSession:
+    properties:
+      created_at:
+        type: string
+      uuid:
+        type: string
+    type: object
 info:
   contact:
     email: nik19ta.me@gmail.com
@@ -579,6 +586,29 @@ paths:
           schema:
             $ref: '#/definitions/http.ErrorAuthResponse'
       summary: Register a new user
+      tags:
+      - authentication
+  /auth/sessions:
+    get:
+      consumes:
+      - application/json
+      description: Returns all the sessions associated with a user, identified by
+        their ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of user sessions with details
+          schema:
+            items:
+              $ref: '#/definitions/service.UserSession'
+            type: array
+        "400":
+          description: 'Example: {\"error\":\"error message describing why the retrieval
+            failed\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+      summary: Retrieve all sessions of a user
       tags:
       - authentication
   /auth/token/revoke/{session}:

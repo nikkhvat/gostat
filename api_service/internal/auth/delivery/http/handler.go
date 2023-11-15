@@ -196,6 +196,15 @@ func (h *AuthHandler) RevokeToken(c *gin.Context) {
 	c.JSON(200, SuccessAuthConfirmResponse{Successful: true})
 }
 
+// Sessions                      godoc
+// @Summary                      Retrieve all sessions of a user
+// @Description                  Returns all the sessions associated with a user, identified by their ID
+// @Tags                         authentication
+// @Accept                       json
+// @Produce                      json
+// @Success                      200 {array} service.UserSession "List of user sessions with details"
+// @Failure                      400 {object} ErrorAuthResponse "Example: {\"error\":\"error message describing why the retrieval failed\"}"
+// @Router                       /auth/sessions [get]
 func (h *AuthHandler) Sessions(c *gin.Context) {
 	id := c.GetUint64("id")
 
