@@ -269,7 +269,7 @@ const docTemplate = `{
         },
         "/auth/login": {
             "post": {
-                "description": "Uses (login or email) and password for authentication to get access and refresh tokens",
+                "description": "Uses (login or email) and password for authentication to get access token",
                 "consumes": [
                     "application/json"
                 ],
@@ -279,7 +279,7 @@ const docTemplate = `{
                 "tags": [
                     "authentication"
                 ],
-                "summary": "Authenticate a user and get access and refresh tokens",
+                "summary": "Authenticate a user and get access token",
                 "parameters": [
                     {
                         "description": "Login payload",
@@ -406,18 +406,9 @@ const docTemplate = `{
                     "authentication"
                 ],
                 "summary": "Refresh the access token",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Refresh token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
-                        "description": "Example: {\\\"access_token\\\":\\\"your_new_generated_token\\\", \\\"refresh_token\\\":\\\"your_refresh_token\\\"}",
+                        "description": "Example: {\\\"access_token\\\":\\\"your_new_generated_token\\\"}",
                         "schema": {
                             "$ref": "#/definitions/http.SuccessAuthResponse"
                         }
@@ -670,10 +661,6 @@ const docTemplate = `{
             "properties": {
                 "access_token": {
                     "description": "The generated JWT\nin: body\nexample: \"your_generated_token\"",
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "description": "The generated Refresh\nin: body\nexample: \"your_refresh_token\"",
                     "type": "string"
                 }
             }

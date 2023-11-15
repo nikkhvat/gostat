@@ -287,11 +287,11 @@
         },
         "/auth/login": {
             "post": {
-                "description": "Uses (login or email) and password for authentication to get access and refresh tokens",
+                "description": "Uses (login or email) and password for authentication to get access token",
                 "tags": [
                     "authentication"
                 ],
-                "summary": "Authenticate a user and get access and refresh tokens",
+                "summary": "Authenticate a user and get access token",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -428,20 +428,9 @@
                     "authentication"
                 ],
                 "summary": "Refresh the access token",
-                "parameters": [
-                    {
-                        "description": "Refresh token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
-                        "description": "Example: {\\\"access_token\\\":\\\"your_new_generated_token\\\", \\\"refresh_token\\\":\\\"your_refresh_token\\\"}",
+                        "description": "Example: {\\\"access_token\\\":\\\"your_new_generated_token\\\"}",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -724,10 +713,6 @@
                 "properties": {
                     "access_token": {
                         "description": "The generated JWT\nin: body\nexample: \"your_generated_token\"",
-                        "type": "string"
-                    },
-                    "refresh_token": {
-                        "description": "The generated Refresh\nin: body\nexample: \"your_refresh_token\"",
                         "type": "string"
                     }
                 }

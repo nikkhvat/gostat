@@ -103,12 +103,6 @@ definitions:
           in: body
           example: "your_generated_token"
         type: string
-      refresh_token:
-        description: |-
-          The generated Refresh
-          in: body
-          example: "your_refresh_token"
-        type: string
     type: object
   http.SuccessSetVisitResponse:
     properties:
@@ -458,7 +452,7 @@ paths:
       consumes:
       - application/json
       description: Uses (login or email) and password for authentication to get access
-        and refresh tokens
+        token
       parameters:
       - description: Login payload
         in: body
@@ -481,7 +475,7 @@ paths:
           description: Unauthorized
           schema:
             $ref: '#/definitions/http.ErrorAuthResponse'
-      summary: Authenticate a user and get access and refresh tokens
+      summary: Authenticate a user and get access token
       tags:
       - authentication
   /auth/password/request:
@@ -543,17 +537,11 @@ paths:
       consumes:
       - application/json
       description: Uses the refresh token to generate a new access token
-      parameters:
-      - description: Refresh token
-        in: header
-        name: Authorization
-        required: true
-        type: string
       produces:
       - application/json
       responses:
         "200":
-          description: 'Example: {\"access_token\":\"your_new_generated_token\", \"refresh_token\":\"your_refresh_token\"}'
+          description: 'Example: {\"access_token\":\"your_new_generated_token\"}'
           schema:
             $ref: '#/definitions/http.SuccessAuthResponse'
         "401":
