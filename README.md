@@ -1,5 +1,7 @@
 # GOStat - Open Source Statistics Service
 
+**[link](https://gostat.app/)** | **[swagger](https://gostat.app/api/docs/)**
+
 **Note**: This project is created to showcase my proficiency in frontend and backend development.
 
 Welcome to GOStat, a cutting-edge microservice-based application designed to handle HTTP request authentication and statistics with finesse. This project comprises several key microservices, each contributing to its overall functionality and prowess:
@@ -21,6 +23,7 @@ All of these microservices are crafted using GoLang. For synchronous communicati
 - **Langs**: GoLang / TypeScript
 - **Web Server**: Gin
 - **Front-end**: NextJs
+- **In-Memory Data Store / Caching**: Redis
 - **Database**: PostgreSQL
 - **ORM**: GORM
 - **Microservice** Communication: 

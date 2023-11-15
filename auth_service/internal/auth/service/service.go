@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"regexp"
 	"strings"
 
@@ -10,30 +11,42 @@ import (
 	"github.com/nik19ta/gostat/auth_service/internal/auth/model"
 	"github.com/nik19ta/gostat/auth_service/internal/auth/repository/postgres"
 	"github.com/nik19ta/gostat/auth_service/pkg/env"
+
+	"github.com/google/uuid"
 )
 
 type AuthService struct {
 	repo postgres.UserRepository
 }
 
+func GenerateUUID() string {
+	return uuid.New().String()
+}
+
 func NewAuthService(r postgres.UserRepository) AuthService {
 	return AuthService{repo: r}
 }
 
-func (s AuthService) RefreshToken(token string) (string, error) {
+func (s AuthService) RefreshToken(token string) (*string, error) {
 	user, err := s.repo.RefreshToken(token)
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	tokens, err := generateToken(uint(user.Id), user.Login)
+	isAllow, err := s.repo.CheckSession(user.SessionUUID)
+
+	if isAllow == false {
+		return nil, errors.New("session has been revoked")
+	}
+
+	tokens, err := generateToken(uint(user.Id), user.Login, user.SessionUUID)
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return tokens.JWTToken, err
+	return &tokens.JWTToken, err
 }
 
 func (s AuthService) ConfirmAccount(secret string) error {
@@ -46,7 +59,9 @@ func (s AuthService) Authenticate(login, password string) (*TokenResponse, error
 		return nil, err
 	}
 
-	token, err := generateToken(user.ID, user.Login)
+	newUUID := GenerateUUID()
+	token, err := generateToken(user.ID, user.Login, newUUID)
+	s.repo.RegisterNewSession(newUUID, uint64(user.ID))
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +139,9 @@ func (s AuthService) Registration(login, mail, password, firstName, lastName, mi
 		}
 	}
 
-	token, tokenErr := generateToken(user.ID, user.Login)
+	newUUID := GenerateUUID()
+	token, tokenErr := generateToken(user.ID, user.Login, newUUID)
+	s.repo.RegisterNewSession(newUUID, uint64(user.ID))
 
 	if tokenErr != nil {
 		return &RegResponse{
@@ -146,11 +163,12 @@ type TokenResponse struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
-func generateToken(userID uint, login string) (*TokenResponse, error) {
+func generateToken(userID uint, login string, sessionUUID string) (*TokenResponse, error) {
 	accessToken := jwt.New(jwt.SigningMethodHS256)
 	claims := accessToken.Claims.(jwt.MapClaims)
 	claims["user_id"] = userID
 	claims["user_login"] = login
+	claims["session_uuid"] = sessionUUID
 	claims["exp"] = time.Now().Add(time.Hour * 1).Unix()
 
 	t, err := accessToken.SignedString([]byte(env.Get("JWT_SECRET")))
@@ -162,8 +180,9 @@ func generateToken(userID uint, login string) (*TokenResponse, error) {
 	rtClaims := refreshToken.Claims.(jwt.MapClaims)
 	rtClaims["user_id"] = userID
 	rtClaims["user_login"] = login
+	rtClaims["session_uuid"] = sessionUUID
 	rtClaims["type"] = "refresh"
-	rtClaims["exp"] = time.Now().Add(time.Hour * (24 * 7)).Unix()
+	rtClaims["exp"] = time.Now().Add(time.Hour * (24 * 30)).Unix()
 
 	rt, err := refreshToken.SignedString([]byte(env.Get("REFRESH_SECRET")))
 	if err != nil {
@@ -193,7 +212,9 @@ func (s AuthService) PasswordReset(secret, mail, password string) (*TokenRespons
 		return nil, err
 	}
 
-	tokens, err := generateToken(uint(user.ID), user.Login)
+	newUUID := GenerateUUID()
+	tokens, err := generateToken(uint(user.ID), user.Login, newUUID)
+	s.repo.RegisterNewSession(newUUID, uint64(user.ID))
 
 	if err != nil {
 		return nil, err
@@ -208,4 +229,34 @@ func (s AuthService) GetUserInfo(id uint64) (*model.User, error) {
 
 func (s AuthService) SetNewConfirmCode(id uint64) (*string, error) {
 	return s.repo.UpdateConfirmationCode(id)
+}
+
+func (s AuthService) RevokeToken(uuid string) error {
+	return s.repo.RevokeToken(uuid)
+}
+
+type UserSession struct {
+	Uuid      string
+	CreatedAt time.Time
+}
+
+func (s AuthService) GetSessions(id uint64) ([]UserSession, error) {
+	data, err := s.repo.GetUserSessions(id)
+
+	var sessions []UserSession
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, item := range data {
+		if item.Allow {
+			sessions = append(sessions, UserSession{
+				Uuid:      item.UUID,
+				CreatedAt: item.CreatedAt,
+			})
+		}
+	}
+
+	return sessions, nil
 }

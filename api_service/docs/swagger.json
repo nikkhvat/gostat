@@ -461,6 +461,86 @@
                 }
             }
         },
+        "/auth/sessions": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns all the sessions associated with a user, identified by their ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Retrieve all sessions of a user",
+                "responses": {
+                    "200": {
+                        "description": "List of user sessions with details",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/service.UserSession"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"error\\\":\\\"error message describing why the retrieval failed\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/token/revoke/{session}": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Accepts a session identifier in UUID format and revokes it to invalidate the session",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Revoke a user's session token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Session Identifier (UUID)",
+                        "name": "session",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Example: {\\\"successful\\\":true}",
+                        "schema": {
+                            "$ref": "#/definitions/http.SuccessAuthConfirmResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"error\\\":\\\"Unexpected error, failed to revoke token\\\"}",
+                        "schema": {
+                            "$ref": "#/definitions/http.ErrorAuthResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/stats/get/visits": {
             "get": {
                 "security": [
@@ -852,6 +932,17 @@
                 },
                 "middle_name": {
                     "description": "Middle name of the user\nexample: \"Dmitrievich\"",
+                    "type": "string"
+                }
+            }
+        },
+        "service.UserSession": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "uuid": {
                     "type": "string"
                 }
             }

@@ -56,3 +56,11 @@ func (c *AuthClient) GetUserInfo(ctx context.Context, req *auth.GetUserInfoReque
 func (c *AuthClient) SetConfirmCode(ctx context.Context, req *auth.SetConfirmCodeRequest) (*auth.SetConfirmCodeResponse, error) {
 	return c.client.SetConfirmCode(ctx, req)
 }
+
+func (c *AuthClient) RevokeToken(ctx context.Context, req *auth.RevokeTokenRequest) (*auth.RevokeTokenResponse, error) {
+	return c.client.RevokeToken(ctx, req)
+}
+
+func (c *AuthClient) GetSessions(ctx context.Context, req *auth.GetSessionsRequest) (*auth.GetSessionsResponse, error) {
+	return c.client.GetSessions(ctx, req)
+}

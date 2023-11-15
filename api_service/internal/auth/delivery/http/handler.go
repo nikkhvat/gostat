@@ -171,6 +171,54 @@ func (h *AuthHandler) ConfirmSendAccount(c *gin.Context) {
 	c.JSON(200, SuccessAuthConfirmResponse{Successful: true})
 }
 
+// RevokeToken                   godoc
+// @Summary                      Revoke a user's session token
+// @Description                  Accepts a session identifier in UUID format and revokes it to invalidate the session
+// @Tags                         authentication
+// @Accept                       json
+// @Produce                      json
+// @Security                     BearerAuth
+// @Param                        session path string true "Session Identifier (UUID)"
+// @Success                      200 {object} SuccessAuthConfirmResponse "Example: {\"successful\":true}"
+// @Failure                      400 {object} ErrorAuthResponse "Example: {\"error\":\"Unexpected error, failed to revoke token\"}"
+// @Router                       /auth/token/revoke/{session} [post]
+func (h *AuthHandler) RevokeToken(c *gin.Context) {
+	session := c.Param("session")
+
+	err := h.service.RevokeToken(c, session)
+
+	if err != nil {
+		log.Println(err)
+		c.JSON(400, ErrorAuthResponse{Error: "Unexpected error, failed to revoke token"})
+		return
+	}
+
+	c.JSON(200, SuccessAuthConfirmResponse{Successful: true})
+}
+
+// Sessions                      godoc
+// @Summary                      Retrieve all sessions of a user
+// @Description                  Returns all the sessions associated with a user, identified by their ID
+// @Tags                         authentication
+// @Accept                       json
+// @Produce                      json
+// @Security                     BearerAuth
+// @Success                      200 {array} service.UserSession "List of user sessions with details"
+// @Failure                      400 {object} ErrorAuthResponse "Example: {\"error\":\"error message describing why the retrieval failed\"}"
+// @Router                       /auth/sessions [get]
+func (h *AuthHandler) Sessions(c *gin.Context) {
+	id := c.GetUint64("id")
+
+	data, err := h.service.GetUserSession(c, id)
+
+	if err != nil {
+		c.JSON(400, ErrorAuthResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(200, data)
+}
+
 // Registration                godoc
 // @Summary                    Register a new user
 // @Description                Register a new user with the given details
