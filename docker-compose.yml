@@ -44,8 +44,8 @@ services:
       - APP_HOST=${APP_HOST}
       - GIN_MODE=${GIN_MODE}
       - JWT_SECRET=${JWT_SECRET}
-      - COOKIE_HTTPS=${COOKIE_HTTPS}
       - DOMAIN=${DOMAIN}
+      - COOKIE_HTTPS=${COOKIE_HTTPS}
     restart: on-failure
 
   auth_service:
