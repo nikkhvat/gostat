@@ -14,12 +14,33 @@ api.interceptors.request.use((config: any) => {
   (error: AxiosError) => Promise.reject(error),
 );
 
-
 api.interceptors.response.use(
   (response: AxiosResponse) => {
     return response;
   },
-  (error: AxiosError) => {
+  async (error: AxiosError) => {
+    const originalRequest:any = error.config;
+    console.log(error.config)
+
+    if (error.response?.status === 401 && originalRequest._retry != true) {
+      originalRequest._retry = true;
+      try {
+        const refreshResponse = await axios.post('/api/auth/refresh');
+        const newAccessToken = refreshResponse.data.access_token;
+        localStorage.setItem('gostat_access_token', newAccessToken);
+      } catch {
+
+      }
+
+      if (error.config) {
+        return api.request(error.config);
+      }
+    } else if (originalRequest._retry === true && error.response?.status === 401) {
+      localStorage.removeItem('gostat_access_token');
+
+      window.location.href = '/auth';
+    }
+
     return Promise.reject(error);
   }
 );
