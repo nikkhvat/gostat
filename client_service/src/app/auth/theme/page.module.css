@@ -59,14 +59,48 @@
   cursor: pointer;
 }
 
-.system__button {
-  width: 200px;
-  height: 129px;
+.light__button__large {
+  width: 240px;
+  height: 155px;
+  border-radius: 15px;
+  background: #EFEFEF;
   display: flex;
   align-items: center;
   justify-content: center;
 
   cursor: pointer;
+}
+
+.system__button {
+  background: linear-gradient(to right, #EFEFEF 50%, #1E1E1E 50%);
+  width: 200px;
+  height: 129px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+
+  cursor: pointer;
+}
+
+.system__button svg {
+  fill: transparent;
+}
+
+.system__button__large {
+  background: linear-gradient(to right, #EFEFEF 50%, #1E1E1E 50%);
+  width: 240px;
+  height: 155px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.system__button__large svg {
+  fill: transparent;
 }
 
 .system__button__left {
@@ -111,6 +145,18 @@
 }
 
 .dark__button {
+  width: 200px;
+  height: 129px;
+  border-radius: 15px;
+  background: #1E1E1E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.dark__button__large {
   width: 240px;
   height: 155px;
   border-radius: 15px;
