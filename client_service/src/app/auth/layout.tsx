@@ -1,9 +1,11 @@
 import React from "react";
 import styles from "./layout.module.css";
 
-import { LayoutTopLeftPicture } from "@/app/shared/icons/components/layout-top-left-picture";
-import { LayoutBottomLeftPicture } from "@/app/shared/icons/components/layout-bottom-left-picture";
-import { LayoutBottomRightPicture } from "@/app/shared/icons/components/layout-bottom-right-picture";
+import {
+  LayoutBottomLeftPicture,
+  LayoutBottomRightPicture,
+  LayoutTopLeftPicture,
+} from "@/app/shared/icons/components/layout-picture";
 
 export default function AuthLayout({
   children,
