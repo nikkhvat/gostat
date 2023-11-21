@@ -1,0 +1,139 @@
+.box {
+  height: 584px;
+  width: 800px;
+  background-color: var(--color1);
+  text-align: center;
+  border-radius: 15px;
+  position: relative;
+  padding-top: 60px;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+.texts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.title {
+  color: var(--color8);
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.description {
+  color: var(--color6);
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 15px;
+  width: 411px;
+}
+
+.main__block {
+  margin-top: 60px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.button {
+  width: 200px;
+  height: 129px;
+  
+  border-radius: 15px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  cursor: pointer;
+  border: none;
+
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.button_text {
+  position: absolute;
+  bottom: -30px;
+  color: var(--color7);
+
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.button_system {
+  background-image: linear-gradient(to right, #EFEFEF 50%, #1E1E1E 50%);
+}
+
+.button_dark {
+  background-color: #1E1E1E;
+}
+
+.button svg {
+  width: 110px;
+}
+
+.active {
+  transform: scale(1.2) translateY(-10%);
+}
+
+.active .button_text {
+  color: var(--color8)
+}
+
+.box__bottom {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--color2);
+
+  display: flex;
+  justify-content: flex-end;
+}
+
+.continue__button {
+  margin: 26px 30px 30px 0;
+  display: inline-flex;
+  padding: 10px 15px;
+  align-items: center;
+  outline: none;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  background: var(--color8);
+  color: var(--color1);
+}
+
+.back__button {
+  padding: 10px 15px;
+  align-items: center;
+  border-radius: 10px;
+  border: 1px solid var(--color2);
+  text-decoration: none;
+  color: #3C3C3C;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  margin-right: 15px;
+}

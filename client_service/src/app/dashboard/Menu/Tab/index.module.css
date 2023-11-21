@@ -5,4 +5,14 @@
 
 .item_icon {
   cursor: pointer;
+  
+}
+
+.item_icon svg path {
+  fill: var(--color8);
+  stroke: var(--color1);
+}
+
+.item_icon svg rect {
+  fill: var(--color8);
 }

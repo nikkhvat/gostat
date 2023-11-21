@@ -4,20 +4,22 @@ import styles from "./index.module.css";
 
 import Image from "next/image";
 
+import {
+  TabIconBrowser,
+  TabIconEye,
+  TabIconGlobe,
+  TabIconTerminal,
+} from "@/app/shared/icons/components/tab-icon";
+
 import BackgroundEye from "@/app/assets/dashboard/tabs/backgrounds/eye.svg";
 import BackgroundGlobe from "@/app/assets/dashboard/tabs/backgrounds/globe.svg";
 import BackgroundBrowser from "@/app/assets/dashboard/tabs/backgrounds/browser.svg";
 import BackgroundTerminal from "@/app/assets/dashboard/tabs/backgrounds/terminal.svg";
 
-import IconEye from "@/app/assets/dashboard/tabs/icons/eye.svg";
-import IconGlobe from "@/app/assets/dashboard/tabs/icons/globe.svg";
-import IconBrowser from "@/app/assets/dashboard/tabs/icons/browser.svg";
-import IconTerminal from "@/app/assets/dashboard/tabs/icons/terminal.svg";
-
 interface IMetro {
   activeScreen: number;
   setActiveScreen: Function;
-  sectionStat: {[key: string]: number};
+  sectionStat: { [key: string]: number };
 }
 
 const Metro: React.FC<IMetro> = ({
@@ -31,40 +33,40 @@ const Metro: React.FC<IMetro> = ({
       name: "Visits",
       subtitle: "Visits",
       key: "visits",
-      color: "#A185E7",
-      subtitle_color: "#4D3195",
+      color: "var(--violet-bg)",
+      subtitle_color: "var(--violet-text)",
       background: BackgroundEye,
-      icon: IconEye,
+      icon: TabIconBrowser,
     },
     {
       id: 2,
       name: "Top countries",
       subtitle: "Countries",
       key: "countries",
-      color: "#86E06A",
-      subtitle_color: "#1C4D63",
+      color: "var(--green-bg)",
+      subtitle_color: "var(--green-text)",
       background: BackgroundBrowser,
-      icon: IconBrowser,
+      icon: TabIconEye,
     },
     {
       id: 3,
       name: "Top browsers",
       subtitle: "Browsers",
       key: "browsers",
-      color: "#8CCFE8",
-      subtitle_color: "#2D611B",
+      color: "var(--blue-bg)",
+      subtitle_color: "var(--blue-text)",
       background: BackgroundGlobe,
-      icon: IconGlobe,
+      icon: TabIconGlobe,
     },
     {
       id: 4,
       name: "Bots",
       subtitle: "Visits",
       key: "bots",
-      color: "#F5C087",
-      subtitle_color: "#644220",
+      color: "var(--orange-bg)",
+      subtitle_color: "var(--orange-text)",
       background: BackgroundTerminal,
-      icon: IconTerminal,
+      icon: TabIconTerminal,
     },
   ];
 
@@ -98,13 +100,7 @@ const Metro: React.FC<IMetro> = ({
           <p className={styles.metro_item__title}>
             {item.name}
 
-            <Image
-              src={item.icon}
-              alt={"icon"}
-              className={styles.metro_item__title_icon}
-              width={16}
-              height={16}
-            />
+            <item.icon/>
           </p>
           <p className={styles.metro_item__value}>{sectionStat[item.key]}</p>
 
@@ -114,7 +110,7 @@ const Metro: React.FC<IMetro> = ({
               style={
                 item.id === activeScreen
                   ? { color: item.subtitle_color }
-                  : { color: "#5A5A5A" }
+                  : { color: "var(--color6)" }
               }
               className={styles.bottom_second_text}
             >

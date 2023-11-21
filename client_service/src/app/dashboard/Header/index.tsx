@@ -5,7 +5,7 @@ import styles from "./index.module.css";
 
 import defaultAvatar from "@/app/assets/header/avatar/default_dark.svg";
 
-import bellDark from "@/app/assets/header/bell_dark.svg";
+import { Notification } from "@/app/shared/icons/components/notification";
 
 import Image from "next/image";
 
@@ -74,7 +74,7 @@ const Header: React.FC<IHeader> = ({ userInfo, activeApp, setActiveApp }) => {
 
   return (
     <div className={styles.header}>
-      <div></div>
+      <div style={{width: "310px"}} ></div>
 
       <search role="search">
         <form onSubmit={submitSearch}>
@@ -92,13 +92,7 @@ const Header: React.FC<IHeader> = ({ userInfo, activeApp, setActiveApp }) => {
           onClick={clickNotifications}
           className={styles.header__bell_button}
         >
-          <Image
-            className={styles.header__bell_image}
-            width={20}
-            height={20}
-            src={bellDark}
-            alt="user avatar"
-          />
+          <Notification />
         </Button>
         <Button onClick={clickAvatar} className={styles.header__avatar_button}>
           <Image

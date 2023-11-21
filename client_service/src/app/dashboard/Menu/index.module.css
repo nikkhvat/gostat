@@ -1,12 +1,20 @@
 
 .menu {
   padding: 20px;
-  background-color: var(--block-backgroud-color);
+  background-color: var(--color1);
   border-radius: 15px;
 }
 
 .logo {
   cursor: pointer;
+}
+
+.logo svg {
+  width: 100%;
+}
+
+.logo svg path {
+  fill: var(--color8)
 }
 
 

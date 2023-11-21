@@ -1,10 +1,8 @@
 "use client"
 import React, { ChangeEvent, useState } from 'react';
 import styles from './index.module.css'
-import Image from 'next/image';
 
-import eye from '../../../assets/auth/eye.svg';
-import eye_off from '../../../assets/auth/eye-off.svg';
+import { Eye, EyeOff } from '@/app/shared/icons/components/icon-eye';
 
 interface InputProps {
   typeProp: string;
@@ -40,7 +38,7 @@ const Input: React.FC<InputProps> = ({ typeProp, placeholder, check, onChange}) 
           aria-pressed={type === "text"}
           aria-label={type === "password" ? "Show password" : "Hide password"}
         >
-          <Image src={type === "text" ? eye : eye_off} alt="eye icon" />
+          {type === "text" ? <Eye /> : <EyeOff />}
         </button>
       )}
     </div>

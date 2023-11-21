@@ -10,14 +10,14 @@ import Link from "next/link";
 export default function Confirm() {
   const router = useRouter();
   
-  const [confirmed, setСonfirmed] = useState(false)
+  const [confirmed, setConfirmed] = useState(false)
 
   const param = useSearchParams().get('code')
 
   const submit = async (code: string) => {
     const response = await confirmEmail(code)
     if (response.status === 200) {
-      setСonfirmed(true)
+      setConfirmed(true)
     }
   }
 

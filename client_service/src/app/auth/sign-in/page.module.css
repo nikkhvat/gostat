@@ -1,7 +1,7 @@
 .box {
   padding: 60px 30px;
   border-radius: 15px;
-  background: #181818;
+  background: var(--color1);
   height: 584px;
 }
 
@@ -12,8 +12,12 @@
   gap: 15px;
 }
 
+.logo svg path {
+  fill: var(--color8);
+}
+
 .title {
-  color: #FFF;
+  color: var(--color8);
   text-align: center;
   font-family: Commissioner;
   font-size: 36px;
@@ -23,7 +27,7 @@
 }
 
 .top__button {
-  color: #999;
+  color: var(--color6);
   text-align: center;
   font-family: Commissioner;
   font-size: 16px;
@@ -58,12 +62,12 @@
   padding: 15px;
   align-self: stretch;
   border-radius: 10px;
-  background: #FFF;
+  background: var(--color8);
   border: none;
   cursor: pointer;
   margin-top: 125px;
 
-  color: #181818;
+  color: var(--color1);
   font-family: Commissioner;
   font-size: 16px;
   font-style: normal;
@@ -73,7 +77,7 @@
 
 .link {
   margin-top: 15px;
-  color: #FFF;
+  color: var(--color8);
   text-decoration: none;
   font-family: Commissioner;
   display: block;

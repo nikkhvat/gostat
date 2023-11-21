@@ -13,7 +13,7 @@
   justify-content: space-between;
   align-items: center;
   border-radius: 15px;
-  background: #181818;
+  background: var(--color1);
   border: none;
   font-family: 'Commissioner';
   font-size: 16px;
@@ -43,14 +43,20 @@
 
 .header__bell_button {
   display: flex;
-  padding: 16px;
   align-items: flex-start;
   gap: 10px;
   border-radius: 15px;
-  background: #181818;
+  background: var(--color1);
   border: none;
   border: none;
   cursor: pointer;
+}
+
+.header__bell_button svg rect {
+  fill: var(--color1);
+}
+.header__bell_button svg path {
+  stroke: var(--color8);
 }
 
 .header__bell_image {

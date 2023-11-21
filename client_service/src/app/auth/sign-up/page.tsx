@@ -1,10 +1,9 @@
 "use client"
 import styles from './page.module.css' 
 import InputComponent from '@/app/auth/components/Input/index';
-import Image from 'next/image';
 import Link from "next/link";
 
-import logo from '@/app/assets/auth/logo.svg';
+import { Logo } from "@/app/shared/icons/components/logo";
 
 import { useEffect, useState } from 'react';
 import { singUp } from '../api';
@@ -66,7 +65,7 @@ export default function SingIn() {
     <div className={styles.box}>
       <div className={styles.top}>
         <div className={styles.logo}>
-          <Image src={logo} alt="GoStat Logo" />
+          <Logo />
           <h1 className={styles.title}>GoStat</h1>
         </div>
         <h2 className={styles.top__button}>Create account</h2>
