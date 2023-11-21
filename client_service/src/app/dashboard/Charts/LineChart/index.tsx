@@ -56,7 +56,7 @@ const LineChart: React.FC<{
         .attr("y1", y + 2)
         .attr("x2", width)
         .attr("y2", y + 2)
-        .attr("stroke", "#1E1E1E")
+        .attr("stroke", "var(--color3)")
         .attr("stroke-width", 1);
 
       const textValue = Math.round(yScale.invert(y));
@@ -69,7 +69,7 @@ const LineChart: React.FC<{
         .attr("dy", 4)
         .attr("font-size", "12px")
         .attr("text-anchor", "end")
-        .attr("fill", "#3C3C3C")
+        .attr("fill", "var(--color4)")
         .text(textValue);
     });
 
@@ -77,7 +77,7 @@ const LineChart: React.FC<{
       .append("path")
       .datum(data)
       .attr("fill", "none")
-      .attr("stroke", "#FFF")
+      .attr("stroke", "var(--color8)")
       .attr("stroke-width", 1)
       .attr("d", line);
 
@@ -90,7 +90,7 @@ const LineChart: React.FC<{
         .attr("y", height - 10)
         .attr("font-size", "12px")
         .attr("text-anchor", "middle")
-        .attr("fill", "#3C3C3C")
+        .attr("fill", "var(--color4)")
         .text(d3.timeFormat("%m-%d")(new Date(d.date)));
     });
 

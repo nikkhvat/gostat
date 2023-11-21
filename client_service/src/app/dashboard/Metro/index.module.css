@@ -8,7 +8,7 @@
   height: 154px;
 
   border-radius: 15px;
-  border: 1px solid #3C3C3C;
+  border: 1px solid var(--color4);
   padding: 20px;
 
   position: relative;
@@ -17,7 +17,7 @@
 }
 
 .metro_item__title {
-  color: var(--main-text);
+  color: var(--color8);
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -32,18 +32,32 @@
   align-items: center;
 }
 
+.metro_item__title svg path {
+  stroke: var(--color8)
+}
+
+.metro_item__active .metro_item__title svg path {
+  stroke: var(--color10)
+}
+
 .metro_item__title_icon {
   width: 16px;
   height: 16px;
 }
 
 .metro_item__value {
-  color: var(--main-text);
+  color: var(--color8);
   font-size: 36px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
   margin-top: 35px;
+}
+
+.metro_item__active .metro_item__value, 
+.metro_item__active .bottom_first_text,
+.metro_item__active .metro_item__title {
+  color: var(--color10);
 }
 
 .metro_item__icon {

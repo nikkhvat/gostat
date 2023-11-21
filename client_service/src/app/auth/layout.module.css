@@ -1,5 +1,5 @@
 .container {
-  background-color: #1E1E1E;
+  background-color: var(--color2);
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -31,4 +31,8 @@
 .container_child {
   z-index: 2;
   height: auto;
+}
+
+.bottom_right_picture svg path, .top_left_picture svg path, .bottom_left_picture svg path {
+  fill: var(--color1);
 }

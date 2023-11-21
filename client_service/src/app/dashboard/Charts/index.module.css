@@ -6,7 +6,7 @@
   padding: 20px;
 
   border-radius: 15px;
-  background: #181818;
+  background: var(--color1);
 }
 
 .header__bottom {
@@ -23,10 +23,10 @@
   align-items: flex-start;
   gap: 2px;
   border-radius: 5px;
-  border: 1px solid #3C3C3C;
+  border: 1px solid var(--color4);
   cursor: pointer;
   background: transparent;
-  color: #999;
+  color: var(--color6);
   font-family: 'Commissioner';
   font-size: 10px;
   font-style: normal;
@@ -36,7 +36,7 @@
 
 .header__button_active {
   border: 1px solid #999;
-  color: #FFF;
+  color: var(--color8);
 }
 
 .content {

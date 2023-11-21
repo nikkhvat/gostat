@@ -1,7 +1,7 @@
 .box {
   height: 584px;
   width: 800px;
-  background-color: #181818;
+  background-color: var(--color1);
   text-align: center;
   border-radius: 15px;
   position: relative;
@@ -19,7 +19,7 @@
 }
 
 .title {
-  color: #FFF;
+  color: var(--color8);
   text-align: center;
   font-family: Commissioner;
   font-size: 36px;
@@ -29,7 +29,7 @@
 }
 
 .subtitle {
-  color: #5A5A5A;
+  color: var(--color7);
   text-align: center;
   font-family: Commissioner;
   font-size: 16px;
@@ -40,7 +40,7 @@
 }
 
 .send__button {
-  color: #181818;
+  color: var(--color1);
   font-family: Commissioner;
   font-size: 16px;
   font-style: normal;
@@ -49,7 +49,7 @@
   border: none;
 
   border-radius: 10px;
-  background: #FFF;
+  background: var(--color8);
 
   display: inline-flex;
   padding: 10px 15px;

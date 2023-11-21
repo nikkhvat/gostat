@@ -1,15 +1,52 @@
 @import url('https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;600;700&display=swap');
 
 :root {
-  --backgroud-color: #1E1E1E;
-  --block-backgroud-color: #181818;
-  --border-color: #3C3C3C;
-  --main-text: #FFFFFF;
-  --grey-text: #999999;
-  --dark-grey-color: #5A5A5A;
+  --violet-bg: #A880EE;
+  --violet-icon: #B28DF0;
+  --violet-text: #3B2267;
+
+  --blue-bg: #8CCFE8;
+  --blue-icon: #A9DFF2;
+  --blue-text: #1C4D63;
+
+  --green-bg: #86E06A;
+  --green-icon: #A6F48E;
+  --green-text: #2D611B;
+
+  --orange-bg: #F5C087;
+  --orange-icon: #F7D0A4;
+  --orange-text: #644220;
 
   --page-padding: 30px;
 }
+
+body,
+body[data-theme="light"] {
+  --color1: #FFFFFF;
+  --color2: #F6F6F4;
+  --color3: #EFEFEF;
+  --color4: #C9C9C9;
+  --color5: #C9C9C9;
+  --color6: #999999;
+  --color7: #999999;
+  --color8: #181818;
+  --color9: #EFEFEF;
+  --color10: #FFFFFF;
+}
+
+body[data-theme="dark"] {
+  --color1: #181818;
+  --color2: #1E1E1E;
+  --color3: #1E1E1E;
+  --color4: #3C3C3C;
+  --color5: #5A5A5A;
+  --color6: #5A5A5A;
+  --color7: #999999;
+  --color8: #FFFFFF;
+  --color9: #EFEFEF;
+  --color10: #FFFFFF;
+}
+
 
 *, *::after, *::before {
   box-sizing: border-box;
@@ -20,11 +57,11 @@
 }
 
 p, span, div, input, textarea {
-  color: var(--main-text);
+  color: var(--color8);
   font-size: 16px;
 }
 
 body, html {
-  background-color: var(--backgroud-color);
-  color: var(--main-text);
+  background-color: var(--color2);
+  color: var(--color8);
 }

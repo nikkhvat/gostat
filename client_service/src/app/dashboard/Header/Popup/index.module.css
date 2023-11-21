@@ -12,8 +12,8 @@
   align-items: flex-start;
   gap: 15px;
   border-radius: 15px;
-  border: 1px solid #3C3C3C;
-  background: #181818;
+  border: 1px solid var(--color4);
+  background: var(--color1);
 
   z-index: 999;
 }
@@ -21,7 +21,7 @@
 .item {
   width: 100%;
   padding: 0 15px 15px;
-  border-bottom: 1px solid #3C3C3C;
+  border-bottom: 1px solid var(--color4);
 
   text-align: left;
 
@@ -38,7 +38,7 @@
 .item__button {
   border: none;
   background: transparent;
-  color: #FFF;
+  color: var(--color8);
   font-family: 'Commissioner';
   font-size: 14px;
   font-style: normal;
@@ -49,7 +49,7 @@
 }
 
 .item__title {
-  color: #FFF;
+  color: var(--color8);
   font-family: 'Commissioner';
   font-size: 14px;
   font-style: normal;
@@ -62,7 +62,7 @@
   text-align: left;
   padding: 7px 10px;
   cursor: pointer;
-  color: #181818;
+  color: var(--color1);
   font-family: 'Commissioner';
   font-size: 14px;
   font-style: normal;
@@ -70,10 +70,10 @@
   line-height: normal;
   border: none;
   border-radius: 5px;
-  background: #FFF;
+  background: var(--color8);
 }
 
 .app_buton_inactive {
   background: transparent;
-  color: #FFF;
+  color: var(--color8);
 }
