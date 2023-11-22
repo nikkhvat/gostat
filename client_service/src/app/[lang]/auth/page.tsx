@@ -1,12 +1,10 @@
 "use client"
-import { useEffect } from 'react';
-import styles from './page.module.css' 
-
-import Storage from "@/app/utils/storage";
+import React, { useEffect } from "react";
+import Storage from "../../utils/storage";
 
 import { useRouter } from "next/navigation";
 
-export default function Home() {
+export default function AuthPage() {
   const router = useRouter();
 
   useEffect(() => {
@@ -17,10 +15,11 @@ export default function Home() {
     } else {
       router.push("/en/auth/sign-in", { scroll: false });
     }
-  }, [router]);
+  }, [router])
 
   return (
-    <main className={styles.home}>
+    <main>
+      <p>loading...</p>
     </main>
-  )
+  );
 }

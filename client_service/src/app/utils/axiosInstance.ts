@@ -38,7 +38,7 @@ api.interceptors.response.use(
     } else if (originalRequest._retry === true && error.response?.status === 401) {
       localStorage.removeItem('gostat_access_token');
 
-      window.location.href = '/auth';
+      window.location.href = '/en/auth';
     }
 
     return Promise.reject(error);

@@ -21,7 +21,7 @@
 }
 
 body,
-body[data-theme="light"] {
+.light-theme {
   --color1: #FFFFFF;
   --color2: #F6F6F4;
   --color3: #EFEFEF;
@@ -34,7 +34,7 @@ body[data-theme="light"] {
   --color10: #FFFFFF;
 }
 
-body[data-theme="dark"] {
+.dark-theme {
   --color1: #181818;
   --color2: #1E1E1E;
   --color3: #1E1E1E;

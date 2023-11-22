@@ -1,0 +1,56 @@
+"use client"
+import React, { useEffect, useState } from "react";
+
+import style from './page.module.css';
+import { useRouter, useSearchParams } from "next/navigation";
+import Loader from "../components/loader";
+import { confirmEmail } from "../api";
+import Link from "next/link";
+
+import i18next, { checkLang } from "@/app/shared/libs/i18n";
+
+export default function Confirm({ params: { lang } }: any) {
+  checkLang(lang);
+
+  const router = useRouter();
+
+  const [confirmed, setConfirmed] = useState(false);
+
+  const param = useSearchParams().get("code");
+
+  const submit = async (code: string) => {
+    const response = await confirmEmail(code);
+    if (response.status === 200) {
+      setConfirmed(true);
+    }
+  };
+
+  useEffect(() => {
+    if (param) {
+      submit(param);
+    } else {
+      router.push(`/${lang}/auth/alert`, { scroll: false });
+    }
+  }, [param]);
+
+  return (
+    <div className={style.box}>
+      <div className={style.texts}>
+        
+        {confirmed &&<h2 className={style.title}>{i18next.t("auth.verification.title")}</h2>}
+        {!confirmed && <h2 className={style.title}>{i18next.t("auth.confirmation.title")}</h2>}
+
+        {confirmed && <h3 className={style.subtitle}>{i18next.t("auth.confirmation.subtitle")}</h3>}
+        {!confirmed && <h3 className={style.subtitle}>{i18next.t("auth.loading")}</h3>}
+
+        {!confirmed && <Loader />}
+      </div>
+
+      <div className={confirmed ? style.box__bottom : style.box__bottom__close}>
+        <Link className={style.continue__button} href="/dashboard">
+          {i18next.t("auth.continue")}
+        </Link>
+      </div>
+    </div>
+  );
+}

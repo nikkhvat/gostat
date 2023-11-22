@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import ThemeWrapper from './theme'
+import Lang from './lang'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -13,19 +14,17 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
-}) {
-
-  console.log("ОБЩИЙ БЛИН ЛАЙАУУТ");
-  
-
+  children: React.ReactNode;
+  params: any
+}) {  
   return (
     <html lang="en">
+      <head>
+        <script src="/theme-script.js" defer></script>
+      </head>
       <body className={inter.className}>
-        <ThemeWrapper>
-          {children}
-        </ThemeWrapper>
+        <Lang>{children}</Lang>
       </body>
     </html>
-  )
+  );
 }
