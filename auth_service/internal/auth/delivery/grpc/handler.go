@@ -58,7 +58,7 @@ func (h *AuthServiceHandler) RefreshToken(ctx context.Context, req *pb.RefreshTo
 		return nil, status.Errorf(codes.Internal, "internal error")
 	}
 
-	return &pb.RefreshTokenResponse{NewToken: token}, nil
+	return &pb.RefreshTokenResponse{NewToken: *token}, nil
 }
 
 func (h *AuthServiceHandler) ConfirmAccount(ctx context.Context, req *pb.ConfirmAccountRequest) (*pb.ConfirmAccountResponse, error) {
@@ -143,4 +143,33 @@ func (h *AuthServiceHandler) SetConfirmCode(ctx context.Context, req *pb.SetConf
 	return &pb.SetConfirmCodeResponse{
 		NewSecret: *code,
 	}, nil
+}
+
+func (h *AuthServiceHandler) RevokeToken(ctx context.Context, req *pb.RevokeTokenRequest) (*pb.RevokeTokenResponse, error) {
+	err := h.service.RevokeToken(req.Uuid)
+
+	if err != nil {
+		return &pb.RevokeTokenResponse{Successful: true}, nil
+	} else {
+		return &pb.RevokeTokenResponse{Successful: false}, nil
+	}
+}
+
+func (h *AuthServiceHandler) GetSessions(ctx context.Context, req *pb.GetSessionsRequest) (*pb.GetSessionsResponse, error) {
+	sessions, err := h.service.GetSessions(req.Id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var data pb.GetSessionsResponse
+
+	for _, session := range sessions {
+		data.Sessions = append(data.Sessions, &pb.UserSession{
+			Uuid:      session.Uuid,
+			CreatedAt: session.CreatedAt.String(),
+		})
+	}
+
+	return &data, nil
 }

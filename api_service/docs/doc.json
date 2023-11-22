@@ -287,11 +287,11 @@
         },
         "/auth/login": {
             "post": {
-                "description": "Uses (login or email) and password for authentication to get access and refresh tokens",
+                "description": "Uses (login or email) and password for authentication to get access token",
                 "tags": [
                     "authentication"
                 ],
-                "summary": "Authenticate a user and get access and refresh tokens",
+                "summary": "Authenticate a user and get access token",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -428,20 +428,9 @@
                     "authentication"
                 ],
                 "summary": "Refresh the access token",
-                "parameters": [
-                    {
-                        "description": "Refresh token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
-                        "description": "Example: {\\\"access_token\\\":\\\"your_new_generated_token\\\", \\\"refresh_token\\\":\\\"your_refresh_token\\\"}",
+                        "description": "Example: {\\\"access_token\\\":\\\"your_new_generated_token\\\"}",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -504,6 +493,92 @@
                     },
                     "409": {
                         "description": "Example: {\\\"error\\\":\\\"User with the same email already exists\\\"}",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/http.ErrorAuthResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/sessions": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns all the sessions associated with a user, identified by their ID",
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Retrieve all sessions of a user",
+                "responses": {
+                    "200": {
+                        "description": "List of user sessions with details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/service.UserSession"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"error\\\":\\\"error message describing why the retrieval failed\\\"}",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/http.ErrorAuthResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/token/revoke/{session}": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Accepts a session identifier in UUID format and revokes it to invalidate the session",
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Revoke a user's session token",
+                "parameters": [
+                    {
+                        "description": "Session Identifier (UUID)",
+                        "name": "session",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Example: {\\\"successful\\\":true}",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/http.SuccessAuthConfirmResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Example: {\\\"error\\\":\\\"Unexpected error, failed to revoke token\\\"}",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -725,10 +800,6 @@
                     "access_token": {
                         "description": "The generated JWT\nin: body\nexample: \"your_generated_token\"",
                         "type": "string"
-                    },
-                    "refresh_token": {
-                        "description": "The generated Refresh\nin: body\nexample: \"your_refresh_token\"",
-                        "type": "string"
                     }
                 }
             },
@@ -926,6 +997,17 @@
                     },
                     "middle_name": {
                         "description": "Middle name of the user\nexample: \"Dmitrievich\"",
+                        "type": "string"
+                    }
+                }
+            },
+            "service.UserSession": {
+                "type": "object",
+                "properties": {
+                    "created_at": {
+                        "type": "string"
+                    },
+                    "uuid": {
                         "type": "string"
                     }
                 }

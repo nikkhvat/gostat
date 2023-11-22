@@ -2,10 +2,12 @@ package http
 
 import (
 	"log"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nik19ta/gostat/api_service/internal/auth/service"
+	"github.com/nik19ta/gostat/api_service/pkg/env"
 )
 
 type AuthHandler struct {
@@ -23,10 +25,6 @@ type SuccessAuthResponse struct {
 	// in: body
 	// example: "your_generated_token"
 	AccessToken string `json:"access_token"`
-	// The generated Refresh
-	// in: body
-	// example: "your_refresh_token"
-	RefreshToken string `json:"refresh_token"`
 }
 
 // ErrorAuthResponse defines a response for an error
@@ -39,8 +37,8 @@ type ErrorAuthResponse struct {
 }
 
 // Login                   godoc
-// @Summary                Authenticate a user and get access and refresh tokens
-// @Description            Uses (login or email) and password for authentication to get access and refresh tokens
+// @Summary                Authenticate a user and get access token
+// @Description            Uses (login or email) and password for authentication to get access token
 // @Tags                   authentication
 // @Accept                 json
 // @Produce                json
@@ -68,7 +66,18 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, SuccessAuthResponse{AccessToken: token.AccessToken, RefreshToken: token.RefreshToekn})
+	// set cookie
+	cookieHttpsStr := env.Get("COOKIE_HTTPS")
+	cookieHttps, err := strconv.ParseBool(cookieHttpsStr)
+	if err != nil {
+		c.JSON(500, ErrorAuthResponse{Error: "Error COOKIE_HTTPS not bool"})
+		return
+	}
+
+	c.SetCookie("refresh_token", token.RefreshToekn, 2592000, "/", env.Get("DOMAIN"), cookieHttps, true)
+	// set cookie
+
+	c.JSON(200, SuccessAuthResponse{AccessToken: token.AccessToken})
 }
 
 // RefreshToken                godoc
@@ -77,12 +86,12 @@ func (h *AuthHandler) Login(c *gin.Context) {
 // @Tags                       authentication
 // @Accept                     json
 // @Produce                    json
-// @Param                      Authorization header string true "Refresh token"
-// @Success                    200 {object} SuccessAuthResponse "Example: {\"access_token\":\"your_new_generated_token\", \"refresh_token\":\"your_refresh_token\"}"
+// @Success                    200 {object} SuccessAuthResponse "Example: {\"access_token\":\"your_new_generated_token\"}"
 // @Failure                    401 {object} ErrorAuthResponse "Example: {\"error\":\"Invalid refresh token\"}"
 // @Router                     /auth/refresh [post]
 func (h *AuthHandler) RefreshToken(c *gin.Context) {
-	refreshToken := c.GetHeader("Authorization")
+	refreshToken, err := c.Cookie("refresh_token")
+	// refreshToken := c.GetHeader("Authorization")
 
 	if len(refreshToken) == 0 {
 		c.JSON(401, ErrorAuthResponse{Error: "Invalid refresh token"})
@@ -96,7 +105,7 @@ func (h *AuthHandler) RefreshToken(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, SuccessAuthResponse{AccessToken: *token, RefreshToken: refreshToken})
+	c.JSON(200, SuccessAuthResponse{AccessToken: *token})
 }
 
 // SuccessAuthConfirmResponse defines the response for a successful account confirmation
@@ -162,6 +171,54 @@ func (h *AuthHandler) ConfirmSendAccount(c *gin.Context) {
 	c.JSON(200, SuccessAuthConfirmResponse{Successful: true})
 }
 
+// RevokeToken                   godoc
+// @Summary                      Revoke a user's session token
+// @Description                  Accepts a session identifier in UUID format and revokes it to invalidate the session
+// @Tags                         authentication
+// @Accept                       json
+// @Produce                      json
+// @Security                     BearerAuth
+// @Param                        session path string true "Session Identifier (UUID)"
+// @Success                      200 {object} SuccessAuthConfirmResponse "Example: {\"successful\":true}"
+// @Failure                      400 {object} ErrorAuthResponse "Example: {\"error\":\"Unexpected error, failed to revoke token\"}"
+// @Router                       /auth/token/revoke/{session} [post]
+func (h *AuthHandler) RevokeToken(c *gin.Context) {
+	session := c.Param("session")
+
+	err := h.service.RevokeToken(c, session)
+
+	if err != nil {
+		log.Println(err)
+		c.JSON(400, ErrorAuthResponse{Error: "Unexpected error, failed to revoke token"})
+		return
+	}
+
+	c.JSON(200, SuccessAuthConfirmResponse{Successful: true})
+}
+
+// Sessions                      godoc
+// @Summary                      Retrieve all sessions of a user
+// @Description                  Returns all the sessions associated with a user, identified by their ID
+// @Tags                         authentication
+// @Accept                       json
+// @Produce                      json
+// @Security                     BearerAuth
+// @Success                      200 {array} service.UserSession "List of user sessions with details"
+// @Failure                      400 {object} ErrorAuthResponse "Example: {\"error\":\"error message describing why the retrieval failed\"}"
+// @Router                       /auth/sessions [get]
+func (h *AuthHandler) Sessions(c *gin.Context) {
+	id := c.GetUint64("id")
+
+	data, err := h.service.GetUserSession(c, id)
+
+	if err != nil {
+		c.JSON(400, ErrorAuthResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(200, data)
+}
+
 // Registration                godoc
 // @Summary                    Register a new user
 // @Description                Register a new user with the given details
@@ -207,7 +264,18 @@ func (h *AuthHandler) Registration(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, SuccessAuthResponse{AccessToken: token.AccessToken, RefreshToken: token.RefreshToekn})
+	// set cookie
+	cookieHttpsStr := env.Get("COOKIE_HTTPS")
+	cookieHttps, err := strconv.ParseBool(cookieHttpsStr)
+	if err != nil {
+		c.JSON(500, ErrorAuthResponse{Error: "Error COOKIE_HTTPS not bool"})
+		return
+	}
+
+	c.SetCookie("refresh_token", token.RefreshToekn, 2592000, "/", env.Get("DOMAIN"), cookieHttps, true)
+	// set cookie
+
+	c.JSON(200, SuccessAuthResponse{AccessToken: token.AccessToken})
 }
 
 // PasswordRequest sends a password reset email to the user
@@ -263,7 +331,18 @@ func (h *AuthHandler) PasswordReset(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, SuccessAuthResponse{AccessToken: token.AccessToken, RefreshToken: token.RefreshToekn})
+	// set cookie
+	cookieHttpsStr := env.Get("COOKIE_HTTPS")
+	cookieHttps, err := strconv.ParseBool(cookieHttpsStr)
+	if err != nil {
+		c.JSON(500, ErrorAuthResponse{Error: "Error COOKIE_HTTPS not bool"})
+		return
+	}
+
+	c.SetCookie("refresh_token", token.RefreshToekn, 2592000, "/", env.Get("DOMAIN"), cookieHttps, true)
+	// set cookie
+
+	c.JSON(200, SuccessAuthResponse{AccessToken: token.AccessToken})
 }
 
 // GetInfoAccount fetches detailed information about a user account and associated applications

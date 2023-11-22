@@ -103,12 +103,6 @@ definitions:
           in: body
           example: "your_generated_token"
         type: string
-      refresh_token:
-        description: |-
-          The generated Refresh
-          in: body
-          example: "your_refresh_token"
-        type: string
     type: object
   http.SuccessSetVisitResponse:
     properties:
@@ -280,6 +274,13 @@ definitions:
         description: |-
           Middle name of the user
           example: "Dmitrievich"
+        type: string
+    type: object
+  service.UserSession:
+    properties:
+      created_at:
+        type: string
+      uuid:
         type: string
     type: object
 info:
@@ -458,7 +459,7 @@ paths:
       consumes:
       - application/json
       description: Uses (login or email) and password for authentication to get access
-        and refresh tokens
+        token
       parameters:
       - description: Login payload
         in: body
@@ -481,7 +482,7 @@ paths:
           description: Unauthorized
           schema:
             $ref: '#/definitions/http.ErrorAuthResponse'
-      summary: Authenticate a user and get access and refresh tokens
+      summary: Authenticate a user and get access token
       tags:
       - authentication
   /auth/password/request:
@@ -543,17 +544,11 @@ paths:
       consumes:
       - application/json
       description: Uses the refresh token to generate a new access token
-      parameters:
-      - description: Refresh token
-        in: header
-        name: Authorization
-        required: true
-        type: string
       produces:
       - application/json
       responses:
         "200":
-          description: 'Example: {\"access_token\":\"your_new_generated_token\", \"refresh_token\":\"your_refresh_token\"}'
+          description: 'Example: {\"access_token\":\"your_new_generated_token\"}'
           schema:
             $ref: '#/definitions/http.SuccessAuthResponse'
         "401":
@@ -591,6 +586,59 @@ paths:
           schema:
             $ref: '#/definitions/http.ErrorAuthResponse'
       summary: Register a new user
+      tags:
+      - authentication
+  /auth/sessions:
+    get:
+      consumes:
+      - application/json
+      description: Returns all the sessions associated with a user, identified by
+        their ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of user sessions with details
+          schema:
+            items:
+              $ref: '#/definitions/service.UserSession'
+            type: array
+        "400":
+          description: 'Example: {\"error\":\"error message describing why the retrieval
+            failed\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+      security:
+      - BearerAuth: []
+      summary: Retrieve all sessions of a user
+      tags:
+      - authentication
+  /auth/token/revoke/{session}:
+    post:
+      consumes:
+      - application/json
+      description: Accepts a session identifier in UUID format and revokes it to invalidate
+        the session
+      parameters:
+      - description: Session Identifier (UUID)
+        in: path
+        name: session
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Example: {\"successful\":true}'
+          schema:
+            $ref: '#/definitions/http.SuccessAuthConfirmResponse'
+        "400":
+          description: 'Example: {\"error\":\"Unexpected error, failed to revoke token\"}'
+          schema:
+            $ref: '#/definitions/http.ErrorAuthResponse'
+      security:
+      - BearerAuth: []
+      summary: Revoke a user's session token
       tags:
       - authentication
   /stats/get/visits:

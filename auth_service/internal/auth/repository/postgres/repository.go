@@ -1,22 +1,124 @@
 package postgres
 
 import (
+	"context"
+	"encoding/json"
 	"errors"
 	"os"
+	"time"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
 	"github.com/nik19ta/gostat/auth_service/internal/auth/model"
 	"github.com/nik19ta/gostat/auth_service/pkg/argon2"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )
 
 type UserRepository struct {
-	db *gorm.DB
+	db  *gorm.DB
+	rdb *redis.Client
 }
 
-func NewUserRepository(db *gorm.DB) UserRepository {
-	return UserRepository{db: db}
+func NewUserRepository(db *gorm.DB, rdb *redis.Client) UserRepository {
+	return UserRepository{db: db, rdb: rdb}
+}
+
+type SessionData struct {
+	UserId    uint64
+	Allow     bool
+	CreatedAt time.Time
+	UUID      string
+}
+
+func (r *UserRepository) GetUserSessions(userId uint64) ([]SessionData, error) {
+	ctx := context.Background()
+
+	allKeys, err := r.rdb.Keys(ctx, "*").Result()
+	if err != nil {
+		return nil, err
+	}
+
+	var sessions []SessionData
+	for _, key := range allKeys {
+		val, err := r.rdb.Get(ctx, key).Result()
+		if err != nil {
+			continue
+		}
+
+		var session SessionData
+		err = json.Unmarshal([]byte(val), &session)
+		if err != nil {
+			continue
+		}
+
+		if session.UserId == userId {
+			session.UUID = key
+			sessions = append(sessions, session)
+		}
+	}
+
+	return sessions, nil
+}
+
+func (r *UserRepository) RegisterNewSession(uuid string, userId uint64) error {
+	ctx := context.Background()
+	session := SessionData{
+		UserId:    userId,
+		Allow:     true,
+		CreatedAt: time.Now(),
+	}
+
+	sessionData, err := json.Marshal(session)
+	if err != nil {
+		return err
+	}
+
+	expiration := 30 * 24 * time.Hour
+	return r.rdb.Set(ctx, uuid, sessionData, expiration).Err()
+}
+
+func (r *UserRepository) RevokeToken(uuid string) error {
+	ctx := context.Background()
+	val, err := r.rdb.Get(ctx, uuid).Result()
+	if err != nil {
+		return err
+	}
+
+	var session SessionData
+	err = json.Unmarshal([]byte(val), &session)
+	if err != nil {
+		return err
+	}
+
+	session.Allow = false
+	sessionData, err := json.Marshal(session)
+	if err != nil {
+		return err
+	}
+
+	expiration := 30 * 24 * time.Hour
+	return r.rdb.Set(ctx, uuid, sessionData, expiration).Err()
+}
+
+func (r *UserRepository) CheckSession(uuid string) (bool, error) {
+	ctx := context.Background()
+
+	val, err := r.rdb.Get(ctx, uuid).Result()
+	if err != nil {
+		if err == redis.Nil {
+			return false, nil
+		}
+		return false, err
+	}
+
+	var session SessionData
+	err = json.Unmarshal([]byte(val), &session)
+	if err != nil {
+		return false, err
+	}
+
+	return session.Allow, nil
 }
 
 func (r UserRepository) AccountConfirm(secret string) error {
@@ -55,9 +157,15 @@ func (r UserRepository) RefreshToken(token string) (*model.UserClaims, error) {
 		return nil, errors.New("invalid user_login in the token")
 	}
 
+	sessionUUID, ok := claims["session_uuid"].(string)
+	if !ok {
+		return nil, errors.New("invalid user_login in the token")
+	}
+
 	return &model.UserClaims{
-		Id:    userID,
-		Login: userLogin,
+		Id:          userID,
+		Login:       userLogin,
+		SessionUUID: sessionUUID,
 	}, nil
 }
 

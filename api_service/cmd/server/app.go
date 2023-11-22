@@ -97,6 +97,8 @@ func main() {
 		privateAuthRouter := authRouter.Group("/")
 		privateAuthRouter.Use(middlewareAuth.AuthRequired())
 		{
+			privateAuthRouter.POST("/token/revoke/:session", authHandler.RevokeToken)
+			privateAuthRouter.GET("/sessions", authHandler.Sessions)
 			privateAuthRouter.POST("/confirm/mail", authHandler.ConfirmSendAccount)
 			privateAuthRouter.GET("/info", authHandler.GetInfoAccount)
 		}

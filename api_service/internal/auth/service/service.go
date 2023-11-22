@@ -80,6 +80,18 @@ func (s *AuthService) Login(ctx context.Context, req LoginRequest) (*Token, erro
 	}, nil
 }
 
+func (s *AuthService) RevokeToken(ctx context.Context, session string) error {
+	_, err := s.client.RevokeToken(ctx, &auth.RevokeTokenRequest{
+		Uuid: session,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (s *AuthService) RefreshToken(ctx context.Context, token string) (*string, error) {
 	resp, err := s.client.RefreshToken(ctx, &auth.RefreshTokenRequest{
 		RefreshToken: token,
@@ -316,4 +328,29 @@ func (s *AuthService) GetInfoAccount(ctx context.Context, id uint64) (*UserInfo,
 		Apps:             userapps,
 	}
 	return &resp, nil
+}
+
+type UserSession struct {
+	UUID      string `json:"uuid"`
+	CreatedAt string `json:"created_at"`
+}
+
+	func (s *AuthService) GetUserSession(ctx context.Context, id uint64) ([]UserSession, error) {
+
+	var sessions []UserSession
+
+	resp, err := s.client.GetSessions(ctx, &auth.GetSessionsRequest{Id: id})
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, session := range resp.Sessions {
+		sessions = append(sessions, UserSession{
+			UUID:      session.Uuid,
+			CreatedAt: session.CreatedAt,
+		})
+	}
+
+	return sessions, nil
 }
