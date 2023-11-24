@@ -15,18 +15,27 @@ export default function Request() {
           <Logo />
           <h1 className={style.title}>GoStat</h1>
         </div>
-        <h2 className={style.top__button}>{page === true ? 'Password recovery' : 'Password reset email sent'}</h2>
+        <h2 className={style.top__button}>{page === true ? 'Password reset email sent' : 'Password recovery'}</h2>
       </div>
+
+      {
+        page === true
+        ?
+        <div className={style.main__text}>
+          <p>Password reset instructions sent. Check your email, or spam folder if not received.</p>
+        </div>
+        :
+        <div className={style.input__block}>
+          <input className={style.input} type="text" placeholder="E-mail" />
+        </div>
+      }
 
       {
         page === true 
         ?
-        <div className={style.main__block}>
-          <p className={style.main__text}>Password reset instructions sent. Check your email, or spam folder if not received.</p>
-        </div>
+        <></>
         :
         <div className={style.main__block}>
-          <input className={style.input} type="text" placeholder="E-mail" />
           <button className={style.button}>Send reset link</button>
         </div>
       }
