@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import styles from "./index.module.css";
 
@@ -13,10 +13,6 @@ import { getStat, getUserData } from "./api";
 import { IUserData, Stat } from ".";
 import Header from "./Header";
 import { useRouter } from "next/navigation";
-
-import i18next from "@/app/shared/libs/i18n";
-
-export const LangContext = createContext({});
 
 export default function Dashboard() {
   const router = useRouter();
@@ -74,24 +70,22 @@ export default function Dashboard() {
   };
 
   return (
-    <LangContext.Provider value={i18next}>
-      <main className={styles.page}>
-        <Menu />
-        <div className={styles.content}>
-          <Header
-            userInfo={userInfo}
-            activeApp={activeApp}
-            setActiveApp={changeActiveApp}
-          />
-          <Metro
-            activeScreen={activeScreen}
-            setActiveScreen={setActiveScreen}
-            sectionStat={sectionStat}
-          />
+    <main className={styles.page}>
+      <Menu />
+      <div className={styles.content}>
+        <Header
+          userInfo={userInfo}
+          activeApp={activeApp}
+          setActiveApp={changeActiveApp}
+        />
+        <Metro
+          activeScreen={activeScreen}
+          setActiveScreen={setActiveScreen}
+          sectionStat={sectionStat}
+        />
 
-          <Charts activeScreen={activeScreen} stats={stats} />
-        </div>
-      </main>
-    </LangContext.Provider>
+        <Charts activeScreen={activeScreen} stats={stats} />
+      </div>
+    </main>
   );
 }
