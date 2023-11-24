@@ -1,9 +1,10 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import Lang from './lang'
 
 import { cookies } from "next/headers";
+import { changeLanguage, defaultLang } from './shared/libs/i18n';
+import { APP_LANGUAGES_TYPE } from './shared/constants/languages';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,17 +16,18 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
-  params: any
-}) {  
-
+  children: React.ReactNode
+}) {
   const cookieStore = cookies();
   const theme = cookieStore.get("theme");
+  const lang = (cookieStore.get("lang")?.value ?? defaultLang).toLowerCase() as APP_LANGUAGES_TYPE;
+
+  changeLanguage(lang);
 
   return (
-    <html lang="en">
+    <html lang={lang ?? "en"}>
       <body className={`${inter.className} ${theme?.value}`}>
-        <Lang>{children}</Lang>
+        {children}
       </body>
     </html>
   );

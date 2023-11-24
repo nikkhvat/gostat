@@ -13,9 +13,9 @@ export default function Home() {
     const token = Storage.get("access_token");
 
     if (token != null && token.length > 0) {
-      router.push("/en/dashboard", { scroll: false });
+      router.push("/dashboard", { scroll: false });
     } else {
-      router.push("/en/auth/sign-in", { scroll: false });
+      router.push("/auth/sign-in", { scroll: false });
     }
   }, [router]);
 

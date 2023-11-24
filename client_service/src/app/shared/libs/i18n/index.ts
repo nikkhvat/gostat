@@ -1,31 +1,37 @@
 import { APP_LANGUAGES, APP_LANGUAGES_TYPE, APP_LANGUAGES_ARRAY } from '@/app/shared/constants/languages';
-
 import { localeResources } from './locales';
-
 import i18next from 'i18next';
 
-const defaultLang = APP_LANGUAGES.en
+export const defaultLang = APP_LANGUAGES.en
 
-i18next.init({
-  lng: defaultLang,
-  fallbackLng: APP_LANGUAGES.en,
-  returnNull: false,
-  debug: true,
-  resources: localeResources,
-});
-
-export const changeLanguage = (lang: APP_LANGUAGES_TYPE) => {
-  i18next.changeLanguage(lang);
-};
-
-export const currentLang = i18next.language
-
-export const checkLang = (lang: string) => {
-  if (APP_LANGUAGES_ARRAY.includes(lang) && lang !== i18next.language) {
-    changeLanguage(lang as APP_LANGUAGES_TYPE)
-  }
+export async function initI18Next(lng?: string) {
+  await i18next.init({
+    lng: lng ?? defaultLang,
+    fallbackLng: APP_LANGUAGES.en,
+    returnNull: false,
+    debug: true,
+    resources: localeResources,
+  });
 }
 
-export const languagesList = APP_LANGUAGES_ARRAY
+initI18Next()
+
+export const changeLanguage = async (langRaw: APP_LANGUAGES_TYPE) => {
+  const lang = langRaw.toLowerCase();
+
+  if (!i18next.isInitialized) {
+    setTimeout(() => changeLanguage(langRaw), 100);
+    return;
+  }
+
+  if (lang !== i18next.language && APP_LANGUAGES_ARRAY.includes(lang)) {
+    console.log("Changing language to:", lang);
+    await i18next.changeLanguage(lang);
+  }
+};
+
+export const currentLang = () => i18next.language;
+
+export const languagesList = APP_LANGUAGES_ARRAY;
 
 export default i18next;

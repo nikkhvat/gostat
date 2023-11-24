@@ -14,13 +14,11 @@ import { IUserData, Stat } from ".";
 import Header from "./Header";
 import { useRouter } from "next/navigation";
 
-import i18next, { checkLang } from "@/app/shared/libs/i18n";
+import i18next from "@/app/shared/libs/i18n";
 
 export const LangContext = createContext({});
 
-export default function Dashboard({ params: { lang } }: any) {
-  checkLang(lang)
-
+export default function Dashboard() {
   const router = useRouter();
 
   const [activeScreen, setActiveScreen] = useState(1 as 1 | 2 | 3 | 4);
@@ -46,7 +44,7 @@ export default function Dashboard({ params: { lang } }: any) {
       }
 
       if (response.data.account_confirmed === false) {
-        router.push(`${lang}/en/auth/alert`, { scroll: false });
+        router.push(`/auth/alert`, { scroll: false });
       }
     } catch (error) {
       console.error("Ошибка:", error);

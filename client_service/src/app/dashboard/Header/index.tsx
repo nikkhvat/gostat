@@ -66,9 +66,8 @@ const Header: React.FC<IHeader> = ({ userInfo, activeApp, setActiveApp }) => {
   const singOut = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
-    router.push("/en/auth/sign-in", { scroll: false });
+    router.push("/auth/sign-in", { scroll: false });
     Storage.delete("access_token");
-    Storage.delete("refresh_token");
   };
 
   return (

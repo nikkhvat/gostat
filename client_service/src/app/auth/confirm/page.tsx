@@ -8,11 +8,9 @@ import Loader from "../components/loader";
 import { confirmEmail } from "../api";
 import Link from "next/link";
 
-import i18next, { checkLang } from "@/app/shared/libs/i18n";
+import i18next from "@/app/shared/libs/i18n";
 
-export default function Confirm({ params: { lang } }: any) {
-  checkLang(lang);
-
+export default function Confirm() {
   const router = useRouter();
 
   const [confirmed, setConfirmed] = useState(false);
@@ -30,7 +28,7 @@ export default function Confirm({ params: { lang } }: any) {
     if (param) {
       submit(param);
     } else {
-      router.push(`/${lang}/auth/alert`, { scroll: false });
+      router.push(`/auth/alert`, { scroll: false });
     }
   }, [param]);
 

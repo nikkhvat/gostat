@@ -3,10 +3,9 @@ import React from "react";
 
 import style from './page.module.css';
 
-import i18next, { checkLang } from "@/app/shared/libs/i18n";
+import i18next from "@/app/shared/libs/i18n";
 
-export default function Alert({ params: { lang } }: any) {
-  checkLang(lang);
+export default function Alert() {
 
   return (
     <div className={style.box}>

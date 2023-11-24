@@ -1,6 +1,6 @@
 "use client"
 import styles from './page.module.css' 
-import InputComponent from '@/app/[lang]/auth/components/Input/index';
+import InputComponent from '@/app/auth/components/Input/index';
 import Link from "next/link";
 
 import { Logo } from "@/app/shared/icons/components/logo";
@@ -10,17 +10,16 @@ import { singIn } from '../api';
 import Storage from '@/app/utils/storage';
 
 import { useRouter } from "next/navigation";
-import i18next, { checkLang } from '@/app/shared/libs/i18n';
+import i18next from '@/app/shared/libs/i18n';
 
-export default function SingIn({ params: { lang } }: any) {
+export default function SingIn() {
   const router = useRouter();
-  checkLang(lang)
 
   useEffect(() => {
     const token = Storage.get("access_token");
 
     if (token != null && token.length > 0) {
-      router.push("/en/dashboard", { scroll: false });
+      router.push("/dashboard", { scroll: false });
     }
   }, [router]);
 
@@ -43,9 +42,7 @@ export default function SingIn({ params: { lang } }: any) {
     });
 
     Storage.set("access_token", response.data.access_token);
-    Storage.set("refresh_token", response.data.refresh_token);
-
-    router.push("/en/dashboard", { scroll: false });
+    router.push("/dashboard", { scroll: false });
   };
 
   return (
@@ -80,7 +77,7 @@ export default function SingIn({ params: { lang } }: any) {
         </button>
       </form>
 
-      <Link className={styles.link} href={`/${lang}/auth/sign-up`}>
+      <Link className={styles.link} href={`/auth/sign-up`}>
         {i18next.t("auth.signIn.link")}
       </Link>
     </div>
