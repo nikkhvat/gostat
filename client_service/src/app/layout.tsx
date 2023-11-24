@@ -22,7 +22,7 @@ export default function RootLayout({
   const theme = cookieStore.get("theme");
   const lang = (cookieStore.get("lang")?.value ?? defaultLang).toLowerCase() as APP_LANGUAGES_TYPE;
 
-  changeLanguage(lang);
+  // changeLanguage(lang);
 
   return (
     <html lang={lang ?? "en"}>
