@@ -24,7 +24,7 @@ export const changeLanguage = async (langRaw: APP_LANGUAGES_TYPE) => {
     return;
   }
 
-  if (lang !== i18next.language && APP_LANGUAGES_ARRAY.includes(lang)) {
+  if (APP_LANGUAGES_ARRAY.includes(lang)) {
     console.log("Changing language to:", lang);
     await i18next.changeLanguage(lang);
   }
