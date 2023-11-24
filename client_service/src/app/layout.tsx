@@ -1,8 +1,9 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import ThemeWrapper from './theme'
 import Lang from './lang'
+
+import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,12 +18,13 @@ export default function RootLayout({
   children: React.ReactNode;
   params: any
 }) {  
+
+  const cookieStore = cookies();
+  const theme = cookieStore.get("theme");
+
   return (
     <html lang="en">
-      <head>
-        <script src="/theme-script.js" defer></script>
-      </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} ${theme?.value}`}>
         <Lang>{children}</Lang>
       </body>
     </html>

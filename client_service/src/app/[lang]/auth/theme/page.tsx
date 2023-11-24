@@ -1,54 +1,57 @@
-"use client";
-import React, { useState, useEffect } from "react";
+// "use client";
+// import React, { useState, useEffect } from "react";
 import style from "./page.module.css";
 import Link from "next/link";
+
 import {
   LightCat,
   DarkCat,
   LightDarkCat,
 } from "@/app/shared/icons/components/icon-cat-theme";
-import Storage from "@/app/utils/storage";
+
 import classNames from "classnames/bind";
 
 import i18next, { checkLang } from "@/app/shared/libs/i18n/index";
 
+import setCookiesTheme from "@/app/actions/theme"
+
+import { cookies } from "next/headers";
+import ThemeButton from "./ThemeButton";
+
 const Theme = ({ params: { lang } }: any) => {
   checkLang(lang);
 
+  const cookieStore = cookies();
+  const theme = cookieStore.get("theme");
+
   const cx = classNames.bind(style);
 
-  const [theme, setTheme] = useState(
-    null as "dark" | "light" | "system" | null
-  );
+  // const [theme, setTheme] = useState(
+  //   null as "dark" | "light" | "system" | null
+  // );
 
-  const getInitialTheme = (): "dark" | "light" | "system" => {
-    const storedTheme = Storage.get("theme");
+  // const getInitialTheme = (): "dark" | "light" | "system" => {
+  //   const storedTheme = Storage.get("theme");
 
-    if (storedTheme === "light" || storedTheme === "dark") return storedTheme;
-    else return "system";
-  };
+  //   if (storedTheme === "light" || storedTheme === "dark") return storedTheme;
+  //   else return "system";
+  // };
 
-  const updateTheme = (newTheme: "dark" | "light" | "system" | null) => {
-    if (!newTheme) return;
+  // const updateTheme = (newTheme: "dark" | "light" | "system" | null) => {
+  //   if (!newTheme) return;
 
-    setTheme(newTheme);
+  //   setTheme(newTheme);
+  //   setCookiesTheme(newTheme);
+  //   Storage.set("theme", newTheme);
+  // };
 
-    document.body.classList.remove("light-theme", "dark-theme");
-    if (newTheme !== "system") {
-      const className = `${newTheme}-theme`;
-      document.body.classList.add(className);
-    }
+  // useEffect(() => {
+  //   setTheme(getInitialTheme());
+  // }, []);
 
-    Storage.set("theme", newTheme);
-  };
-
-  useEffect(() => {
-    setTheme(getInitialTheme());
-  }, []);
-
-  useEffect(() => {
-    updateTheme(theme);
-  }, [theme]);
+  // useEffect(() => {
+  //   updateTheme(theme);
+  // }, [theme]);
 
   return (
     <div className={style.box}>
@@ -63,21 +66,26 @@ const Theme = ({ params: { lang } }: any) => {
           { title: i18next.t("theme.dark"), key: "dark" },
           { title: i18next.t("theme.system"), key: "system" },
         ].map((t: any) => (
-          <button
+          <ThemeButton
             key={t.key}
-            onClick={() => updateTheme(t.key)}
-            className={cx({
-              button: true,
-              button_dark: t.key === "dark",
-              button_system: t.key === "system",
-              active: theme === t.key,
-            })}
-          >
-            {t.key === "light" && <LightCat />}
-            {t.key === "dark" && <DarkCat />}
-            {t.key === "system" && <LightDarkCat />}
-            <p className={style.button_text}>{t.title}</p>
-          </button>
+            t={t}
+            theme={theme?.value ? theme?.value : "system"}
+          />
+          // <button
+          //   key={t.key}
+          //   onClick={() => setCookiesTheme(t.key)}
+          //   className={cx({
+          //     button: true,
+          //     button_dark: t.key === "dark",
+          //     button_system: t.key === "system",
+          //     active: theme === t.key,
+          //   })}
+          // >
+          //   {t.key === "light" && <LightCat />}
+          //   {t.key === "dark" && <DarkCat />}
+          //   {t.key === "system" && <LightDarkCat />}
+          //   <p className={style.button_text}>{t.title}</p>
+          // </button>
         ))}
       </div>
 

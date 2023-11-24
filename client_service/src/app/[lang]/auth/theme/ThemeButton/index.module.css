@@ -1,0 +1,49 @@
+
+.button {
+  width: 200px;
+  height: 129px;
+  
+  border-radius: 15px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  cursor: pointer;
+  border: none;
+
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.button_text {
+  position: absolute;
+  bottom: -30px;
+  color: var(--color7);
+
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.button_system {
+  background-image: linear-gradient(to right, #EFEFEF 50%, #1E1E1E 50%);
+}
+
+.button_dark {
+  background-color: #1E1E1E;
+}
+
+.button svg {
+  width: 110px;
+}
+
+.active {
+  transform: scale(1.2) translateY(-10%);
+}
+
+.active .button_text {
+  color: var(--color8)
+}
