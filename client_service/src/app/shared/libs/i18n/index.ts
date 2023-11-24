@@ -21,9 +21,6 @@ export const changeLanguage = (lang: APP_LANGUAGES_TYPE) => {
 export const currentLang = i18next.language
 
 export const checkLang = (lang: string) => {
-  console.log(lang);
-  
-
   if (APP_LANGUAGES_ARRAY.includes(lang) && lang !== i18next.language) {
     changeLanguage(lang as APP_LANGUAGES_TYPE)
   }

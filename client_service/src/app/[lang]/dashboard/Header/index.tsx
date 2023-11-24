@@ -52,8 +52,6 @@ const Header: React.FC<IHeader> = ({ userInfo, activeApp, setActiveApp }) => {
 
   const submitSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    console.log(`search: ${search}`);
   };
 
   const clickAvatar = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -63,7 +61,6 @@ const Header: React.FC<IHeader> = ({ userInfo, activeApp, setActiveApp }) => {
   const clickNotifications = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    console.log(e);
   };
 
   const singOut = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

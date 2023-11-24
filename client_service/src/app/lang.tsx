@@ -21,10 +21,6 @@ const Lang = ({ children }: any) => {
     return false
   }
 
-  useEffect(() => {
-    console.log(`IS SUPPORT`, isSupportLang());
-  }, [])
-
   return <>{children}</>;
 };
 

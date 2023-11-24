@@ -46,7 +46,6 @@ export default function Dashboard({ params: { lang } }: any) {
       }
 
       if (response.data.account_confirmed === false) {
-        console.log(response.data);
         router.push(`${lang}/en/auth/alert`, { scroll: false });
       }
     } catch (error) {
