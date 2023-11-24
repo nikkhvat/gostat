@@ -21,7 +21,7 @@
 }
 
 body,
-body[data-theme="light"] {
+.light {
   --color1: #FFFFFF;
   --color2: #F6F6F4;
   --color3: #EFEFEF;
@@ -34,7 +34,7 @@ body[data-theme="light"] {
   --color10: #FFFFFF;
 }
 
-body[data-theme="dark"] {
+.dark {
   --color1: #181818;
   --color2: #1E1E1E;
   --color3: #1E1E1E;
@@ -45,6 +45,36 @@ body[data-theme="dark"] {
   --color8: #FFFFFF;
   --color9: #EFEFEF;
   --color10: #FFFFFF;
+}
+
+@media (prefers-color-scheme: light) {
+  .system {
+    --color1: #FFFFFF;
+    --color2: #F6F6F4;
+    --color3: #EFEFEF;
+    --color4: #C9C9C9;
+    --color5: #C9C9C9;
+    --color6: #999999;
+    --color7: #999999;
+    --color8: #181818;
+    --color9: #EFEFEF;
+    --color10: #FFFFFF;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .system {
+    --color1: #181818;
+    --color2: #1E1E1E;
+    --color3: #1E1E1E;
+    --color4: #3C3C3C;
+    --color5: #5A5A5A;
+    --color6: #5A5A5A;
+    --color7: #999999;
+    --color8: #FFFFFF;
+    --color9: #EFEFEF;
+    --color10: #FFFFFF;
+  }
 }
 
 

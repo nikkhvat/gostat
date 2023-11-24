@@ -16,6 +16,8 @@ import Storage from "@/app/utils/storage";
 import Button from "../components/Button";
 import { IUserData } from "..";
 
+import i18next from "@/app/shared/libs/i18n";
+
 interface IHeader {
   userInfo: IUserData;
   activeApp: string | null;
@@ -50,8 +52,6 @@ const Header: React.FC<IHeader> = ({ userInfo, activeApp, setActiveApp }) => {
 
   const submitSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    console.log(`search: ${search}`);
   };
 
   const clickAvatar = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -61,7 +61,6 @@ const Header: React.FC<IHeader> = ({ userInfo, activeApp, setActiveApp }) => {
   const clickNotifications = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    console.log(e);
   };
 
   const singOut = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -69,12 +68,11 @@ const Header: React.FC<IHeader> = ({ userInfo, activeApp, setActiveApp }) => {
 
     router.push("/auth/sign-in", { scroll: false });
     Storage.delete("access_token");
-    Storage.delete("refresh_token");
   };
 
   return (
     <div className={styles.header}>
-      <div style={{width: "310px"}} ></div>
+      <div style={{ width: "310px" }}></div>
 
       <search role="search">
         <form onSubmit={submitSearch}>
@@ -82,7 +80,7 @@ const Header: React.FC<IHeader> = ({ userInfo, activeApp, setActiveApp }) => {
             className={styles.header__search}
             onChange={(e) => setSearch(e.target.value)}
             name="search"
-            placeholder="Search"
+            placeholder={i18next.t("menu.search")}
           />
         </form>
       </search>

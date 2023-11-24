@@ -32,3 +32,8 @@
   
   height: 42px;
 }
+
+.upper {
+  text-transform: uppercase;
+  color: inherit;
+}

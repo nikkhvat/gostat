@@ -57,7 +57,7 @@ const LineChart: React.FC<{
         .attr("x2", width)
         .attr("y2", y + 2)
         .attr("stroke", "var(--color3)")
-        .attr("stroke-width", 1);
+        .attr("strokeWidth", 1);
 
       const textValue = Math.round(yScale.invert(y));
 
@@ -78,7 +78,7 @@ const LineChart: React.FC<{
       .datum(data)
       .attr("fill", "none")
       .attr("stroke", "var(--color8)")
-      .attr("stroke-width", 1)
+      .attr("strokeWidth", 1)
       .attr("d", line);
 
     const selectedDates = data.filter((_, i) => i % 3 === 0);

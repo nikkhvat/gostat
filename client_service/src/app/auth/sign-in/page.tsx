@@ -10,6 +10,7 @@ import { singIn } from '../api';
 import Storage from '@/app/utils/storage';
 
 import { useRouter } from "next/navigation";
+import i18next from '@/app/shared/libs/i18n';
 
 export default function SingIn() {
   const router = useRouter();
@@ -22,29 +23,27 @@ export default function SingIn() {
     }
   }, [router]);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handlePasswordChange = (e: any) => {
     setPassword(e.target.value);
-  }
+  };
 
   const handleEmailChange = (e: any) => {
     setEmail(e.target.value);
-  }
+  };
 
   const submit = async (e: any) => {
-    e.preventDefault()
+    e.preventDefault();
     const response = await singIn({
       login: email,
       password: password,
     });
-    
-    Storage.set("access_token", response.data.access_token);
-    Storage.set("refresh_token", response.data.refresh_token);
 
+    Storage.set("access_token", response.data.access_token);
     router.push("/dashboard", { scroll: false });
-  }
+  };
 
   return (
     <div className={styles.box}>
@@ -53,33 +52,33 @@ export default function SingIn() {
           <Logo />
           <h1 className={styles.title}>GoStat</h1>
         </div>
-        <h2 className={styles.top__button}>Create account</h2>
+        <h2 className={styles.top__button}>{i18next.t("auth.signIn.title")}</h2>
       </div>
 
       <form className={styles.form}>
         <fieldset className={styles.fieldset}>
           <legend className={styles.legend}>
-            Sign In Information, email and password
+            {i18next.t("auth.signIn.subtitle")}
           </legend>
           <InputComponent
             typeProp="email"
-            placeholder="E-mail"
+            placeholder={i18next.t("auth.emailPlaceholder")}
             onChange={handleEmailChange}
           />
           <InputComponent
             typeProp="password"
-            placeholder="Password"
+            placeholder={i18next.t("auth.passwordPlaceholder")}
             check={true}
             onChange={handlePasswordChange}
           />
         </fieldset>
         <button className={styles.registration__button} onClick={submit}>
-          Sign in
+          {i18next.t("auth.signIn.button")}
         </button>
       </form>
 
-      <Link className={styles.link} href="/auth/sign-up">
-        Create account
+      <Link className={styles.link} href={`/auth/sign-up`}>
+        {i18next.t("auth.signIn.link")}
       </Link>
     </div>
   );
