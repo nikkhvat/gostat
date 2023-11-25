@@ -57,7 +57,6 @@ type ResetPasswordRequest struct {
 // ResetConfirmPasswordRequest represents the request body for confirming a password reset
 type ResetConfirmPasswordRequest struct {
 	Secret      string `json:"secret"`
-	Mail        string `json:"mail"`
 	NewPassword string `json:"password"`
 }
 
@@ -208,16 +207,11 @@ func (s *AuthService) PasswordRequest(ctx context.Context, req ResetPasswordRequ
 }
 
 func (s *AuthService) PasswordReset(ctx context.Context, req ResetConfirmPasswordRequest) (*Token, error) {
-	if len(req.Mail) == 0 {
-		return nil, errors.New("Invalid mail")
-	}
-
 	if len(req.NewPassword) < 8 {
 		return nil, errors.New("Invalid password")
 	}
 
 	token, err := s.client.PasswordReset(ctx, &auth.PasswordResetRequest{
-		Mail:     req.Mail,
 		Password: req.NewPassword,
 		Secret:   req.Secret,
 	})
@@ -335,7 +329,7 @@ type UserSession struct {
 	CreatedAt string `json:"created_at"`
 }
 
-	func (s *AuthService) GetUserSession(ctx context.Context, id uint64) ([]UserSession, error) {
+func (s *AuthService) GetUserSession(ctx context.Context, id uint64) ([]UserSession, error) {
 
 	var sessions []UserSession
 

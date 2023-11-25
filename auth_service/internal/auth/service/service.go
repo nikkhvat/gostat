@@ -205,8 +205,8 @@ func (s AuthService) PasswordRequest(mail string) (*model.User, error) {
 	return user, nil
 }
 
-func (s AuthService) PasswordReset(secret, mail, password string) (*TokenResponse, error) {
-	user, err := s.repo.PasswordReset(mail, password, secret)
+func (s AuthService) PasswordReset(secret, password string) (*TokenResponse, error) {
+	user, err := s.repo.PasswordReset(password, secret)
 
 	if err != nil {
 		return nil, err

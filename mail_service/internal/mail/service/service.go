@@ -1,10 +1,10 @@
 package service
 
 import (
-	"net/smtp"
-
 	"github.com/matcornic/hermes/v2"
 	"github.com/nik19ta/gostat/mail_service/pkg/env"
+
+	"github.com/go-mail/mail"
 )
 
 type MailService struct {
@@ -18,20 +18,20 @@ func NewMailService() MailService {
 func sendEmail(to, subject, body string) error {
 	from := env.Get("MAIL_LOGIN")
 	pass := env.Get("MAIL_PASSWORD")
-	mailSmtp := env.Get("MAIL_SMTP")
-	mailHost := env.Get("MAIL_HOST")
 
-	msg := "From: " + from + "\n" +
-		"To: " + to + "\n" +
-		"Subject: " + subject + "\n" +
-		"Content-Type: text/html\n\n" +
-		body
+	m := mail.NewMessage()
+	m.SetHeader("From", from)
+	m.SetHeader("To", to)
+	m.SetHeader("Subject", subject)
+	m.SetBody("text/html", body)
 
-	err := smtp.SendMail(mailSmtp,
-		smtp.PlainAuth("", from, pass, mailHost),
-		from, []string{to}, []byte(msg))
+	d := mail.NewDialer("smtp.gmail.com", 587, from, pass)
 
-	return err
+	if err := d.DialAndSend(m); err != nil {
+		panic(err)
+	}
+
+	return nil
 }
 
 func (s MailService) SendMailResetPassword(email, first_name, second_name, secret_code string) error {
@@ -51,14 +51,18 @@ func (s MailService) SendMailResetPassword(email, first_name, second_name, secre
 			},
 			Actions: []hermes.Action{
 				{
-					Instructions: "To get started with GoStat, please click here:",
+					Instructions: "Click the button below to reset your password:",
 					Button: hermes.Button{
-						Color: "#ff5000",
+						Color: "#DC4D2F",
 						Text:  "Reset pasword",
-						Link:  "https://gostat.app/auth/confirm?code=" + secret_code,
+						Link:  "https://gostat.app/auth/password-recovery/confirm?code=" + secret_code,
 					},
 				},
 			},
+			Outros: []string{
+				"If you did not request a password reset, no further action is required on your part.",
+			},
+			Signature: "Thanks",
 		},
 	}
 

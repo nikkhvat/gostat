@@ -39,7 +39,7 @@ func (h *AuthServiceHandler) PasswordRequest(ctx context.Context, req *pb.Passwo
 }
 
 func (h *AuthServiceHandler) PasswordReset(ctx context.Context, req *pb.PasswordResetRequest) (*pb.PasswordResetResponse, error) {
-	token, err := h.service.PasswordReset(req.Secret, req.Mail, req.Password)
+	token, err := h.service.PasswordReset(req.Secret, req.Password)
 
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "internal error")
