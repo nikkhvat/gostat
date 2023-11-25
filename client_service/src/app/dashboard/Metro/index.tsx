@@ -19,6 +19,7 @@ import BackgroundTerminal from "@/app/assets/dashboard/tabs/backgrounds/terminal
 import classNames from "classnames/bind";
 
 import i18n from "@/app/shared/libs/i18n";
+import {useTranslate} from "@/app/shared/libs/i18n";
 
 interface IMetro {
   activeScreen: number;
@@ -33,11 +34,13 @@ const Metro: React.FC<IMetro> = ({
 }) => {
   const cx = classNames.bind(styles);
 
+  const t = useTranslate()
+  
   const sections = [
     {
       id: 1,
-      name: i18n.t("dashboard.visits.title"),
-      subtitle: i18n.t("dashboard.visits.subtitle"),
+      name: t("dashboard.visits.title"),
+      subtitle: t("dashboard.visits.subtitle"),
       key: "visits",
       color: "var(--violet-bg)",
       subtitle_color: "var(--violet-text)",
@@ -46,8 +49,8 @@ const Metro: React.FC<IMetro> = ({
     },
     {
       id: 2,
-      name: i18n.t("dashboard.topCountries.title"),
-      subtitle: i18n.t("dashboard.topCountries.subtitle"),
+      name: t("dashboard.topCountries.title"),
+      subtitle: t("dashboard.topCountries.subtitle"),
       key: "countries",
       color: "var(--green-bg)",
       subtitle_color: "var(--green-text)",
@@ -56,8 +59,8 @@ const Metro: React.FC<IMetro> = ({
     },
     {
       id: 3,
-      name: i18n.t("dashboard.topBrowsers.title"),
-      subtitle: i18n.t("dashboard.topBrowsers.subtitle"),
+      name: t("dashboard.topBrowsers.title"),
+      subtitle: t("dashboard.topBrowsers.subtitle"),
       key: "browsers",
       color: "var(--blue-bg)",
       subtitle_color: "var(--blue-text)",
@@ -66,8 +69,8 @@ const Metro: React.FC<IMetro> = ({
     },
     {
       id: 4,
-      name: i18n.t("dashboard.bots.title"),
-      subtitle: i18n.t("dashboard.bots.subtitle"),
+      name: t("dashboard.bots.title"),
+      subtitle: t("dashboard.bots.subtitle"),
       key: "bots",
       color: "var(--orange-bg)",
       subtitle_color: "var(--orange-text)",
@@ -121,7 +124,7 @@ const Metro: React.FC<IMetro> = ({
               }
               className={styles.bottom_second_text}
             >
-              {i18n.t("dashboard.month")}
+              {t("dashboard.month")}
             </p>
           </div>
         </div>

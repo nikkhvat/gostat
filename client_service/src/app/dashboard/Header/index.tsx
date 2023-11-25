@@ -16,7 +16,8 @@ import Storage from "@/app/utils/storage";
 import Button from "../components/Button";
 import { IUserData } from "..";
 
-import i18n from "@/app/shared/libs/i18n";
+import { useTranslate } from "@/app/shared/libs/i18n";
+
 
 interface IHeader {
   userInfo: IUserData;
@@ -30,6 +31,8 @@ const Header: React.FC<IHeader> = ({ userInfo, activeApp, setActiveApp }) => {
   const [search, setSearch] = useState("");
 
   const [openedPopUp, setOpenedPopUp] = useState(false);
+
+  const t = useTranslate();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -80,7 +83,7 @@ const Header: React.FC<IHeader> = ({ userInfo, activeApp, setActiveApp }) => {
             className={styles.header__search}
             onChange={(e) => setSearch(e.target.value)}
             name="search"
-            placeholder={i18n.t("menu.search")}
+            placeholder={t("menu.search")}
           />
         </form>
       </search>

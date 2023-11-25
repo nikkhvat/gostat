@@ -1,22 +1,52 @@
-import { APP_LANGUAGES, APP_LANGUAGES_ARRAY, APP_LANGUAGES_TYPE } from '@/app/shared/constants/languages';
+import { APP_LANGUAGES_ARRAY, APP_LANGUAGES_TYPE } from '@/app/shared/constants/languages';
 import { localeResources } from './locales';
 
-import i18n from 'i18next';
+let lang = "en" as APP_LANGUAGES_TYPE;
 
-export const defaultLang = APP_LANGUAGES.en;
+function translate(lang: string, resources: any) {
+  return function (path: string, variables?: Record<string, string>) {
+    path = lang + ".translation." + path;
+    const parts = path.split('.');
 
-export const initI18n = (lang: APP_LANGUAGES_TYPE) => {
-  i18n.init({
-    lng: lang,
-    fallbackLng: APP_LANGUAGES.en,
-    returnNull: false,
-    debug: true,
-    resources: localeResources,
-  });
+    let currentObject: any = resources;
+
+    for (let part of parts) {
+      if (currentObject[part] !== undefined) {
+        currentObject = currentObject[part];
+      } else {
+        return path;
+      }
+    }
+
+    let result = typeof currentObject === 'string' ? currentObject : path;
+
+    if (variables) {
+      for (const key of Object.keys(variables)) {
+        const value = variables[key];
+        result = result.replace(new RegExp(`{{${key}}}`, 'g'), value);
+      }
+    }
+    
+    return result;
+  }
 }
 
-export const currentLang = () => i18n.language;
 
-export const languagesList = APP_LANGUAGES_ARRAY;
+const i18n = {
+  resources: localeResources,
+  setLanguage: function(lang: APP_LANGUAGES_TYPE) {
+    lang = lang
+  },
+  useTranslate: () => {
+    return translate(lang, localeResources)
+  },
+}
 
-export default i18n;
+export const setLanguage = (l: APP_LANGUAGES_TYPE) => {
+  lang = l
+}
+
+export const languagesList = APP_LANGUAGES_ARRAY
+export const useTranslate = i18n.useTranslate
+
+export default i18n

@@ -4,13 +4,15 @@ import Image from 'next/image';
 import Link from "next/link";
 import LanguageButton from "@/app/auth/components/languageButton/index";
 import image from '@/app/assets/auth/earth.svg';
-import i18n, { languagesList } from "@/app/shared/libs/i18n";
+import { languagesList, useTranslate } from "@/app/shared/libs/i18n";
 
 import { cookies } from "next/headers";
 import { CookiesKeys } from "@/app/shared/services/cookie/types";
 
 export default function Language() {  
   const cookieStore = cookies();
+  
+  const t = useTranslate();
 
   const lang = cookieStore.get(CookiesKeys.LOCALE);
 
@@ -37,13 +39,13 @@ export default function Language() {
   return (
     <div className={style.box}>
       <div className={style.texts}>
-        <h1 className={style.title}>{i18n.t("language.title")}</h1>
-        <p className={style.subTitle}>{i18n.t("language.subtitle")}</p>
+        <h1 className={style.title}>{t("language.title")}</h1>
+        <p className={style.subTitle}>{t("language.subtitle")}</p>
       </div>
 
       <div className={style.mainBlock}>
         <p className={style.chooseLanguageTitle}>
-          {i18n.t("language.chooseYourLanguage")}
+          {t("language.chooseYourLanguage")}
         </p>
 
         <div className={style.languageButtons}>
@@ -64,10 +66,10 @@ export default function Language() {
       <div className={style.box__bottom}>
         <div className={style.bottom__bottoms}>
           <Link className={style.back__button} href={`/dashboard`}>
-            {i18n.t("theme.back")}
+            {t("theme.back")}
           </Link>
           <Link className={style.continue__button} href={`/dashboard`}>
-            {i18n.t("theme.continue")}
+            {t("theme.continue")}
           </Link>
         </div>
       </div>
