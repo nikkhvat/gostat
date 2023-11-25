@@ -6,7 +6,7 @@ import Button from "../components/Button";
 
 import ChartVisits from "./ChartVisits";
 
-import i18next from "@/app/shared/libs/i18n";
+import i18n from "@/app/shared/libs/i18n";
 
 enum ActiveScreen {
   Visits = 1,
@@ -44,22 +44,22 @@ const Charts: React.FC<ICharts> = ({ activeScreen, stats }) => {
 
   const charts = {
     1: {
-      name: i18next.t("dashboard.visits.title"),
+      name: i18n.t("dashboard.visits.title"),
       buttons: [
-        { id: 0, name: i18next.t("dashboard.visits.buttons.all") },
-        { id: 1, name: i18next.t("dashboard.visits.buttons.unique") },
+        { id: 0, name: i18n.t("dashboard.visits.buttons.all") },
+        { id: 1, name: i18n.t("dashboard.visits.buttons.unique") },
       ],
     },
     2: {
-      name: i18next.t("dashboard.topCountries.title"),
+      name: i18n.t("dashboard.topCountries.title"),
       buttons: [],
     },
     3: {
-      name: i18next.t("dashboard.topBrowsers.title"),
+      name: i18n.t("dashboard.topBrowsers.title"),
       buttons: [],
     },
     4: {
-      name: i18next.t("dashboard.bots.title"),
+      name: i18n.t("dashboard.bots.title"),
       buttons: [],
     },
   };
