@@ -16,7 +16,7 @@ import Storage from "@/app/utils/storage";
 import Button from "../components/Button";
 import { IUserData } from "..";
 
-import i18next from "@/app/shared/libs/i18n";
+import i18n from "@/app/shared/libs/i18n";
 
 interface IHeader {
   userInfo: IUserData;
@@ -80,7 +80,7 @@ const Header: React.FC<IHeader> = ({ userInfo, activeApp, setActiveApp }) => {
             className={styles.header__search}
             onChange={(e) => setSearch(e.target.value)}
             name="search"
-            placeholder={i18next.t("menu.search")}
+            placeholder={i18n.t("menu.search")}
           />
         </form>
       </search>

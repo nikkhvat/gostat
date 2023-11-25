@@ -13,7 +13,7 @@ interface IPopUp {
   setActiveApp: Function
 }
 
-import i18next from "@/app/shared/libs/i18n";
+import i18n from "@/app/shared/libs/i18n";
 
 const PopUp: React.FC<IPopUp> = ({
   name,
@@ -26,7 +26,7 @@ const PopUp: React.FC<IPopUp> = ({
     <div id="popup" className={styles.container}>
       <div className={styles.item}>
         <p className={styles.item__title}>
-          {i18next.t("menu.signedInAs", { name })}
+          {i18n.t("menu.signedInAs", { name })}
         </p>
       </div>
       <div className={styles.item}>
@@ -45,15 +45,15 @@ const PopUp: React.FC<IPopUp> = ({
       </div>
       <div className={styles.item}>
         <button className={styles.item__button}>
-          {i18next.t("menu.options.settings")}
+          {i18n.t("menu.options.settings")}
         </button>
         <button className={styles.item__button}>
-          {i18next.t("menu.options.faq")}
+          {i18n.t("menu.options.faq")}
         </button>
       </div>
       <div className={`${styles.item} ${styles.item__last}`}>
         <button className={styles.item__button} onClick={singOut}>
-          {i18next.t("menu.singOut")}
+          {i18n.t("menu.singOut")}
         </button>
       </div>
     </div>
