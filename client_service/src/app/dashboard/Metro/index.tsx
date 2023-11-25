@@ -18,7 +18,6 @@ import BackgroundTerminal from "@/app/assets/dashboard/tabs/backgrounds/terminal
 
 import classNames from "classnames/bind";
 
-import i18n from "@/app/shared/libs/i18n";
 import {useTranslate} from "@/app/shared/libs/i18n";
 
 interface IMetro {
