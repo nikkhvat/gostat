@@ -1,11 +1,26 @@
 import { APP_LANGUAGES_ARRAY, APP_LANGUAGES_TYPE } from '@/app/shared/constants/languages';
 import { localeResources } from './locales';
 
+type NestedKeys<T> = T extends string ? [] : {
+  [K in Extract<keyof T, string>]: [K, ...NestedKeys<T[K]>]
+}[Extract<keyof T, string>];
+
+type Join<T extends string[], D extends string> =
+  T extends [] ? never :
+  T extends [infer F] ? F :
+  T extends [infer F, ...infer R] ?
+  F extends string ?
+  `${F}${D}${Join<Extract<R, string[]>, D>}`
+  : never
+  : string;
+
+type TranslationKeys = Join<NestedKeys<typeof localeResources['en']['translation']>, '.'>;
+
 let lang = "en" as APP_LANGUAGES_TYPE;
 
 function translate(lang: string, resources: any) {
-  return function (path: string, variables?: Record<string, string>) {
-    path = lang + ".translation." + path;
+  return function (pathToObj: TranslationKeys, variables?: Record<string, string>) {
+    const path = lang + ".translation." + pathToObj;
     const parts = path.split('.');
 
     let currentObject: any = resources;
@@ -26,7 +41,7 @@ function translate(lang: string, resources: any) {
         result = result.replace(new RegExp(`{{${key}}}`, 'g'), value);
       }
     }
-    
+
     return result;
   }
 }
