@@ -6,7 +6,10 @@ import { CookiesCat } from "@/app/shared/icons/components/cookies-cat";
 
 import Storage from "@/app/utils/storage";
 
+import { useTranslate } from "@/app/shared/libs/i18n";
+
 const CookiesBanner: React.FC = () => {
+  const t = useTranslate()
 
   const [show, setShow] = useState(false);
 
@@ -29,13 +32,12 @@ const CookiesBanner: React.FC = () => {
         <CookiesCat />
       </div>
       <p className={styles.text}>
-        We use cookies tp personalize your experience. By continuing to visit
-        this website you agree to our use of cookies.
-        <span className={styles.mark}>Privacy Policy.</span>
+        {t("cookies.message")}
+        <span className={styles.mark}>{t("cookies.privacyPolicy")}</span>
       </p>
 
       <button onClick={close} className={styles.button}>
-        Got it!
+        {t("cookies.button")}
       </button>
     </div>
   );
