@@ -850,9 +850,6 @@ const docTemplate = `{
         "service.ResetConfirmPasswordRequest": {
             "type": "object",
             "properties": {
-                "mail": {
-                    "type": "string"
-                },
                 "password": {
                     "type": "string"
                 },

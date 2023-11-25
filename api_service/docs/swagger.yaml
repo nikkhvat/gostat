@@ -179,8 +179,6 @@ definitions:
     type: object
   service.ResetConfirmPasswordRequest:
     properties:
-      mail:
-        type: string
       password:
         type: string
       secret:
