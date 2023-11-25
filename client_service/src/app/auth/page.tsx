@@ -13,7 +13,7 @@ export default function AuthPage() {
     if (token != null && token.length > 0) {
       router.push("/dashboard", { scroll: false });
     } else {
-      router.push("/auth/sign-up", { scroll: false });
+      router.push("/auth/sign-in", { scroll: false });
     }
   }, [router])
 

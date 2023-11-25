@@ -6,6 +6,8 @@ import Button from "../components/Button";
 
 import ChartVisits from "./ChartVisits";
 
+import {useTranslate} from "@/app/shared/libs/i18n";
+
 enum ActiveScreen {
   Visits = 1,
   TopCountries = 2,
@@ -29,6 +31,7 @@ interface ICharts {
 }
 
 const Charts: React.FC<ICharts> = ({ activeScreen, stats }) => {
+  const t = useTranslate()
   const [chartsState, setChartState] = useState<IChartsButtonsState>({
     [ActiveScreen.Visits]: { activeButton: 0 },
     [ActiveScreen.TopCountries]: { activeButton: 1 },
@@ -42,22 +45,22 @@ const Charts: React.FC<ICharts> = ({ activeScreen, stats }) => {
 
   const charts = {
     1: {
-      name: "Visits",
+      name: t("dashboard.visits.title"),
       buttons: [
-        { id: 0, name: "All visits" },
-        { id: 1, name: "Unique visits" },
+        { id: 0, name: t("dashboard.visits.buttons.all") },
+        { id: 1, name: t("dashboard.visits.buttons.unique") },
       ],
     },
     2: {
-      name: "Top countries",
+      name: t("dashboard.topCountries.title"),
       buttons: [],
     },
     3: {
-      name: "Top browsers & OS",
+      name: t("dashboard.topBrowsers.title"),
       buttons: [],
     },
     4: {
-      name: "Bots",
+      name: t("dashboard.bots.title"),
       buttons: [],
     },
   };

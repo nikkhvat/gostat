@@ -16,6 +16,10 @@ import BackgroundGlobe from "@/app/assets/dashboard/tabs/backgrounds/globe.svg";
 import BackgroundBrowser from "@/app/assets/dashboard/tabs/backgrounds/browser.svg";
 import BackgroundTerminal from "@/app/assets/dashboard/tabs/backgrounds/terminal.svg";
 
+import classNames from "classnames/bind";
+
+import {useTranslate} from "@/app/shared/libs/i18n";
+
 interface IMetro {
   activeScreen: number;
   setActiveScreen: Function;
@@ -27,11 +31,15 @@ const Metro: React.FC<IMetro> = ({
   setActiveScreen,
   sectionStat,
 }) => {
+  const cx = classNames.bind(styles);
+
+  const t = useTranslate()
+  
   const sections = [
     {
       id: 1,
-      name: "Visits",
-      subtitle: "Visits",
+      name: t("dashboard.visits.title"),
+      subtitle: t("dashboard.visits.subtitle"),
       key: "visits",
       color: "var(--violet-bg)",
       subtitle_color: "var(--violet-text)",
@@ -40,8 +48,8 @@ const Metro: React.FC<IMetro> = ({
     },
     {
       id: 2,
-      name: "Top countries",
-      subtitle: "Countries",
+      name: t("dashboard.topCountries.title"),
+      subtitle: t("dashboard.topCountries.subtitle"),
       key: "countries",
       color: "var(--green-bg)",
       subtitle_color: "var(--green-text)",
@@ -50,8 +58,8 @@ const Metro: React.FC<IMetro> = ({
     },
     {
       id: 3,
-      name: "Top browsers",
-      subtitle: "Browsers",
+      name: t("dashboard.topBrowsers.title"),
+      subtitle: t("dashboard.topBrowsers.subtitle"),
       key: "browsers",
       color: "var(--blue-bg)",
       subtitle_color: "var(--blue-text)",
@@ -60,8 +68,8 @@ const Metro: React.FC<IMetro> = ({
     },
     {
       id: 4,
-      name: "Bots",
-      subtitle: "Visits",
+      name: t("dashboard.bots.title"),
+      subtitle: t("dashboard.bots.subtitle"),
       key: "bots",
       color: "var(--orange-bg)",
       subtitle_color: "var(--orange-text)",
@@ -75,9 +83,10 @@ const Metro: React.FC<IMetro> = ({
       {sections.map((item) => (
         <div
           key={item.key}
-          className={`${styles.metro_item} ${
-            item.id === activeScreen ? styles.metro_item__active : ""
-          }`}
+          className={cx({
+            metro_item: true,
+            metro_item__active: item.id === activeScreen
+          })}
           style={
             item.id === activeScreen
               ? {
@@ -100,7 +109,7 @@ const Metro: React.FC<IMetro> = ({
           <p className={styles.metro_item__title}>
             {item.name}
 
-            <item.icon/>
+            <item.icon />
           </p>
           <p className={styles.metro_item__value}>{sectionStat[item.key]}</p>
 
@@ -114,7 +123,7 @@ const Metro: React.FC<IMetro> = ({
               }
               className={styles.bottom_second_text}
             >
-              Month
+              {t("dashboard.month")}
             </p>
           </div>
         </div>

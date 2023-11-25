@@ -1,5 +1,3 @@
-"use client"
-
 import styles from "./index.module.css";
 
 import { Logo } from "@/app/shared/icons/components/logo"
@@ -30,7 +28,12 @@ export default function Menu() {
 
       <div className={styles.list}>
         {tabs.map((tab) => (
-          <Tab key={tab.id} tab={tab} active={activeTab} onClick={setTab} />
+          <Tab 
+            key={tab.id} 
+            tab={tab} 
+            active={activeTab} 
+            onClick={setTab} 
+          />
         ))}
       </div>
     </div>

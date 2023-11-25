@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
 import { useEffect, useState } from "react";
@@ -14,46 +15,48 @@ import Header from "./Header";
 import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
-
   const router = useRouter();
 
   const [activeScreen, setActiveScreen] = useState(1 as 1 | 2 | 3 | 4);
-  const [sectionStat, setSectionStat] = useState({visits: 0, countries: 0, browsers: 0, bots: 0 });
-  const [stats, setStat] = useState({} as Stat)
+  const [sectionStat, setSectionStat] = useState({
+    visits: 0,
+    countries: 0,
+    browsers: 0,
+    bots: 0,
+  });
+  const [stats, setStat] = useState({} as Stat);
 
   const [userInfo, setUserInfo] = useState({} as IUserData);
   const [activeApp, setActiveApp] = useState(null as null | string);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getUserData();
+  async function fetchData() {
+    try {
+      const response = await getUserData();
 
-        setUserInfo(response.data);
+      setUserInfo(response.data);
 
-        if (response.data.apps) {
-          changeActiveApp(response.data.apps[0].id)
-        }
-
-        if (response.data.account_confirmed === false) {
-          console.log(response.data);
-          router.push("/auth/alert", { scroll: false });
-        }
-      } catch (error) {
-        console.error("Ошибка:", error);
+      if (response.data.apps) {
+        changeActiveApp(response.data.apps[0].id);
       }
-    };
 
+      if (response.data.account_confirmed === false) {
+        router.push(`/auth/alert`, { scroll: false });
+      }
+    } catch (error) {
+      console.error("Ошибка:", error);
+    }
+  }
+
+  useEffect(() => {
     fetchData();
   }, []);
 
   const changeActiveApp = async (app: string) => {
-    setActiveApp(app)
+    setActiveApp(app);
 
-    const response = await getStat(app)
+    const response = await getStat(app);
     const body = response.data;
 
-    
     if (response.data.stats.avg_duration) {
       setSectionStat({
         visits: body.stats.first_visits,
@@ -61,10 +64,10 @@ export default function Dashboard() {
         browsers: body.stats.top_browsers.length,
         bots: 0,
       });
-  
-      setStat(response.data); 
+
+      setStat(response.data);
     }
-  }
+  };
 
   return (
     <main className={styles.page}>
