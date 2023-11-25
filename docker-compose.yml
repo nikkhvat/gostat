@@ -93,11 +93,11 @@ services:
   mail_service:
     build: ./mail_service
     environment:
-      - MAIL_LOGIN=${MAIL_LOGIN}
-      - KAFKA_HOST=${KAFKA_HOST}
-      - MAIL_PASSWORD=${MAIL_PASSWORD}
-      - MAIL_SMTP=${MAIL_SMTP}
-      - MAIL_HOST=${MAIL_HOST}
+       - MAIL_LOGIN=${MAIL_LOGIN}
+       - KAFKA_HOST=${KAFKA_HOST}
+       - MAIL_PASSWORD=${MAIL_PASSWORD}
+       - MAIL_SMTP=${MAIL_SMTP}
+       - MAIL_HOST=${MAIL_HOST}
     restart: on-failure
       
   db:

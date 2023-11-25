@@ -39,7 +39,7 @@ func (h *AuthServiceHandler) PasswordRequest(ctx context.Context, req *pb.Passwo
 }
 
 func (h *AuthServiceHandler) PasswordReset(ctx context.Context, req *pb.PasswordResetRequest) (*pb.PasswordResetResponse, error) {
-	token, err := h.service.PasswordReset(req.Secret, req.Mail, req.Password)
+	token, err := h.service.PasswordReset(req.Secret, req.Password)
 
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "internal error")
@@ -73,10 +73,16 @@ func (h *AuthServiceHandler) ConfirmAccount(ctx context.Context, req *pb.Confirm
 
 func (h *AuthServiceHandler) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
 	token, err := h.service.Authenticate(req.GetLogin(), req.GetPassword())
+
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, status.Errorf(codes.NotFound, "user not found")
 		}
+
+		if err.Error() == "invalid password" {
+			return nil, status.Errorf(codes.NotFound, "invalid password")
+		}
+
 		return nil, status.Errorf(codes.Internal, "internal error")
 	}
 

@@ -45,7 +45,6 @@ type ErrorAuthResponse struct {
 // @Param                  LoginRequest body service.LoginRequest true "Login payload"
 // @Success                200 {object} SuccessAuthResponse
 // @Failure                400 {object} ErrorAuthResponse
-// @Failure                401 {object} ErrorAuthResponse
 // @Router                 /auth/login [post]
 func (h *AuthHandler) Login(c *gin.Context) {
 	var req service.LoginRequest
@@ -55,10 +54,16 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	}
 
 	token, err := h.service.Login(c.Request.Context(), req)
+
 	if err != nil {
 
-		if err.Error() == "rpc error: code = NotFound desc = user not found" {
-			c.JSON(401, ErrorAuthResponse{Error: "login or password is not correct"})
+		if strings.Contains(err.Error(), "user not found") {
+			c.JSON(400, ErrorAuthResponse{Error: "login or password is not correct"})
+			return
+		}
+
+		if strings.Contains(err.Error(), "invalid password") {
+			c.JSON(400, ErrorAuthResponse{Error: "login or password is not correct"})
 			return
 		}
 
@@ -69,14 +74,13 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	// set cookie
 	cookieHttpsStr := env.Get("COOKIE_HTTPS")
 	cookieHttps, err := strconv.ParseBool(cookieHttpsStr)
+
 	if err != nil {
 		c.JSON(500, ErrorAuthResponse{Error: "Error COOKIE_HTTPS not bool"})
 		return
 	}
 
 	c.SetCookie("refresh_token", token.RefreshToekn, 2592000, "/", env.Get("DOMAIN"), cookieHttps, true)
-	// set cookie
-
 	c.JSON(200, SuccessAuthResponse{AccessToken: token.AccessToken})
 }
 

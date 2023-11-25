@@ -66,9 +66,8 @@ message PasswordRequestRequest {
 }
 
 message PasswordResetRequest {
-  string mail = 1;
-  string secret = 2;
-  string password = 3;
+  string secret = 1;
+  string password = 2;
 }
 
 message PasswordRequestResponse {
