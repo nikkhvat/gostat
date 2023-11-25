@@ -6,8 +6,6 @@ import { cookies } from "next/headers";
 import { APP_LANGUAGES, APP_LANGUAGES_TYPE } from './shared/constants/languages';
 import { CookiesKeys } from './shared/services/cookie/types';
 
-import { dir } from "i18next";
-
 import { setLanguage } from "@/app/shared/libs/i18n"
 import Lang from './Lang';
 
@@ -36,7 +34,7 @@ export default function RootLayout({
   setLanguage(lang);
 
   return (
-    <html lang={lang ?? "en"} dir={dir(lang)}>
+    <html lang={lang ?? "en"}>
       <body className={`${inter.className} ${theme?.value}`}>
         <Lang lang={lang} />
         {children}

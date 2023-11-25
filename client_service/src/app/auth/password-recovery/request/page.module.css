@@ -1,0 +1,89 @@
+.box {
+  padding: 60px 30px;
+  border-radius: 15px;
+  background: var(--color1);
+  height: 584px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.logo svg path {
+  fill: var(--color8);
+}
+
+.title {
+  color: var(--color8);
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.top__button {
+  color: var(--color6);
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 15px;
+}
+
+.input__block {
+  margin-top: 30px;
+}
+
+.input__block input {
+  border: 1px solid var(--color4);
+  background: var(--color1);
+  width: 360px;
+  padding: 15px;
+  outline: none;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.main__text {
+  color: #FFF;
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  width: 360px;
+
+  margin-top: 30px;
+}
+
+.main__block {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 275px;
+}
+
+.main__block button {
+  width: 360px;
+  border-radius: 10px;
+  background: white;
+  padding: 15px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+
+  color: #181818;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}

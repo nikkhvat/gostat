@@ -23,3 +23,7 @@ export interface IConfirmAccount {
 export interface IConfirmAccountResponse {
   successful: boolean
 }
+
+export interface IRequestResetPassword {
+  email: string
+}
