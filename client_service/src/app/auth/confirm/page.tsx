@@ -8,9 +8,10 @@ import Loader from "../components/loader";
 import { confirmEmail } from "../api";
 import Link from "next/link";
 
-import i18n from "@/app/shared/libs/i18n";
+import {useTranslate} from "@/app/shared/libs/i18n";
 
 export default function Confirm() {
+  const t = useTranslate()
   const router = useRouter();
 
   const [confirmed, setConfirmed] = useState(false);
@@ -36,18 +37,18 @@ export default function Confirm() {
     <div className={style.box}>
       <div className={style.texts}>
         
-        {confirmed &&<h2 className={style.title}>{i18n.t("auth.verification.title")}</h2>}
-        {!confirmed && <h2 className={style.title}>{i18n.t("auth.confirmation.title")}</h2>}
+        {confirmed &&<h2 className={style.title}>{t("auth.verification.title")}</h2>}
+        {!confirmed && <h2 className={style.title}>{t("auth.confirmation.title")}</h2>}
 
-        {confirmed && <h3 className={style.subtitle}>{i18n.t("auth.confirmation.subtitle")}</h3>}
-        {!confirmed && <h3 className={style.subtitle}>{i18n.t("auth.loading")}</h3>}
+        {confirmed && <h3 className={style.subtitle}>{t("auth.confirmation.subtitle")}</h3>}
+        {!confirmed && <h3 className={style.subtitle}>{t("auth.loading")}</h3>}
 
         {!confirmed && <Loader />}
       </div>
 
       <div className={confirmed ? style.box__bottom : style.box__bottom__close}>
         <Link className={style.continue__button} href="/dashboard">
-          {i18n.t("auth.continue")}
+          {t("auth.continue")}
         </Link>
       </div>
     </div>

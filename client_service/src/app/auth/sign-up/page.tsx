@@ -11,10 +11,14 @@ import Storage from "@/app/utils/storage";
 
 import { useRouter } from "next/navigation";
 
-import i18n from "@/app/shared/libs/i18n";
+import { useTranslate } from "@/app/shared/libs/i18n";
+
+
 
 export default function SingIn() {  
   const router = useRouter();
+
+  const t = useTranslate()
 
   useEffect(() => {
     const token = Storage.get("access_token");
@@ -67,44 +71,44 @@ export default function SingIn() {
           <Logo />
           <h1 className={styles.title}>GoStat</h1>
         </div>
-        <h2 className={styles.top__button}>{i18n.t("auth.signUp.title")}</h2>
+        <h2 className={styles.top__button}>{t("auth.signUp.title")}</h2>
       </div>
 
       <form className={styles.form}>
         <fieldset className={styles.fieldset}>
           <legend className={styles.legend}>
-            {i18n.t("auth.signUp.subtitle")}
+            {t("auth.signUp.subtitle")}
           </legend>
           <InputComponent
             typeProp="text"
-            placeholder={i18n.t("auth.namePlaceholder")}
+            placeholder={t("auth.namePlaceholder")}
             onChange={handleNameChange}
           />
           <InputComponent
             typeProp="email"
-            placeholder={i18n.t("auth.emailPlaceholder")}
+            placeholder={t("auth.emailPlaceholder")}
             onChange={handleEmailChange}
           />
           <InputComponent
             typeProp="password"
-            placeholder={i18n.t("auth.passwordPlaceholder")}
+            placeholder={t("auth.passwordPlaceholder")}
             check={true}
             onChange={handlePasswordChange}
           />
           <InputComponent
             typeProp="password"
-            placeholder={i18n.t("auth.repeatPlaceholder")}
+            placeholder={t("auth.repeatPlaceholder")}
             check={true}
             onChange={handleRepeatChange}
           />
         </fieldset>
         <button className={styles.registration__button} onClick={submit}>
-          {i18n.t("auth.signUp.button")}
+          {t("auth.signUp.button")}
         </button>
       </form>
 
       <Link className={styles.link} href={`/auth/sign-in`}>
-        {i18n.t("auth.signUp.link")}
+        {t("auth.signUp.link")}
       </Link>
     </div>
   );

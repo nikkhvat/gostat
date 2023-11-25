@@ -5,13 +5,11 @@ import { Inter } from 'next/font/google'
 import { cookies } from "next/headers";
 import { APP_LANGUAGES, APP_LANGUAGES_TYPE } from './shared/constants/languages';
 import { CookiesKeys } from './shared/services/cookie/types';
-// import i18n from './shared/libs/i18n';
 
-import i18n from 'i18next';
+import { dir } from "i18next";
 
-import { localeResources } from './shared/libs/i18n/locales';
-import { initI18n } from './shared/libs/i18n';
-import ClientSideI18nHydration from './ClientSideI18nHydration';
+import { setLanguage } from "@/app/shared/libs/i18n"
+import Lang from './Lang';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,6 +23,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   const cookieStore = cookies();
   const theme = cookieStore.get(CookiesKeys.THEME);
 
@@ -32,12 +31,14 @@ export default function RootLayout({
 
   const lang = rawLang.toLowerCase() as APP_LANGUAGES_TYPE;
 
-  initI18n(lang);
+  console.log("lang", lang);
+  
+  setLanguage(lang);
 
   return (
-    <html lang={lang ?? "en"}>
+    <html lang={lang ?? "en"} dir={dir(lang)}>
       <body className={`${inter.className} ${theme?.value}`}>
-        <ClientSideI18nHydration />
+        <Lang lang={lang} />
         {children}
       </body>
     </html>
