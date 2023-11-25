@@ -2,10 +2,21 @@
 import React, { useState } from "react";
 import style from '@/app/auth/password-recovery/request/page.module.css'
 import {Logo} from '@/app/shared/icons/components/logo';
+import {requestResetPAssword} from '../../api';
 
 export default function Request() {
 
-  let [page, setPage] = useState(false);
+  const [page, setPage] = useState(false);
+
+  const [email, setEmail] = useState('');
+
+  const submit = async (e: any) => {
+    const response = await requestResetPAssword({
+      email: e
+    })
+
+    console.log(response)
+  }
 
   return (
     <div className={style.box}>
@@ -26,7 +37,7 @@ export default function Request() {
         </div>
         :
         <div className={style.input__block}>
-          <input className={style.input} type="text" placeholder="E-mail" />
+          <input onChange={(e) => {setEmail(e.target.value)}} className={style.input} type="text" placeholder="E-mail" />
         </div>
       }
 
@@ -36,7 +47,7 @@ export default function Request() {
         <></>
         :
         <div className={style.main__block}>
-          <button className={style.button}>Send reset link</button>
+          <button onClick={() => {submit(email)}} className={style.button}>Send reset link</button>
         </div>
       }
 
