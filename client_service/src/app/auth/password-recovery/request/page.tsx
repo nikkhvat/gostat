@@ -4,10 +4,13 @@ import style from '@/app/auth/password-recovery/request/page.module.css'
 import {Logo} from '@/app/shared/icons/components/logo';
 import {requestResetPAssword} from '../../api';
 
+import { useTranslate } from "@/app/shared/libs/i18n";
+
 export default function Request() {
 
-  const [page, setPage] = useState(false);
+  const t = useTranslate();
 
+  const [page, setPage] = useState(false);
   const [email, setEmail] = useState('');
 
   const submit = async (e: any) => {
@@ -26,18 +29,18 @@ export default function Request() {
           <Logo />
           <h1 className={style.title}>GoStat</h1>
         </div>
-        <h2 className={style.top__button}>{page === true ? 'Password reset email sent' : 'Password recovery'}</h2>
+        <h2 className={style.top__button}>{page === true ? t("auth.passwordRecovery.alert.title") : t("auth.passwordRecovery.form.title")}</h2>
       </div>
 
       {
         page === true
         ?
         <div className={style.main__text}>
-          <p>Password reset instructions sent. Check your email, or spam folder if not received.</p>
+          <p>{t("auth.passwordRecovery.alert.alert")}</p>
         </div>
         :
         <div className={style.input__block}>
-          <input onChange={(e) => {setEmail(e.target.value)}} className={style.input} type="text" placeholder="E-mail" />
+          <input onChange={(e) => {setEmail(e.target.value)}} className={style.input} type="text" placeholder={t("auth.passwordRecovery.form.input")} />
         </div>
       }
 
@@ -47,7 +50,7 @@ export default function Request() {
         <></>
         :
         <div className={style.main__block}>
-          <button onClick={() => {submit(email)}} className={style.button}>Send reset link</button>
+          <button onClick={() => {submit(email)}} className={style.button}>{t("auth.passwordRecovery.form.button")}</button>
         </div>
       }
 

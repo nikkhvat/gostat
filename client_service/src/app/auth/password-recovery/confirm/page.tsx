@@ -4,7 +4,10 @@ import style from '@/app/auth/password-recovery/confirm/page.module.css';
 import {Logo} from '@/app/shared/icons/components/logo';
 import InputComponent from '@/app/auth/components/Input/index';
 
+import { useTranslate } from "@/app/shared/libs/i18n";
+
 export default function Confirm() {
+  const t = useTranslate();
 
   const [password, setPassword] = useState('');
   const [repaetPassword, setRepeatPassword] = useState('');
@@ -25,26 +28,26 @@ export default function Confirm() {
           <Logo />
           <h1 className={style.title}>GoStat</h1>
         </div>
-        <h2 className={style.top__button}>Set new password</h2>
+        <h2 className={style.top__button}>{t("auth.passwordRecovery.reset.title")}</h2>
       </div>
 
       <div className={style.inputs}>
         <InputComponent
           typeProp="password"
-          placeholder="New password"
+          placeholder={t("auth.passwordRecovery.reset.password")}
           check={true}
           onChange={handlePasswordChange}
         />
         <InputComponent
           typeProp="password"
-          placeholder="Repeat password"
+          placeholder={t("auth.passwordRecovery.reset.repeat")}
           check={true}
           onChange={handleSetRepeatPassword}
         />
       </div>
 
       <div className={style.button__block}>
-        <button className={style.button}>Reset password</button>
+        <button className={style.button}>{t("auth.passwordRecovery.reset.button")}</button>
       </div>
 
     </div>

@@ -37,7 +37,7 @@ export const confirmEmail = async (code: string): Promise<AxiosResponse<IConfirm
 
 export const requestResetPAssword = async (body: IRequestResetPassword): Promise<AxiosResponse<IAuthResponse>> => {
   try {
-    const response = await api.post('/api/auth/password/request')
+    const response = await api.post('/api/auth/password/request', body)
     return response
   } catch (error) {
     console.log('Error fetching data:', error);

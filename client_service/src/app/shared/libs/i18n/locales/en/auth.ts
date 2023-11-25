@@ -28,6 +28,26 @@ export const auth = {
     button: "Send mail again",
   },
 
+  passwordRecovery: {
+    form: {
+      title: 'Password recovery',
+      button: 'Send reset link',
+      input: 'E-mail'
+    },
+
+    alert: {
+      title: 'Password reset email sent',
+      alert: 'Password reset instructions sent. Check your email, or spam folder if not received.'
+    },
+
+    reset: {
+      title: 'Set new password',
+      password: 'New password',
+      repeat: 'Repeat password',
+      button: 'Reset password'
+    }
+  },
+
   continue: "Continue",
   loading: "Loading ...",
 
