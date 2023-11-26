@@ -476,10 +476,6 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/http.ErrorAuthResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/http.ErrorAuthResponse'
       summary: Authenticate a user and get access token
       tags:
       - authentication

@@ -42,7 +42,7 @@ func (h *AuthServiceHandler) PasswordReset(ctx context.Context, req *pb.Password
 	token, err := h.service.PasswordReset(req.Secret, req.Password)
 
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "internal error")
+		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 
 	return &pb.PasswordResetResponse{

@@ -330,6 +330,11 @@ func (h *AuthHandler) PasswordReset(c *gin.Context) {
 
 	token, err := h.service.PasswordReset(c, req)
 
+	if strings.Contains(err.Error(), "no user found with the provided email and secret code") {
+		c.JSON(400, ErrorAuthResponse{Error: "invalid secret code"})
+		return
+	}
+
 	if err != nil {
 		c.JSON(400, ErrorAuthResponse{Error: err.Error()})
 		return
