@@ -303,12 +303,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/http.ErrorAuthResponse"
                         }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/http.ErrorAuthResponse"
-                        }
                     }
                 }
             }
