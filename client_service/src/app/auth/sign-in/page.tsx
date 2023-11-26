@@ -37,16 +37,52 @@ export default function SingIn() {
     setEmail(e.target.value);
   };
 
-  const submit = async (e: any) => {
-    e.preventDefault();
-    const response = await singIn({
-      login: email,
-      password: password,
-    });
+  const validatePassword = (password: string) => {
+    // Пароль больше или ровно 8 символов
+    const lengthRegex = /.{8,}/;
 
-    Storage.set("access_token", response.data.access_token);
-    router.push("/dashboard", { scroll: false });
-  };
+    // Пароль имеет спец знак
+    const specialCharRegex = /[!@#$%^&*(),_.?":{}|<>]/;
+
+    // Пароль имеет число
+    const digitRegex = /\d/;
+
+    // Пароль имеет большую и маленькую букву
+    const uppercaseRegex = /[A-Z]/;
+    const lowercaseRegex = /[a-z]/;
+
+    return (
+      lengthRegex.test(password) &&
+      specialCharRegex.test(password) &&
+      digitRegex.test(password) &&
+      uppercaseRegex.test(password) &&
+      lowercaseRegex.test(password)
+    );
+  }
+
+  const validateMail = (mail: string) => {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email)
+  }
+
+  const submit = async (e: any) => {
+    const validPassword = validatePassword(password)
+    const validMail = validateMail(email)
+
+    if (validPassword === true && validMail === true) {
+      // e.preventDefault();
+      // const response = await singIn({
+      //   login: email,
+      //   password: password,
+      // });
+
+      // Storage.set("access_token", response.data.access_token);
+      // router.push("/dashboard", { scroll: false });
+      alert('Пароль и логин валиден')
+    } else {
+      alert('Пароль или логин не валиден')
+    }
+  }
 
   return (
     <div className={styles.box}>
