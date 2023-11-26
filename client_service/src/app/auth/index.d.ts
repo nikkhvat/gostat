@@ -16,6 +16,10 @@ export interface IAuthResponse {
   access_token: string
 }
 
+export interface IRequestResetPassworsResponse {
+  successful: boolean
+}
+
 export interface IConfirmAccount {
   secret_number: string
 }
@@ -24,6 +28,7 @@ export interface IConfirmAccountResponse {
   successful: boolean
 }
 
-export interface IRequestResetPassword {
-  email: string
+export interface IResetPasswordRequest {
+  password: string
+  secret: string
 }

@@ -51,13 +51,13 @@
 .button {
   width: 360px;
   border-radius: 10px;
-  background: white;
+  background: var(--color8);
   padding: 15px;
   outline: none;
   border: none;
   cursor: pointer;
 
-  color: #181818;
+  color: var(--color1);
   font-family: Commissioner;
   font-size: 16px;
   font-style: normal;
