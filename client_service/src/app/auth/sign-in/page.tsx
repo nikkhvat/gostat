@@ -13,6 +13,8 @@ import { useRouter } from "next/navigation";
 
 import { useTranslate } from "@/app/shared/libs/i18n";
 
+import { REGEX } from '@/app/shared/constants/regex';
+
 export default function SingIn() {
   const router = useRouter();
 
@@ -38,18 +40,15 @@ export default function SingIn() {
   };
 
   const validatePassword = (password: string) => {
-    // Пароль больше или ровно 8 символов
-    const lengthRegex = /.{8,}/;
 
-    // Пароль имеет спец знак
-    const specialCharRegex = /[!@#$%^&*(),_.?":{}|<>]/;
+    const lengthRegex = REGEX.lengthRegex;
 
-    // Пароль имеет число
-    const digitRegex = /\d/;
+    const specialCharRegex = REGEX.specialCharRegex;
 
-    // Пароль имеет большую и маленькую букву
-    const uppercaseRegex = /[A-Z]/;
-    const lowercaseRegex = /[a-z]/;
+    const digitRegex = REGEX.digitRegex;
+
+    const uppercaseRegex = REGEX.uppercaseRegex;
+    const lowercaseRegex = REGEX.lowercaseRegex;
 
     return (
       lengthRegex.test(password) &&
@@ -69,18 +68,17 @@ export default function SingIn() {
     const validPassword = validatePassword(password)
     const validMail = validateMail(email)
 
-    if (validPassword === true && validMail === true) {
-      // e.preventDefault();
-      // const response = await singIn({
-      //   login: email,
-      //   password: password,
-      // });
+    if (password !== '' && email !== '' && validPassword === true && validMail === true) {
+      e.preventDefault();
+      const response = await singIn({
+        login: email,
+        password: password,
+      });
 
-      // Storage.set("access_token", response.data.access_token);
-      // router.push("/dashboard", { scroll: false });
-      alert('Пароль и логин валиден')
+      Storage.set("access_token", response.data.access_token);
+      router.push("/dashboard", { scroll: false });
     } else {
-      alert('Пароль или логин не валиден')
+      alert(t("auth.notValid"))
     }
   }
 
