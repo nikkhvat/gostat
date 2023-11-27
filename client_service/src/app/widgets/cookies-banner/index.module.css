@@ -1,0 +1,63 @@
+.container {
+  width: 420px;
+  height: 360px;
+  padding: 30px;
+  
+  
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 30;
+
+  position: absolute;
+  z-index: 999;
+  bottom: 30px;
+  left: 30px;
+
+  background-color: var(--inverse-color1); 
+
+  border-radius: 15px;
+}
+
+.cat_container {
+  width: 100%;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text {
+  color: var(--inverse-color8);
+  font-family: 'Commissioner';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.mark {
+  text-decoration-line: underline;
+  color: var(--orange-bg);
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.button {
+  display: flex;
+  padding: 15px;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 10px;
+  background: var(--inverse-color8);
+  color: var(--inverse-color1);
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border: none;
+  cursor: pointer;
+}

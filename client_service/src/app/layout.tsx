@@ -8,6 +8,7 @@ import { CookiesKeys } from './shared/services/cookie/types';
 
 import { setLanguage } from "@/app/shared/libs/i18n"
 import Lang from './Lang';
+import CookiesBanner from './widgets/cookies-banner';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -34,10 +35,11 @@ export default function RootLayout({
   setLanguage(lang);
 
   return (
-    <html lang={lang ?? "en"} >
+    <html lang={lang ?? "en"}>
       <body className={`${inter.className} ${theme?.value}`}>
         <Lang lang={lang} />
         {children}
+        <CookiesBanner />
       </body>
     </html>
   );

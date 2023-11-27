@@ -1,0 +1,66 @@
+.box {
+  padding: 60px 30px;
+  border-radius: 15px;
+  background: var(--color1);
+  height: 584px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.logo svg path {
+  fill: var(--color8);
+}
+
+.title {
+  color: var(--color8);
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.top__button {
+  color: var(--color6);
+  text-align: center;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 15px;
+}
+
+.inputs {
+  margin-top: 30px;
+}
+
+.button__block {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 210px;
+}
+
+.button {
+  width: 360px;
+  border-radius: 10px;
+  background: var(--color8);
+  padding: 15px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+
+  color: var(--color1);
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}

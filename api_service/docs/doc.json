@@ -323,16 +323,6 @@
                                 }
                             }
                         }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/http.ErrorAuthResponse"
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -908,9 +898,6 @@
             "service.ResetConfirmPasswordRequest": {
                 "type": "object",
                 "properties": {
-                    "mail": {
-                        "type": "string"
-                    },
                     "password": {
                         "type": "string"
                     },

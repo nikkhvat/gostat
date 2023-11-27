@@ -32,6 +32,21 @@ body,
   --color8: #181818;
   --color9: #EFEFEF;
   --color10: #FFFFFF;
+  --color11: #3C3C3C;
+  --color12: #FFFFFF;
+
+  --inverse-color1: #181818;
+  --inverse-color2: #1E1E1E;
+  --inverse-color3: #1E1E1E;
+  --inverse-color4: #3C3C3C;
+  --inverse-color5: #5A5A5A;
+  --inverse-color6: #5A5A5A;
+  --inverse-color7: #999999;
+  --inverse-color8: #FFFFFF;
+  --inverse-color9: #EFEFEF;
+  --inverse-color10: #FFFFFF;
+  --inverse-color11: #181818;
+  --inverse-color12: #3C3C3C;
 }
 
 .dark {
@@ -45,6 +60,21 @@ body,
   --color8: #FFFFFF;
   --color9: #EFEFEF;
   --color10: #FFFFFF;
+  --color11: #181818;
+  --color12: #3C3C3C;
+
+  --inverse-color1: #FFFFFF;
+  --inverse-color2: #F6F6F4;
+  --inverse-color3: #EFEFEF;
+  --inverse-color4: #C9C9C9;
+  --inverse-color5: #C9C9C9;
+  --inverse-color6: #999999;
+  --inverse-color7: #999999;
+  --inverse-color8: #181818;
+  --inverse-color9: #EFEFEF;
+  --inverse-color10: #FFFFFF;
+  --inverse-color11: #3C3C3C;
+  --inverse-color12: #FFFFFF;
 }
 
 @media (prefers-color-scheme: light) {
@@ -59,6 +89,21 @@ body,
     --color8: #181818;
     --color9: #EFEFEF;
     --color10: #FFFFFF;
+    --color11: #3C3C3C;
+    --color12: #FFFFFF;
+
+    --inverse-color1: #181818;
+    --inverse-color2: #1E1E1E;
+    --inverse-color3: #1E1E1E;
+    --inverse-color4: #3C3C3C;
+    --inverse-color5: #5A5A5A;
+    --inverse-color6: #5A5A5A;
+    --inverse-color7: #999999;
+    --inverse-color8: #FFFFFF;
+    --inverse-color9: #EFEFEF;
+    --inverse-color10: #FFFFFF;
+    --inverse-color11: #181818;
+    --inverse-color12: #3C3C3C;
   }
 }
 
@@ -74,6 +119,21 @@ body,
     --color8: #FFFFFF;
     --color9: #EFEFEF;
     --color10: #FFFFFF;
+    --color11: #181818;
+    --color12: #3C3C3C;
+
+    --inverse-color1: #FFFFFF;
+    --inverse-color2: #F6F6F4;
+    --inverse-color3: #EFEFEF;
+    --inverse-color4: #C9C9C9;
+    --inverse-color5: #C9C9C9;
+    --inverse-color6: #999999;
+    --inverse-color7: #999999;
+    --inverse-color8: #181818;
+    --inverse-color9: #EFEFEF;
+    --inverse-color10: #FFFFFF;
+    --inverse-color11: #3C3C3C;
+    --inverse-color12: #FFFFFF;
   }
 }
 

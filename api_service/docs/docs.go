@@ -303,12 +303,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/http.ErrorAuthResponse"
                         }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/http.ErrorAuthResponse"
-                        }
                     }
                 }
             }
@@ -850,9 +844,6 @@ const docTemplate = `{
         "service.ResetConfirmPasswordRequest": {
             "type": "object",
             "properties": {
-                "mail": {
-                    "type": "string"
-                },
                 "password": {
                     "type": "string"
                 },

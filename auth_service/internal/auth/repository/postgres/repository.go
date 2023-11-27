@@ -251,9 +251,9 @@ func (r UserRepository) PasswordRequest(mail string) (*model.User, error) {
 	return &user, nil
 }
 
-func (r UserRepository) PasswordReset(mail, password, secret string) (*model.User, error) {
+func (r UserRepository) PasswordReset(password, secret string) (*model.User, error) {
 	var user model.User
-	if err := r.db.Where("email = ? AND password_recovery_code = ?", mail, secret).First(&user).Error; err != nil {
+	if err := r.db.Where("password_recovery_code = ?", secret).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("no user found with the provided email and secret code")
 		}

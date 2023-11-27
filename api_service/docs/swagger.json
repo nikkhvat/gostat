@@ -296,12 +296,6 @@
                         "schema": {
                             "$ref": "#/definitions/http.ErrorAuthResponse"
                         }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/http.ErrorAuthResponse"
-                        }
                     }
                 }
             }
@@ -843,9 +837,6 @@
         "service.ResetConfirmPasswordRequest": {
             "type": "object",
             "properties": {
-                "mail": {
-                    "type": "string"
-                },
                 "password": {
                     "type": "string"
                 },
