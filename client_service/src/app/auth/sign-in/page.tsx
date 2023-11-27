@@ -13,6 +13,8 @@ import { useRouter } from "next/navigation";
 
 import { useTranslate } from "@/app/shared/libs/i18n";
 
+import { REGEX } from '@/app/shared/constants/regex';
+
 export default function SingIn() {
   const router = useRouter();
 
@@ -37,16 +39,37 @@ export default function SingIn() {
     setEmail(e.target.value);
   };
 
-  const submit = async (e: any) => {
-    e.preventDefault();
-    const response = await singIn({
-      login: email,
-      password: password,
-    });
+  const validatePassword = (password: string) => {
+    return (
+      REGEX.lengthRegex.test(password) &&
+      REGEX.specialCharRegex.test(password) &&
+      REGEX.digitRegex.test(password) &&
+      REGEX.uppercaseRegex.test(password) &&
+      REGEX.lowercaseRegex.test(password)
+    );
+  }
 
-    Storage.set("access_token", response.data.access_token);
-    router.push("/dashboard", { scroll: false });
-  };
+  const validateMail = (email: string) => {
+    return REGEX.emailRegex.test(email)
+  }
+
+  const submit = async (e: any) => {
+    const validPassword = validatePassword(password)
+    const validMail = validateMail(email)
+
+    if (password !== '' && email !== '' && validPassword === true && validMail === true) {
+      e.preventDefault();
+      const response = await singIn({
+        login: email,
+        password: password,
+      });
+
+      Storage.set("access_token", response.data.access_token);
+      router.push("/dashboard", { scroll: false });
+    } else {
+      alert(t("auth.notValid"))
+    }
+  }
 
   return (
     <div className={styles.box}>
