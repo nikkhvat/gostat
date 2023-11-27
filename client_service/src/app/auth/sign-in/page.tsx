@@ -40,28 +40,17 @@ export default function SingIn() {
   };
 
   const validatePassword = (password: string) => {
-
-    const lengthRegex = REGEX.lengthRegex;
-
-    const specialCharRegex = REGEX.specialCharRegex;
-
-    const digitRegex = REGEX.digitRegex;
-
-    const uppercaseRegex = REGEX.uppercaseRegex;
-    const lowercaseRegex = REGEX.lowercaseRegex;
-
     return (
-      lengthRegex.test(password) &&
-      specialCharRegex.test(password) &&
-      digitRegex.test(password) &&
-      uppercaseRegex.test(password) &&
-      lowercaseRegex.test(password)
+      REGEX.lengthRegex.test(password) &&
+      REGEX.specialCharRegex.test(password) &&
+      REGEX.digitRegex.test(password) &&
+      REGEX.uppercaseRegex.test(password) &&
+      REGEX.lowercaseRegex.test(password)
     );
   }
 
-  const validateMail = (mail: string) => {
-    const re = /\S+@\S+\.\S+/;
-    return re.test(email)
+  const validateMail = (email: string) => {
+    return REGEX.emailRegex.test(email)
   }
 
   const submit = async (e: any) => {

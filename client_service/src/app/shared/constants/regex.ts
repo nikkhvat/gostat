@@ -1,4 +1,5 @@
 export const REGEX = {
+  emailRegex: /\S+@\S+\.\S+/,
   lengthRegex: /.{8,}/,
   specialCharRegex: /[!@#$%^&*(),_.?":{}|<>]/,
   digitRegex: /\d/,
