@@ -9,7 +9,7 @@ import { useTranslate } from "@/app/shared/libs/i18n";
 import { useRouter, useSearchParams } from "next/navigation";
 import { resetPassword } from "../../api";
 
-import Storage from "@/app/utils/storage"
+import Storage from "@/app/shared/libs/storage"
 
 export default function Confirm() {
   const router = useRouter();
