@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect } from "react";
-import Storage from "../utils/storage";
+import Storage from "@/app/shared/libs/storage";
 
 import { useRouter } from "next/navigation";
 
