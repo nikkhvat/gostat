@@ -1,11 +1,17 @@
-import axios, { AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
+
+import Storage from '@/app/shared/libs/storage';
+
+interface CustomConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean
+}
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_HOST,
 });
 
-api.interceptors.request.use((config: any) => {
-    const token = localStorage.getItem('gostat_access_token');
+api.interceptors.request.use((config) => {
+  const token = Storage.get("access_token")
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -19,25 +25,34 @@ api.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    const originalRequest:any = error.config;
+    if (error.config?.url?.includes("api/auth")) {
+      return Promise.reject(error);
+    }
+
+    if (error.config === undefined) {
+      return Promise.reject(error);
+    }
+
+    const originalRequest: CustomConfig = error.config;
 
     if (error.response?.status === 401 && originalRequest._retry != true) {
       originalRequest._retry = true;
       try {
         const refreshResponse = await axios.post('/api/auth/refresh');
-        const newAccessToken = refreshResponse.data.access_token;
-        localStorage.setItem('gostat_access_token', newAccessToken);
+        Storage.set("access_token", refreshResponse.data.access_token)
       } catch {
-
+        return Promise.reject(error);
       }
 
       if (error.config) {
         return api.request(error.config);
       }
     } else if (originalRequest._retry === true && error.response?.status === 401) {
-      localStorage.removeItem('gostat_access_token');
+      Storage.delete("access_token")
 
-      window.location.href = '/auth';
+      if (window) {
+        window.location.href = '/auth';
+      }
     }
 
     return Promise.reject(error);

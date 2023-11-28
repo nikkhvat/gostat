@@ -12,7 +12,7 @@ import Image from "next/image";
 import PopUp from "./Popup";
 
 import { useRouter } from "next/navigation";
-import Storage from "@/app/utils/storage";
+import Storage from '@/app/shared/libs/storage';
 import Button from "../components/Button";
 import { IUserData } from "..";
 

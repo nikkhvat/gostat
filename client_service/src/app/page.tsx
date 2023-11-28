@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import styles from './page.module.css' 
 
-import Storage from "@/app/utils/storage";
+import Storage from '@/app/shared/libs/storage';
 
 import { useRouter } from "next/navigation";
 

@@ -7,7 +7,7 @@ import { Logo } from "@/app/shared/icons/components/logo";
 
 import { useEffect, useState } from 'react';
 import { singIn } from '../api';
-import Storage from '@/app/utils/storage';
+import Storage from '@/app/shared/libs/storage';
 
 import { useRouter } from "next/navigation";
 

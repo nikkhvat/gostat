@@ -1,6 +1,6 @@
 "use client"
 
-import setCookiesTheme from "@/app/actions/theme";
+import setCookiesTheme from "@/app/shared/actions/theme";
 import React from "react";
 
 import { DarkCat, LightCat, LightDarkCat } from "@/app/shared/icons/components/icon-cat-theme";

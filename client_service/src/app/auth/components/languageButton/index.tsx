@@ -2,7 +2,7 @@
 import React from 'react';
 import style from './index.module.css';
 
-import setCookiesLang from '@/app/actions/lang';
+import setCookiesLang from '@/app/shared/actions/lang';
 
 import { APP_LANGUAGES_TYPE } from '@/app/shared/constants/languages';
 
