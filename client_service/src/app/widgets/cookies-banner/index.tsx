@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./index.module.css"
 import { CookiesCat } from "@/app/shared/icons/components/cookies-cat";
 
-import Storage from "@/app/utils/storage";
+import Storage from "@/app/shared/libs/storage";
 
 import { useTranslate } from "@/app/shared/libs/i18n";
 
