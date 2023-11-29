@@ -9,12 +9,18 @@ interface InputProps {
   placeholder: string;
   check?: boolean;
   value?: string;
+  autoComplete?: string,
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input: React.FC<InputProps> = ({ typeProp, placeholder, check, onChange}) => {
-
-  let [type, setType] = useState(typeProp)
+const Input: React.FC<InputProps> = ({
+  typeProp,
+  placeholder,
+  check,
+  autoComplete, 
+  onChange,
+}) => {
+  let [type, setType] = useState(typeProp);
 
   const checkFunction = () => {
     setType(type === "password" ? "text" : "password");
@@ -27,6 +33,7 @@ const Input: React.FC<InputProps> = ({ typeProp, placeholder, check, onChange}) 
         type={type}
         placeholder={placeholder}
         onChange={onChange}
+        autoComplete={autoComplete}
       />
 
       {check && (
@@ -43,6 +50,6 @@ const Input: React.FC<InputProps> = ({ typeProp, placeholder, check, onChange}) 
       )}
     </div>
   );
-}
+};
 
 export default Input;

@@ -56,16 +56,14 @@ export default function Request() {
             className={style.input}
             type="text"
             placeholder={t("auth.passwordRecovery.form.input")}
+            autoComplete="email"
           />
         </div>
       )}
 
       {page === Page.Request && (
         <div className={style.main__block}>
-          <button
-            onClick={() => submit(email)}
-            className={style.button}
-          >
+          <button onClick={() => submit(email)} className={style.button}>
             {t("auth.passwordRecovery.form.button")}
           </button>
         </div>
