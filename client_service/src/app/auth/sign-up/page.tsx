@@ -76,30 +76,32 @@ export default function SingIn() {
 
       <form className={styles.form}>
         <fieldset className={styles.fieldset}>
-          <legend className={styles.legend}>
-            {t("auth.signUp.subtitle")}
-          </legend>
+          <legend className={styles.legend}>{t("auth.signUp.subtitle")}</legend>
           <InputComponent
             typeProp="text"
             placeholder={t("auth.namePlaceholder")}
             onChange={handleNameChange}
+            autoComplete="username"
           />
           <InputComponent
             typeProp="email"
             placeholder={t("auth.emailPlaceholder")}
             onChange={handleEmailChange}
+            autoComplete="email"
           />
           <InputComponent
             typeProp="password"
             placeholder={t("auth.passwordPlaceholder")}
             check={true}
             onChange={handlePasswordChange}
+            autoComplete="new-password"
           />
           <InputComponent
             typeProp="password"
             placeholder={t("auth.repeatPlaceholder")}
             check={true}
             onChange={handleRepeatChange}
+            autoComplete="new-password"
           />
         </fieldset>
         <button className={styles.registration__button} onClick={submit}>

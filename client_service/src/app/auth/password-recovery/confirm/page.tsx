@@ -64,12 +64,14 @@ export default function Confirm() {
           placeholder={t("auth.passwordRecovery.reset.password")}
           check={true}
           onChange={handlePasswordChange}
+          autoComplete="new-password"
         />
         <InputComponent
           typeProp="password"
           placeholder={t("auth.passwordRecovery.reset.repeat")}
           check={true}
           onChange={handleSetRepeatPassword}
+          autoComplete="new-password"
         />
       </div>
 

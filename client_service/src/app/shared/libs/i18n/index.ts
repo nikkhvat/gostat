@@ -46,7 +46,6 @@ function translate(lang: string, resources: any) {
   }
 }
 
-
 const i18n = {
   resources: localeResources,
   setLanguage: function(lang: APP_LANGUAGES_TYPE) {
