@@ -1,19 +1,18 @@
-"use client"
-import styles from './page.module.css' 
-import InputComponent from '@/app/auth/components/Input/index';
+"use client";
+
+import React from "react";
 import Link from "next/link";
-
-import { Logo } from "@/app/shared/icons/components/logo";
-
-import { useEffect, useState } from 'react';
-import { singIn } from '../api';
-import Storage from '@/app/shared/libs/storage';
-
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import Storage from "@/app/shared/libs/storage";
+import { Logo } from "@/app/shared/icons/components/logo";
+import InputComponent from "@/app/auth/components/Input/index";
 import { useTranslate } from "@/app/shared/libs/i18n";
+import { REGEX } from "@/app/shared/constants/regex";
 
-import { REGEX } from '@/app/shared/constants/regex';
+import { singIn } from "../api";
+import styles from "./page.module.css";
 
 export default function SingIn() {
   const router = useRouter();
@@ -47,17 +46,17 @@ export default function SingIn() {
       REGEX.uppercaseRegex.test(password) &&
       REGEX.lowercaseRegex.test(password)
     );
-  }
+  };
 
   const validateMail = (email: string) => {
-    return REGEX.emailRegex.test(email)
-  }
+    return REGEX.emailRegex.test(email);
+  };
 
   const submit = async (e: any) => {
-    const validPassword = validatePassword(password)
-    const validMail = validateMail(email)
+    const validPassword = validatePassword(password);
+    const validMail = validateMail(email);
 
-    if (password !== '' && email !== '' && validPassword === true && validMail === true) {
+    if (password !== "" && email !== "" && validPassword === true && validMail === true) {
       e.preventDefault();
       const response = await singIn({
         login: email,
@@ -67,9 +66,9 @@ export default function SingIn() {
       Storage.set("access_token", response.data.access_token);
       router.push("/dashboard", { scroll: false });
     } else {
-      alert(t("auth.notValid"))
+      alert(t("auth.notValid"));
     }
-  }
+  };
 
   return (
     <div className={styles.box}>
@@ -85,15 +84,14 @@ export default function SingIn() {
         <fieldset className={styles.fieldset}>
           <legend className={styles.legend}>{t("auth.signIn.subtitle")}</legend>
           <InputComponent
-            typeProp="email"
+            type="email"
             placeholder={t("auth.emailPlaceholder")}
             onChange={handleEmailChange}
             autoComplete="username"
           />
           <InputComponent
-            typeProp="password"
+            type="password"
             placeholder={t("auth.passwordPlaceholder")}
-            check={true}
             onChange={handlePasswordChange}
             autoComplete="current-password"
           />
@@ -103,7 +101,7 @@ export default function SingIn() {
         </button>
       </form>
 
-      <Link className={styles.link} href={`/auth/sign-up`}>
+      <Link className={styles.link} href="/auth/sign-up">
         {t("auth.signIn.link")}
       </Link>
     </div>

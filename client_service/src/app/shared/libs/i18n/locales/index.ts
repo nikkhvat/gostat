@@ -1,7 +1,7 @@
-import { enLocale } from './en';
-import { ruLocale } from './ru';
+import { enLocale } from "./en";
+import { ruLocale } from "./ru";
 
-export const defaultNS = 'auth';
+export const defaultNS = "auth";
 
 export const localeResources = {
   ru: {

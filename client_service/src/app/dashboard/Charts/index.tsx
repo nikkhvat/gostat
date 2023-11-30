@@ -1,12 +1,13 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
-import styles from "./index.module.css";
-import Button from "../components/Button";
-
-import ChartVisits from "./ChartVisits";
 
 import {useTranslate} from "@/app/shared/libs/i18n";
+
+import styles from "./index.module.css";
+import Button from "../components/Button";
+import ChartVisits from "./ChartVisits";
+
 
 enum ActiveScreen {
   Visits = 1,
@@ -31,7 +32,7 @@ interface ICharts {
 }
 
 const Charts: React.FC<ICharts> = ({ activeScreen, stats }) => {
-  const t = useTranslate()
+  const t = useTranslate();
   const [chartsState, setChartState] = useState<IChartsButtonsState>({
     [ActiveScreen.Visits]: { activeButton: 0 },
     [ActiveScreen.TopCountries]: { activeButton: 1 },

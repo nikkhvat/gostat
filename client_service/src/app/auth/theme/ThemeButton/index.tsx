@@ -1,11 +1,11 @@
-"use client"
+"use client";
+
+import React from "react";
+import classNames from "classnames/bind";
 
 import setCookiesTheme from "@/app/shared/actions/theme";
-import React from "react";
-
 import { DarkCat, LightCat, LightDarkCat } from "@/app/shared/icons/components/icon-cat-theme";
 
-import classNames from "classnames/bind";
 
 import style from "./index.module.css";
 

@@ -1,22 +1,19 @@
-"use client"
-import React, { useEffect, useState } from "react";
+"use client";
 
-import styles from "./index.module.css";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import defaultAvatar from "@/app/assets/header/avatar/default_dark.svg";
-
 import { Notification } from "@/app/shared/icons/components/notification";
+import Storage from "@/app/shared/libs/storage";
+import { useTranslate } from "@/app/shared/libs/i18n";
 
-import Image from "next/image";
-
+import styles from "./index.module.css";
 import PopUp from "./Popup";
-
-import { useRouter } from "next/navigation";
-import Storage from '@/app/shared/libs/storage';
 import Button from "../components/Button";
 import { IUserData } from "..";
 
-import { useTranslate } from "@/app/shared/libs/i18n";
 
 
 interface IHeader {

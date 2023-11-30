@@ -1,11 +1,13 @@
 import React from "react";
-import styles from "./layout.module.css";
 
 import {
   LayoutBottomLeftPicture,
   LayoutBottomRightPicture,
   LayoutTopLeftPicture,
 } from "@/app/shared/icons/components/layout-picture";
+
+import styles from "./layout.module.css";
+
 
 export default function AuthLayout({
   children,

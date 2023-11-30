@@ -1,12 +1,12 @@
+import React from "react";
 import Link from "next/link";
 
-import styles from "./styles/not-found.module.css"
+import styles from "./styles/not-found.module.css";
 import { NotFoundCat } from "./shared/icons/components/not-found";
-
 import { useTranslate } from "./shared/libs/i18n";
 
 export default function NotFound() {
-  const t = useTranslate()
+  const t = useTranslate();
 
   return (
     <div className={styles.container}>

@@ -1,6 +1,6 @@
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
-import { CookiesKeys } from './types';
+import { CookiesKeys } from "./types";
 
 export class CookieService {
   public static saveCookie(name: CookiesKeys, value: string, options: any) {

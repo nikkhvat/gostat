@@ -1,15 +1,16 @@
-"use client"
+"use client";
+
 import React,{useState} from "react";
-import style from '@/app/auth/password-recovery/confirm/page.module.css';
-import {Logo} from '@/app/shared/icons/components/logo';
-import InputComponent from '@/app/auth/components/Input/index';
-
-import { useTranslate } from "@/app/shared/libs/i18n";
-
 import { useRouter, useSearchParams } from "next/navigation";
+
+import style from "@/app/auth/password-recovery/confirm/page.module.css";
+import {Logo} from "@/app/shared/icons/components/logo";
+import InputComponent from "@/app/auth/components/Input/index";
+import { useTranslate } from "@/app/shared/libs/i18n";
+import Storage from "@/app/shared/libs/storage";
+
 import { resetPassword } from "../../api";
 
-import Storage from "@/app/shared/libs/storage"
 
 export default function Confirm() {
   const router = useRouter();
@@ -18,19 +19,19 @@ export default function Confirm() {
 
   const secretCode = useSearchParams().get("code");
 
-  const [password, setPassword] = useState('');
-  const [repaetPassword, setRepeatPassword] = useState('');
+  const [password, setPassword] = useState("");
+  const [repaetPassword, setRepeatPassword] = useState("");
 
   const handlePasswordChange = (e: any) => setPassword(e.target.value);
   const handleSetRepeatPassword = (e: any) => setRepeatPassword(e.target.value);
 
   const submit = async () => {
     if (password !== repaetPassword) {
-      return alert("Пароль не совпадают")
+      return alert("Пароль не совпадают");
     }
     
     if (secretCode === null ) {
-      return alert("Возникла ошибка, секретный код не может быть пустым")
+      return alert("Возникла ошибка, секретный код не может быть пустым");
     }
 
     try {
@@ -41,10 +42,16 @@ export default function Confirm() {
   
       Storage.set("access_token", resp.data.access_token);
       router.push("/dashboard", { scroll: false });
-    } catch (error) {
-      alert("Возникла ошибка")
+    } catch (error: any) {
+      if (error.body.error === "code invalid") {
+        alert("Не верный код");
+      } else if (error.body.error === "timeout") {
+        alert("Истекло время");
+      } else {
+        alert("Возникла ошибка");
+      }
     }
-  }
+  };
   
   return (
     <div className={style.box}>
@@ -60,16 +67,14 @@ export default function Confirm() {
 
       <div className={style.inputs}>
         <InputComponent
-          typeProp="password"
+          type="password"
           placeholder={t("auth.passwordRecovery.reset.password")}
-          check={true}
           onChange={handlePasswordChange}
           autoComplete="new-password"
         />
         <InputComponent
-          typeProp="password"
+          type="password"
           placeholder={t("auth.passwordRecovery.reset.repeat")}
-          check={true}
           onChange={handleSetRepeatPassword}
           autoComplete="new-password"
         />
@@ -81,5 +86,5 @@ export default function Confirm() {
         </button>
       </div>
     </div>
-  )
+  );
 }

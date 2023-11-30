@@ -1,5 +1,4 @@
 
-
 export interface Stat {
   stats: {
     total_visits: number

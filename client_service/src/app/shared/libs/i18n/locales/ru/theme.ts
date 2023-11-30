@@ -6,4 +6,4 @@ export const theme = {
   system: "Системная",
   back: "Вернуться",
   continue: "Продолжить"
-}
+};

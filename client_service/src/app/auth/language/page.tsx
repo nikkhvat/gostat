@@ -1,13 +1,14 @@
 import React from "react";
-import style from './page.module.css';
-import Image from 'next/image';
+import Image from "next/image";
 import Link from "next/link";
-import LanguageButton from "@/app/auth/components/languageButton/index";
-import image from '@/app/assets/auth/earth.svg';
-import { languagesList, useTranslate } from "@/app/shared/libs/i18n";
-
 import { cookies } from "next/headers";
+
+import LanguageButton from "@/app/auth/components/languageButton/index";
+import image from "@/app/assets/auth/earth.svg";
+import { languagesList, useTranslate } from "@/app/shared/libs/i18n";
 import { CookiesKeys } from "@/app/shared/services/cookie/types";
+
+import style from "./page.module.css";
 
 export default function Language() {  
   const cookieStore = cookies();
@@ -54,7 +55,7 @@ export default function Language() {
               key={language.code}
               article={language.code}
               language={language.name}
-              selected={lang?.value.toLowerCase() ?? 'en'}
+              selected={lang?.value.toLowerCase() ?? "en"}
             />
           ))}
         </div>
@@ -65,10 +66,10 @@ export default function Language() {
       </div>
       <div className={style.box__bottom}>
         <div className={style.bottom__bottoms}>
-          <Link className={style.back__button} href={`/dashboard`}>
+          <Link className={style.back__button} href="/dashboard">
             {t("theme.back")}
           </Link>
-          <Link className={style.continue__button} href={`/dashboard`}>
+          <Link className={style.continue__button} href="/dashboard">
             {t("theme.continue")}
           </Link>
         </div>

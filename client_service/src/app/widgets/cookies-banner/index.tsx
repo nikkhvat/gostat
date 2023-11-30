@@ -1,30 +1,30 @@
-"use client"
+"use client";
+
 import React, { useState, useEffect } from "react";
 
-import styles from "./index.module.css"
 import { CookiesCat } from "@/app/shared/icons/components/cookies-cat";
-
 import Storage from "@/app/shared/libs/storage";
-
 import { useTranslate } from "@/app/shared/libs/i18n";
 
+import styles from "./index.module.css";
+
 const CookiesBanner: React.FC = () => {
-  const t = useTranslate()
+  const t = useTranslate();
 
   const [show, setShow] = useState(false);
 
   const close = () => {
     Storage.set("is_allowed_cookie", true);
     setShow(false);
-  }
+  };
 
   useEffect(() => {
     if (Boolean(Storage.get("is_allowed_cookie")) !== true) {
       setShow(true);
     }
-  }, [])
+  }, []);
 
-  if (show == false) return <></>
+  if (show == false) return <></>;
   
   return (
     <div className={styles.container}>
