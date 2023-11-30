@@ -9,8 +9,12 @@ export const errors = {
   },
 
   confirmMail: {
-    inValidSecret: "Invalid secret",
+    inValidSecret: "Invalid secret code",
     unexpectedError: "Unexpected error, failed to verify account"
+  },
+
+  passwordRecovery: {
+    inValidSecret: "Invalid secret code"
   },
 
   error: 'an error occurred'

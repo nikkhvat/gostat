@@ -43,12 +43,8 @@ export default function Confirm() {
       router.push("/dashboard", { scroll: false });
 
     } catch (error: any) {
-      if (error.body.error === 'code invalid') {
-        alert('Не верный код')
-      } else if (error.body.error === 'timeout') {
-        alert('Истекло время')
-      } else {
-        alert('Возникла ошибка')
+      if (error.body.error === 'invalid secret code') {
+        alert(t("errors.passwordRecovery.inValidSecret"))
       }
     }
   }
