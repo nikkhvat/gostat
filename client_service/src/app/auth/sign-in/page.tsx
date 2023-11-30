@@ -71,7 +71,7 @@ export default function SingIn() {
         router.push("/dashboard", { scroll: false });
 
       } catch(error: any) {
-        if (error.body.error === "login or password is not correct") {
+        if (error.response.data.error === "login or password is not correct") {
           alert(t("errors.signIn.inCorrect"));
         } else {
           alert(t("errors.error"));

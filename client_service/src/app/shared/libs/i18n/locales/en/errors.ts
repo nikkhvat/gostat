@@ -9,6 +9,7 @@ export const errors = {
   },
 
   passwordsDontMatch: "Passwords don't match",
+  passwordNotSecure: "Password must be at least 8 characters, include an uppercase letter and a special character",
 
   confirmMail: {
     inValidSecret: "Invalid secret code",

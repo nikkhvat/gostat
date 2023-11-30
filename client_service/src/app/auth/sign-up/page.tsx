@@ -14,8 +14,6 @@ import { useTranslate } from "@/app/shared/libs/i18n";
 import { singUp } from "../api";
 import styles from "./page.module.css";
 
-
-
 export default function SingIn() {  
   const router = useRouter();
 
@@ -33,22 +31,13 @@ export default function SingIn() {
   const [repeat, setRepeat] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [login, setLogin] = useState("");
 
-  const handlePasswordChange = (e: any) => {
-    setPassword(e.target.value);
-  };
-
-  const handleNameChange = (e: any) => {
-    setName(e.target.value);
-  };
-
-  const handleEmailChange = (e: any) => {
-    setEmail(e.target.value);
-  };
-
-  const handleRepeatChange = (e: any) => {
-    setRepeat(e.target.value);
-  };
+  const handleNameChange = (e: any) => setName(e.target.value);
+  const handleEmailChange = (e: any) => setEmail(e.target.value);
+  const handleRepeatChange = (e: any) => setRepeat(e.target.value);
+  const handleLoginChange = (e: any) => setLogin(e.target.value);
+  const handlePasswordChange = (e: any) => setPassword(e.target.value);
 
   const submit = async (e: any) => {
     if (password != repeat) {
@@ -63,17 +52,19 @@ export default function SingIn() {
         last_name: "-",
         middle_name: "-",
         mail: email,
-        login: email,
+        login: login,
         password: password,
       }); 
       Storage.set("access_token", response.data.access_token);
       router.push("/dashboard", { scroll: false });
 
     } catch(error: any) {
-      if (error.body.error === "email already in exists") {
+      if (error.response.data.error === "email already in exists") {
         alert(t("errors.signUP.emailExists"));
-      } else if (error.body.error === "login already in exists") {
+      } else if (error.response.data.error === "login already in exists") {
         alert(t("errors.signUP.loginExists"));
+      } else if (error.response.data.error === "password must be at least 8 characters, include an uppercase letter and a special character") {
+        alert(t("errors.passwordNotSecure"));
       } else {
         alert(t("errors.error"));
       }
@@ -97,13 +88,19 @@ export default function SingIn() {
             type="text"
             placeholder={t("auth.namePlaceholder")}
             onChange={handleNameChange}
-            autoComplete="username"
+            autoComplete="given-name"
           />
           <InputComponent
             type="email"
             placeholder={t("auth.emailPlaceholder")}
             onChange={handleEmailChange}
             autoComplete="email"
+          />
+          <InputComponent
+            type="email"
+            placeholder={t("auth.loginPlaceholder")}
+            onChange={handleLoginChange}
+            autoComplete="username"
           />
           <InputComponent
             type="password"

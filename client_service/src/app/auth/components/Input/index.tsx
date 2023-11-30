@@ -3,9 +3,11 @@
 import React, { ChangeEvent, useState } from "react";
 
 import { Eye, EyeOff } from "@/app/shared/icons/components/icon-eye";
+import debounce from "@/app/shared/libs/debounce/debounce";
 
 import styles from "./index.module.css";
 import { InputType, AutoCompleteType } from "./index.d";
+
 
 interface InputProps {
   type: InputType;
@@ -33,27 +35,30 @@ const Input: React.FC<InputProps> = ({
     else setEyeMode(EyeMode.Hide);
   };
 
+  const debouncedOnChange = debounce(onChange as any, 200);
+
   return (
     <div className={styles.container}>
       <input
         className={styles.input}
         type={type === "password" ? eyeMode : type}
         placeholder={placeholder}
-        onChange={onChange}
+        onChange={debouncedOnChange}
         autoComplete={autoComplete}
       />
 
-      {type === "password" &&
+      {type === "password" && (
         <button
           type="button"
           className={styles.element}
           onClick={checkFunction}
           tabIndex={0}
           aria-pressed={eyeMode === EyeMode.Hide}
-          aria-label={type === "password" ? "Show password" : "Hide password"}
+          aria-label={EyeMode.Hide ? "Show password" : "Hide password"}
         >
-          {eyeMode === EyeMode.Hide ? <Eye /> : <EyeOff />}
-        </button>}
+          {eyeMode === EyeMode.Show ? <Eye /> : <EyeOff />}
+        </button>
+      )}
     </div>
   );
 };

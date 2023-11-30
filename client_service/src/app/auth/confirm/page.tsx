@@ -30,9 +30,9 @@ export default function Confirm() {
         setConfirmed(true);
       }
     } catch (error: any) {
-      if (error.body.error === "Invalid secret") {
+      if (error.response.data.error === "Invalid secret") {
         alert(t("errors.confirmMail.inValidSecret"));
-      } else if (error.body.error === "Unexpected error, failed to verify account") {
+      } else if (error.response.data.error === "Unexpected error, failed to verify account") {
         alert(t("errors.confirmMail.unexpectedError"));
       }
     }

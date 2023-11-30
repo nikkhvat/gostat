@@ -54,6 +54,7 @@ export const auth = {
 
   namePlaceholder: "Name",
   emailPlaceholder: "E-mail",
+  loginPlaceholder: "Login",
   passwordPlaceholder: "Password",
   repeatPlaceholder: "Repeat password",
 };
