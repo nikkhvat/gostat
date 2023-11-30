@@ -46,7 +46,7 @@ export default function Confirm() {
       router.push("/dashboard", { scroll: false });
 
     } catch (error: any) {
-      if (error.body.error === "invalid secret code") {
+      if (error.response.data.error === "invalid secret code") {
         alert(t("errors.passwordRecovery.inValidSecret"));
       }
     }

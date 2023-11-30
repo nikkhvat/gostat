@@ -9,6 +9,7 @@ export const errors = {
   },
 
   passwordsDontMatch: "Пароли не совпадают",
+  passwordNotSecure: "Пароль должен содержать не менее 8 символов, включая заглавную букву и специальный символ",
 
   confirmMail: {
     inValidSecret: "Не верный секретный код",

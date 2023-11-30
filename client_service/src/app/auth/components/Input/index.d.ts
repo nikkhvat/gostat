@@ -58,5 +58,6 @@ export type AutoCompleteType =
   | "tel-area-code"
   | "tel-local"
   | "tel-extension"
-  | "impp";
+  | "impp"
+  | "given-name";
 
