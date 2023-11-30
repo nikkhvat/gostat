@@ -5,13 +5,14 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { singUp } from "../api";
+import styles from "./page.module.css";
+
 import Storage from "@/app/shared/libs/storage";
 import { Logo } from "@/app/shared/icons/components/logo";
 import InputComponent from "@/app/auth/components/Input/index";
 import { useTranslate } from "@/app/shared/libs/i18n";
 
-import { singUp } from "../api";
-import styles from "./page.module.css";
 
 
 export default function SingIn() {  
@@ -64,12 +65,12 @@ export default function SingIn() {
       router.push("/dashboard", { scroll: false });
 
     } catch(error: any) {
-      if (error.body.error === 'email already in exists') {
-        alert(t("errors.signUP.emailExists"))
-      } else if (error.body.error === 'login already in exists') {
-        alert(t("errors.signUP.loginExists"))
+      if (error.body.error === "email already in exists") {
+        alert(t("errors.signUP.emailExists"));
+      } else if (error.body.error === "login already in exists") {
+        alert(t("errors.signUP.loginExists"));
       } else {
-        alert(t("errors.error"))
+        alert(t("errors.error"));
       }
     }
   };

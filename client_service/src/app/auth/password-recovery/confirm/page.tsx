@@ -5,11 +5,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { resetPassword } from "../../api";
 
+import Storage from "@/app/shared/libs/storage";
 import style from "@/app/auth/password-recovery/confirm/page.module.css";
 import {Logo} from "@/app/shared/icons/components/logo";
 import InputComponent from "@/app/auth/components/Input/index";
 import { useTranslate } from "@/app/shared/libs/i18n";
-import Storage from "@/app/shared/libs/storage";
 
 
 

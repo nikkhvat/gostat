@@ -17,5 +17,5 @@ export const errors = {
     inValidSecret: "Invalid secret code"
   },
 
-  error: 'an error occurred'
-}
+  error: "an error occurred"
+};
