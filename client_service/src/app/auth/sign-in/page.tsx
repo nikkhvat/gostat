@@ -58,17 +58,29 @@ export default function SingIn() {
     const validMail = validateMail(email)
 
     if (password !== '' && email !== '' && validPassword === true && validMail === true) {
-      e.preventDefault();
-      const response = await singIn({
-        login: email,
-        password: password,
-      });
 
-      Storage.set("access_token", response.data.access_token);
-      router.push("/dashboard", { scroll: false });
+      try {
+        e.preventDefault();
+        const response = await singIn({
+          login: email,
+          password: password,
+        });
+
+        Storage.set("access_token", response.data.access_token);
+        router.push("/dashboard", { scroll: false });
+
+      } catch(error: any) {
+        if (error.body.error === 'login or password is not correct') {
+          alert(t("errors.signIn.inCorrect"))
+        } else {
+          alert(t("errors.error"))
+        }
+      }
+
     } else {
       alert(t("auth.notValid"))
     }
+    
   }
 
   return (
