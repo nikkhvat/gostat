@@ -5,6 +5,7 @@ import { dashboard } from "./dashboard"
 import { menu } from "./menu"
 import { cookies } from "./cookies"
 import { notFound } from "./not-found"
+import { errors } from "./errors"
 
 export const ruLocale = {
   auth,
@@ -13,5 +14,6 @@ export const ruLocale = {
   dashboard,
   menu,
   cookies,
-  notFound
+  notFound,
+  errors
 }

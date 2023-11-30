@@ -41,8 +41,15 @@ export default function Confirm() {
   
       Storage.set("access_token", resp.data.access_token);
       router.push("/dashboard", { scroll: false });
-    } catch (error) {
-      alert("Возникла ошибка")
+
+    } catch (error: any) {
+      if (error.body.error === 'code invalid') {
+        alert('Не верный код')
+      } else if (error.body.error === 'timeout') {
+        alert('Истекло время')
+      } else {
+        alert('Возникла ошибка')
+      }
     }
   }
   

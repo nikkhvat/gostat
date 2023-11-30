@@ -14,7 +14,6 @@ import { useRouter } from "next/navigation";
 import { useTranslate } from "@/app/shared/libs/i18n";
 
 
-
 export default function SingIn() {  
   const router = useRouter();
 
@@ -50,18 +49,29 @@ export default function SingIn() {
   };
 
   const submit = async (e: any) => {
-    e.preventDefault();
-    const response = await singUp({
-      first_name: name,
-      last_name: "-",
-      middle_name: "-",
-      mail: email,
-      login: email,
-      password: password,
-    });
 
-    Storage.set("access_token", response.data.access_token);
-    router.push("/dashboard", { scroll: false });
+    try {
+      e.preventDefault();
+      const response = await singUp({
+        first_name: name,
+        last_name: "-",
+        middle_name: "-",
+        mail: email,
+        login: email,
+        password: password,
+      }); 
+      Storage.set("access_token", response.data.access_token);
+      router.push("/dashboard", { scroll: false });
+
+    } catch(error: any) {
+      if (error.body.error === 'email already in exists') {
+        alert(t("errors.signUP.emailExists"))
+      } else if (error.body.error === 'login already in exists') {
+        alert(t("errors.signUP.loginExists"))
+      } else {
+        alert(t("errors.error"))
+      }
+    }
   };
 
   return (
