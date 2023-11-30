@@ -1,10 +1,10 @@
-import { auth } from "./auth"
-import { theme } from "./theme"
-import { language } from "./language"
-import { dashboard } from "./dashboard"
-import { menu } from "./menu"
-import { cookies } from "./cookies"
-import { notFound } from "./not-found"
+import { auth } from "./auth";
+import { theme } from "./theme";
+import { language } from "./language";
+import { dashboard } from "./dashboard";
+import { menu } from "./menu";
+import { cookies } from "./cookies";
+import { notFound } from "./not-found";
 
 export const ruLocale = {
   auth,
@@ -14,4 +14,4 @@ export const ruLocale = {
   menu,
   cookies,
   notFound
-}
+};

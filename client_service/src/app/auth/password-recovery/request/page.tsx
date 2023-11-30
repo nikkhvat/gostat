@@ -1,11 +1,13 @@
-"use client"
+"use client";
+
 import React, { useState } from "react";
-import style from '@/app/auth/password-recovery/request/page.module.css'
-import {Logo} from '@/app/shared/icons/components/logo';
+
+import style from "@/app/auth/password-recovery/request/page.module.css";
+import {Logo} from "@/app/shared/icons/components/logo";
+import { useTranslate } from "@/app/shared/libs/i18n";
 
 import { requestResetPassword } from "../../api";
 
-import { useTranslate } from "@/app/shared/libs/i18n";
 
 enum Page {
   Request = "request",
@@ -16,7 +18,7 @@ export default function Request() {
   const t = useTranslate();
 
   const [page, setPage] = useState(Page.Request);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
 
   const submit = async (e: any) => {
     try {
@@ -26,9 +28,9 @@ export default function Request() {
         setPage(Page.Alert);
       }
     } catch (error: any) {
-      alert("Произошла ошибка")
+      alert("Произошла ошибка");
     }
-  }
+  };
 
   return (
     <div className={style.box}>

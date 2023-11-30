@@ -1,8 +1,8 @@
 "use client";
 
-import styles from "./index.module.css";
-
+import React from "react";
 import Image from "next/image";
+import classNames from "classnames/bind";
 
 import {
   TabIconBrowser,
@@ -10,15 +10,13 @@ import {
   TabIconGlobe,
   TabIconTerminal,
 } from "@/app/shared/icons/components/tab-icon";
-
 import BackgroundEye from "@/app/assets/dashboard/tabs/backgrounds/eye.svg";
 import BackgroundGlobe from "@/app/assets/dashboard/tabs/backgrounds/globe.svg";
 import BackgroundBrowser from "@/app/assets/dashboard/tabs/backgrounds/browser.svg";
 import BackgroundTerminal from "@/app/assets/dashboard/tabs/backgrounds/terminal.svg";
-
-import classNames from "classnames/bind";
-
 import {useTranslate} from "@/app/shared/libs/i18n";
+
+import styles from "./index.module.css";
 
 interface IMetro {
   activeScreen: number;
@@ -33,7 +31,7 @@ const Metro: React.FC<IMetro> = ({
 }) => {
   const cx = classNames.bind(styles);
 
-  const t = useTranslate()
+  const t = useTranslate();
   
   const sections = [
     {
@@ -90,9 +88,9 @@ const Metro: React.FC<IMetro> = ({
           style={
             item.id === activeScreen
               ? {
-                  background: item.color,
-                  border: `1px solid ${item.color}`,
-                }
+                background: item.color,
+                border: `1px solid ${item.color}`,
+              }
               : {}
           }
           onClick={() => setActiveScreen(item.id)}
@@ -100,7 +98,7 @@ const Metro: React.FC<IMetro> = ({
           {item.id === activeScreen ? (
             <Image
               src={item.background}
-              alt={"icon"}
+              alt="icon"
               className={styles.metro_item__icon}
             />
           ) : (

@@ -1,4 +1,5 @@
-import { SVGProps } from 'react';
+import React from "react";
+import { SVGProps } from "react";
 
 export const LayoutBottomLeftPicture = ({...props}: SVGProps<SVGSVGElement>) => (
   <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" {...props} >

@@ -1,3 +1,58 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "semi": [ "error", "always" ],
+    "quotes": [ "error", "double" ],
+    "prefer-const": "error",
+    "indent": ["error", 2, { "SwitchCase": 1}],
+    "react/react-in-jsx-scope": "error",
+    "react/jsx-curly-brace-presence": [
+      "error",
+      {
+        "props": "never",
+        "children": "never"
+      }
+    ],
+    "no-console": "warn",
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": [
+          "Link"
+        ],
+        "specialLink": [
+          "hrefLeft",
+          "hrefRight"
+        ],
+        "aspects": [
+          "invalidHref",
+          "preferButton"
+        ]
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always",
+        "groups": [
+          [ "builtin", "external"],
+          "internal",
+          [ "parent", "sibling", "index" ]
+        ]
+      }
+    ],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [
+          ".tsx"
+        ]
+      }
+    ],
+    "react/no-unescaped-entities": "error",
+    "react/no-array-index-key": "error",
+    "react/no-unused-state": "error"
+  }
 }

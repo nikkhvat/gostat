@@ -1,4 +1,6 @@
-import { SVGProps } from 'react';
+import React from "react";
+import { SVGProps } from "react";
+
 export const IconDashboard = ({ width = 50, height = 50, strokeWidth = 2, ...props }: SVGProps<SVGSVGElement>) => (
   <svg width={width} height={height} viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" {...props} >
     <rect width="50" height="50" rx="15" fill="#181818"/>

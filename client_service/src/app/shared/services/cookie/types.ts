@@ -1,4 +1,4 @@
 export enum CookiesKeys {
-  LOCALE = 'lang',
-  THEME = 'theme'
+  LOCALE = "lang",
+  THEME = "theme"
 }

@@ -1,18 +1,15 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-"use client"
-
+"use client";
+import React from "react";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import styles from "./index.module.css";
-
 import Menu from "./Menu";
 import Metro from "./Metro";
-import Charts from "./Charts"
-
+import Charts from "./Charts";
 import { getStat, getUserData } from "./api";
 import { IUserData, Stat } from ".";
 import Header from "./Header";
-import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -29,27 +26,25 @@ export default function Dashboard() {
   const [userInfo, setUserInfo] = useState({} as IUserData);
   const [activeApp, setActiveApp] = useState(null as null | string);
 
-  async function fetchData() {
-    try {
-      const response = await getUserData();
-
-      setUserInfo(response.data);
-
-      if (response.data.apps) {
-        changeActiveApp(response.data.apps[0].id);
-      }
-
-      if (response.data.account_confirmed === false) {
-        router.push(`/auth/alert`, { scroll: false });
-      }
-    } catch (error) {
-      console.error("Ошибка:", error);
-    }
-  }
-
   useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await getUserData();
+
+        setUserInfo(response.data);
+
+        if (response.data.apps) {
+          changeActiveApp(response.data.apps[0].id);
+        }
+
+        if (response.data.account_confirmed === false) {
+          router.push("/auth/alert", { scroll: false });
+        }
+      } catch (error) {}
+    }
+
     fetchData();
-  }, []);
+  }, [router]);
 
   const changeActiveApp = async (app: string) => {
     setActiveApp(app);

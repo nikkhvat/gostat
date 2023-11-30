@@ -1,14 +1,12 @@
 import React from "react";
-
-import style from "./page.module.css";
 import Link from "next/link";
+import { cookies } from "next/headers";
+
+import { CookiesKeys } from "@/app/shared/services/cookie/types";
+import { useTranslate } from "@/app/shared/libs/i18n";
 
 import ThemeButton from "./ThemeButton";
-
-import { cookies } from "next/headers";
-import { CookiesKeys } from "@/app/shared/services/cookie/types";
-
-import { useTranslate } from "@/app/shared/libs/i18n";
+import style from "./page.module.css";
 
 const Theme = () => {
   const cookieStore = cookies();

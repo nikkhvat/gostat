@@ -1,8 +1,10 @@
-"use client"
+"use client";
+
 import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 import Storage from "@/app/shared/libs/storage";
 
-import { useRouter } from "next/navigation";
 
 export default function AuthPage() {
   const router = useRouter();
@@ -15,7 +17,7 @@ export default function AuthPage() {
     } else {
       router.push("/auth/sign-in", { scroll: false });
     }
-  }, [router])
+  }, [router]);
 
   return (
     <main>
