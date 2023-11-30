@@ -8,6 +8,8 @@ export const errors = {
     inCorrect: "login or password is not correct"
   },
 
+  passwordsDontMatch: "Passwords don't match",
+
   confirmMail: {
     inValidSecret: "Invalid secret code",
     unexpectedError: "Unexpected error, failed to verify account"

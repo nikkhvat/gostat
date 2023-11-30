@@ -51,6 +51,10 @@ export default function SingIn() {
   };
 
   const submit = async (e: any) => {
+    if (password != repeat) {
+      alert(t("errors.passwordsDontMatch"));
+      return; 
+    }
 
     try {
       e.preventDefault();
