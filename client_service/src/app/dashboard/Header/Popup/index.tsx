@@ -1,9 +1,13 @@
-"use client"
+"use client";
+
 import React from "react";
 
-import styles from "./index.module.css"
+import {useTranslate} from "@/app/shared/libs/i18n";
+
+import styles from "./index.module.css";
 import { App } from "../..";
 import Button from "../../components/Button";
+
 
 interface IPopUp {
   name: string;
@@ -12,7 +16,6 @@ interface IPopUp {
   singOut: (e: React.MouseEvent<HTMLButtonElement>) => void;
   setActiveApp: Function
 }
-import {useTranslate} from "@/app/shared/libs/i18n";
 
 const PopUp: React.FC<IPopUp> = ({
   name,
@@ -21,7 +24,7 @@ const PopUp: React.FC<IPopUp> = ({
   singOut,
   setActiveApp,
 }) => {
-  const t = useTranslate()
+  const t = useTranslate();
 
   return (
     <div id="popup" className={styles.container}>

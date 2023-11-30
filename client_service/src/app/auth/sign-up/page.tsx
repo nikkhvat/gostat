@@ -1,23 +1,23 @@
-"use client"
-import styles from './page.module.css' 
-import InputComponent from '@/app/auth/components/Input/index';
+"use client";
+
+import React from "react";
 import Link from "next/link";
-
-import { Logo } from "@/app/shared/icons/components/logo";
-
-import { useEffect, useState } from 'react';
-import { singUp } from '../api';
-import Storage from '@/app/shared/libs/storage';
-
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import Storage from "@/app/shared/libs/storage";
+import { Logo } from "@/app/shared/icons/components/logo";
+import InputComponent from "@/app/auth/components/Input/index";
 import { useTranslate } from "@/app/shared/libs/i18n";
+
+import { singUp } from "../api";
+import styles from "./page.module.css";
 
 
 export default function SingIn() {  
   const router = useRouter();
 
-  const t = useTranslate()
+  const t = useTranslate();
 
   useEffect(() => {
     const token = Storage.get("access_token");
@@ -86,30 +86,30 @@ export default function SingIn() {
 
       <form className={styles.form}>
         <fieldset className={styles.fieldset}>
-          <legend className={styles.legend}>
-            {t("auth.signUp.subtitle")}
-          </legend>
+          <legend className={styles.legend}>{t("auth.signUp.subtitle")}</legend>
           <InputComponent
-            typeProp="text"
+            type="text"
             placeholder={t("auth.namePlaceholder")}
             onChange={handleNameChange}
+            autoComplete="username"
           />
           <InputComponent
-            typeProp="email"
+            type="email"
             placeholder={t("auth.emailPlaceholder")}
             onChange={handleEmailChange}
+            autoComplete="email"
           />
           <InputComponent
-            typeProp="password"
+            type="password"
             placeholder={t("auth.passwordPlaceholder")}
-            check={true}
             onChange={handlePasswordChange}
+            autoComplete="new-password"
           />
           <InputComponent
-            typeProp="password"
+            type="password"
             placeholder={t("auth.repeatPlaceholder")}
-            check={true}
             onChange={handleRepeatChange}
+            autoComplete="new-password"
           />
         </fieldset>
         <button className={styles.registration__button} onClick={submit}>
@@ -117,7 +117,7 @@ export default function SingIn() {
         </button>
       </form>
 
-      <Link className={styles.link} href={`/auth/sign-in`}>
+      <Link className={styles.link} href="/auth/sign-in">
         {t("auth.signUp.link")}
       </Link>
     </div>

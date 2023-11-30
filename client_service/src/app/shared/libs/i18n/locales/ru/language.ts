@@ -4,4 +4,4 @@ export const language = {
   chooseYourLanguage: "Выберите свой язык",
   back: "Назад",
   continue: "Продолжить"
-}
+};

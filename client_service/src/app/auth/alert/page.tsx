@@ -1,13 +1,15 @@
-"use client"
-import React from "react";
+"use client";
 
-import style from './page.module.css';
+import React from "react";
 
 import {useTranslate} from "@/app/shared/libs/i18n";
 
+import style from "./page.module.css";
+
+
 export default function Alert() {
 
-  const t = useTranslate()
+  const t = useTranslate();
 
   return (
     <div className={style.box}>

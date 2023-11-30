@@ -9,4 +9,4 @@ export const menu = {
   search: "Search",
 
   singOut: "Sing out"
-}
+};

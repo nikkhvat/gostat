@@ -3,4 +3,4 @@ export const notFound = {
   title: "This page could not be found.",
 
   button: "Back"
-}
+};

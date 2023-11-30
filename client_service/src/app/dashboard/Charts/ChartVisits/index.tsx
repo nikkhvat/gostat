@@ -1,7 +1,6 @@
 import React from "react";
 
 import styles from "./index.module.css";
-
 import LineChart from "../LineChart";
 
 interface IChartVisits {

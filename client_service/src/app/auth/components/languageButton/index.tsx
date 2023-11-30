@@ -1,10 +1,12 @@
-"use client"
-import React from 'react';
-import style from './index.module.css';
+"use client";
 
-import setCookiesLang from '@/app/shared/actions/lang';
+import React from "react";
 
-import { APP_LANGUAGES_TYPE } from '@/app/shared/constants/languages';
+
+import setCookiesLang from "@/app/shared/actions/lang";
+import { APP_LANGUAGES_TYPE } from "@/app/shared/constants/languages";
+
+import style from "./index.module.css";
 
 interface languageButtonProps {
   article: string;
@@ -25,7 +27,7 @@ const LanguageButton: React.FC<languageButtonProps> = ({article, language, selec
         
         setTimeout(() => {
           location.reload();
-        }, 200)
+        }, 200);
       }}
     >
       <span className={style.upper} >{article}</span> | {language}

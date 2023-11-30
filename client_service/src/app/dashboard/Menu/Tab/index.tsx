@@ -1,6 +1,6 @@
 import React, { Dispatch, SVGProps, SetStateAction } from "react";
 
-import styles from "./index.module.css"
+import styles from "./index.module.css";
 
 export interface ITabItem {
   id: number;

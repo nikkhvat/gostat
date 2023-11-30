@@ -1,17 +1,19 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-"use client"
-import React, { useEffect, useState } from "react";
+"use client";
 
-import style from './page.module.css';
+import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Loader from "../components/loader";
-import { confirmEmail } from "../api";
 import Link from "next/link";
 
 import {useTranslate} from "@/app/shared/libs/i18n";
 
+import style from "./page.module.css";
+import Loader from "../components/loader";
+import { confirmEmail } from "../api";
+
+
+
 export default function Confirm() {
-  const t = useTranslate()
+  const t = useTranslate();
   const router = useRouter();
 
   const [confirmed, setConfirmed] = useState(false);
@@ -38,8 +40,9 @@ export default function Confirm() {
     if (param) {
       submit(param);
     } else {
-      router.push(`/auth/alert`, { scroll: false });
+      router.push("/auth/alert", { scroll: false });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [param]);
 
   return (

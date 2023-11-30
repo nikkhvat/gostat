@@ -6,4 +6,4 @@ export const theme = {
   system: "System",
   back: "Back",
   continue: "Continue"
-}
+};
