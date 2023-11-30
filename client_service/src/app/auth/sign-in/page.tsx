@@ -7,11 +7,13 @@ import { Logo } from "@/app/shared/icons/components/logo";
 
 import { useEffect, useState } from 'react';
 import { singIn } from '../api';
-import Storage from '@/app/utils/storage';
+import Storage from '@/app/shared/libs/storage';
 
 import { useRouter } from "next/navigation";
 
 import { useTranslate } from "@/app/shared/libs/i18n";
+
+import { REGEX } from '@/app/shared/constants/regex';
 
 export default function SingIn() {
   const router = useRouter();
@@ -37,16 +39,49 @@ export default function SingIn() {
     setEmail(e.target.value);
   };
 
-  const submit = async (e: any) => {
-    e.preventDefault();
-    const response = await singIn({
-      login: email,
-      password: password,
-    });
+  const validatePassword = (password: string) => {
+    return (
+      REGEX.lengthRegex.test(password) &&
+      REGEX.specialCharRegex.test(password) &&
+      REGEX.digitRegex.test(password) &&
+      REGEX.uppercaseRegex.test(password) &&
+      REGEX.lowercaseRegex.test(password)
+    );
+  }
 
-    Storage.set("access_token", response.data.access_token);
-    router.push("/dashboard", { scroll: false });
-  };
+  const validateMail = (email: string) => {
+    return REGEX.emailRegex.test(email)
+  }
+
+  const submit = async (e: any) => {
+    const validPassword = validatePassword(password)
+    const validMail = validateMail(email)
+
+    if (password !== '' && email !== '' && validPassword === true && validMail === true) {
+
+      try {
+        e.preventDefault();
+        const response = await singIn({
+          login: email,
+          password: password,
+        });
+
+        Storage.set("access_token", response.data.access_token);
+        router.push("/dashboard", { scroll: false });
+
+      } catch(error: any) {
+        if (error.body.error === 'login or password is not correct') {
+          alert(t("errors.signIn.inCorrect"))
+        } else {
+          alert(t("errors.error"))
+        }
+      }
+
+    } else {
+      alert(t("auth.notValid"))
+    }
+    
+  }
 
   return (
     <div className={styles.box}>

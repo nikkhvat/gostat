@@ -9,7 +9,7 @@ import { useTranslate } from "@/app/shared/libs/i18n";
 import { useRouter, useSearchParams } from "next/navigation";
 import { resetPassword } from "../../api";
 
-import Storage from "@/app/utils/storage"
+import Storage from "@/app/shared/libs/storage"
 
 export default function Confirm() {
   const router = useRouter();
@@ -41,8 +41,11 @@ export default function Confirm() {
   
       Storage.set("access_token", resp.data.access_token);
       router.push("/dashboard", { scroll: false });
-    } catch (error) {
-      alert("Возникла ошибка")
+
+    } catch (error: any) {
+      if (error.body.error === 'invalid secret code') {
+        alert(t("errors.passwordRecovery.inValidSecret"))
+      }
     }
   }
   

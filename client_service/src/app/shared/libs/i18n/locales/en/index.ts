@@ -4,6 +4,8 @@ import { language } from "./language"
 import { dashboard } from "./dashboard"
 import { menu } from "./menu"
 import { cookies } from "./cookies"
+import { notFound } from "./not-found"
+import { errors } from "./errors"
 
 export const enLocale = {
   auth,
@@ -11,5 +13,7 @@ export const enLocale = {
   language,
   dashboard,
   menu,
-  cookies
+  cookies,
+  notFound,
+  errors
 }

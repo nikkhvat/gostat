@@ -46,10 +46,11 @@ export const auth = {
       repeat: 'Repeat password',
       button: 'Reset password'
     }
-  },
+  }, 
 
   continue: "Continue",
   loading: "Loading ...",
+  notValid: "Password or login is not valid",
 
   namePlaceholder: "Name",
   emailPlaceholder: "E-mail",
