@@ -5,11 +5,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 
+import {useTranslate} from "@/app/shared/libs/i18n";
+
 import style from "./page.module.css";
 import Loader from "../components/loader";
 import { confirmEmail } from "../api";
 
-import {useTranslate} from "@/app/shared/libs/i18n";
 
 
 
