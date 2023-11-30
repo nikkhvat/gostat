@@ -4,11 +4,13 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
+
 import {useTranslate} from "@/app/shared/libs/i18n";
 
 import style from "./page.module.css";
 import Loader from "../components/loader";
 import { confirmEmail } from "../api";
+
 
 
 
@@ -21,9 +23,18 @@ export default function Confirm() {
   const param = useSearchParams().get("code");
 
   const submit = async (code: string) => {
-    const response = await confirmEmail(code);
-    if (response.status === 200) {
-      setConfirmed(true);
+
+    try {
+      const response = await confirmEmail(code);
+      if (response.status === 200) {
+        setConfirmed(true);
+      }
+    } catch (error: any) {
+      if (error.body.error === "Invalid secret") {
+        alert(t("errors.confirmMail.inValidSecret"));
+      } else if (error.body.error === "Unexpected error, failed to verify account") {
+        alert(t("errors.confirmMail.unexpectedError"));
+      }
     }
   };
 

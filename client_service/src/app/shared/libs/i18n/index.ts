@@ -1,6 +1,5 @@
 import { APP_LANGUAGES_ARRAY, APP_LANGUAGES_TYPE } from "@/app/shared/constants/languages";
-
-import { localeResources } from "./locales";
+import { localeResources } from "@/app/shared/libs/i18n/locales/index";
 
 type NestedKeys<T> = T extends string ? [] : {
   [K in Extract<keyof T, string>]: [K, ...NestedKeys<T[K]>]

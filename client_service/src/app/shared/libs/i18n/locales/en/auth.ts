@@ -46,7 +46,7 @@ export const auth = {
       repeat: "Repeat password",
       button: "Reset password"
     }
-  },
+  }, 
 
   continue: "Continue",
   loading: "Loading ...",

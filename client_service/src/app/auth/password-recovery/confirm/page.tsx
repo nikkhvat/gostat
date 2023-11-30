@@ -3,13 +3,15 @@
 import React,{useState} from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+
+import Storage from "@/app/shared/libs/storage";
 import style from "@/app/auth/password-recovery/confirm/page.module.css";
 import {Logo} from "@/app/shared/icons/components/logo";
 import InputComponent from "@/app/auth/components/Input/index";
 import { useTranslate } from "@/app/shared/libs/i18n";
-import Storage from "@/app/shared/libs/storage";
 
 import { resetPassword } from "../../api";
+
 
 
 export default function Confirm() {
@@ -42,13 +44,10 @@ export default function Confirm() {
   
       Storage.set("access_token", resp.data.access_token);
       router.push("/dashboard", { scroll: false });
+
     } catch (error: any) {
-      if (error.body.error === "code invalid") {
-        alert("Не верный код");
-      } else if (error.body.error === "timeout") {
-        alert("Истекло время");
-      } else {
-        alert("Возникла ошибка");
+      if (error.body.error === "invalid secret code") {
+        alert(t("errors.passwordRecovery.inValidSecret"));
       }
     }
   };
