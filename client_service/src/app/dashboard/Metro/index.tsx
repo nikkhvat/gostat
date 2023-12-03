@@ -33,17 +33,7 @@ const Metro: React.FC<IMetro> = ({
 
   const t = useTranslate();
 
-  const [
-    total_visits,
-    total_browsers,
-    total_countries,
-    total_bots
-  ] = useAppSelector((state: RootState) => [
-    state.dashboard.data.total_visits,
-    state.dashboard.data.top_browsers.length,
-    state.dashboard.data.top_countries.length,
-    state.dashboard.data.total_bots,
-  ]);
+  const stats = useAppSelector((state: RootState) => state.dashboard.data);
   
   const sections = [
     {
@@ -55,7 +45,7 @@ const Metro: React.FC<IMetro> = ({
       subtitle_color: "var(--violet-text)",
       background: BackgroundEye,
       icon: TabIconBrowser,
-      count: total_visits,
+      count: stats.total_visits ?? 0,
     },
     {
       id: 2,
@@ -66,7 +56,7 @@ const Metro: React.FC<IMetro> = ({
       subtitle_color: "var(--green-text)",
       background: BackgroundBrowser,
       icon: TabIconEye,
-      count: total_countries,
+      count: stats.top_countries?.length ?? 0,
     },
     {
       id: 3,
@@ -77,7 +67,7 @@ const Metro: React.FC<IMetro> = ({
       subtitle_color: "var(--blue-text)",
       background: BackgroundGlobe,
       icon: TabIconGlobe,
-      count: total_browsers,
+      count: stats.top_browsers?.length ?? 0,
     },
     {
       id: 4,
@@ -88,7 +78,7 @@ const Metro: React.FC<IMetro> = ({
       subtitle_color: "var(--orange-text)",
       background: BackgroundTerminal,
       icon: TabIconTerminal,
-      count: total_bots,
+      count: stats.total_bots ?? 0,
     },
   ];
 
