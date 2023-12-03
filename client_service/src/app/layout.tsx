@@ -10,6 +10,7 @@ import { APP_LANGUAGES, APP_LANGUAGES_TYPE } from "./shared/constants/languages"
 import { CookiesKeys } from "./shared/services/cookie/types";
 import Lang from "./Lang";
 import CookiesBanner from "./widgets/cookies-banner";
+import StoreProvider from "./StoreProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,9 +37,11 @@ export default function RootLayout({
   return (
     <html lang={lang ?? "en"}>
       <body className={`${inter.className} ${theme?.value}`}>
-        <Lang lang={lang} />
-        {children}
-        <CookiesBanner />
+        <StoreProvider>
+          <Lang lang={lang} />
+          {children}
+          <CookiesBanner />
+        </StoreProvider>
       </body>
     </html>
   );

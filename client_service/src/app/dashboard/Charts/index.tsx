@@ -3,10 +3,13 @@
 import React, { useState } from "react";
 
 import {useTranslate} from "@/app/shared/libs/i18n";
+import { useAppSelector } from "@/app/shared/libs/store/hooks";
+import { RootState } from "@/app/shared/libs/store/store";
 
 import styles from "./index.module.css";
 import Button from "../components/Button";
 import ChartVisits from "./ChartVisits";
+
 
 
 enum ActiveScreen {
@@ -22,16 +25,11 @@ interface IChartsButtonsState {
   };
 }
 
-interface IStat {
-  stats?: any
-}
-
 interface ICharts {
   activeScreen: ActiveScreen;
-  stats: IStat;
 }
 
-const Charts: React.FC<ICharts> = ({ activeScreen, stats }) => {
+const Charts: React.FC<ICharts> = ({ activeScreen }) => {
   const t = useTranslate();
   const [chartsState, setChartState] = useState<IChartsButtonsState>({
     [ActiveScreen.Visits]: { activeButton: 0 },
@@ -66,6 +64,8 @@ const Charts: React.FC<ICharts> = ({ activeScreen, stats }) => {
     },
   };
 
+  const stats = useAppSelector((state: RootState) => state.dashboard.data);
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -86,7 +86,7 @@ const Charts: React.FC<ICharts> = ({ activeScreen, stats }) => {
         </div>
         <div className={styles.content}>
           {activeScreen === 1 && stats && chartsState[1].activeButton === 0 && (
-            <ChartVisits data={stats?.stats?.visits_by_day} />
+            <ChartVisits data={stats?.visits_by_day} />
           )}
         </div>
       </div>
