@@ -24,7 +24,7 @@ api.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    if (error.config?.url?.includes("api/auth")) {
+    if (error.config?.url?.includes("api/auth") && !error.config?.url?.includes("info")) {
       return Promise.reject(error);
     }
 
@@ -36,12 +36,11 @@ api.interceptors.response.use(
 
     if (error.response?.status === 401 && originalRequest._retry != true) {
       originalRequest._retry = true;
+
       try {
-        const refreshResponse = await axios.post("/api/auth/refresh");
+        const refreshResponse = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/auth/refresh`);
         Storage.set("access_token", refreshResponse.data.access_token);
-      } catch {
-        return Promise.reject(error);
-      }
+      } catch {}
 
       if (error.config) {
         return api.request(error.config);
@@ -49,9 +48,7 @@ api.interceptors.response.use(
     } else if (originalRequest._retry === true && error.response?.status === 401) {
       Storage.delete("access_token");
 
-      if (window) {
-        window.location.href = "/auth";
-      }
+      window.location.href = "/auth";
     }
 
     return Promise.reject(error);

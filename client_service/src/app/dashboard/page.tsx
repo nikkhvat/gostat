@@ -37,9 +37,7 @@ export default function Dashboard() {
         if (response.data.account_confirmed === false) {
           router.push("/auth/alert", { scroll: false });
         }
-      } catch (error) {
-        alert("any error");
-      }
+      } catch (error) {}
     }
 
     fetchData();
