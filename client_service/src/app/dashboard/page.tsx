@@ -4,25 +4,22 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import styles from "./index.module.css";
-import Menu from "./Menu";
-import Metro from "./Metro";
-import Charts from "./Charts";
-import { getStat, getUserData } from "./api";
-import { IUserData, Stat } from ".";
 import Header from "./Header";
+import Menu from "./Menu";
+import Charts from "./Charts";
+import Metro from "./Metro";
+import { getUserData } from "./api";
+import { IUserData } from ".";
+import { useAppDispatch } from "../shared/libs/store/hooks";
+import { getStats } from "../shared/libs/store/features/dashboard/slice";
 
 export default function Dashboard() {
   const router = useRouter();
+  
+  const dispatch = useAppDispatch();
 
   const [activeScreen, setActiveScreen] = useState(1 as 1 | 2 | 3 | 4);
-  const [sectionStat, setSectionStat] = useState({
-    visits: 0,
-    countries: 0,
-    browsers: 0,
-    bots: 0,
-  });
-  const [stats, setStat] = useState({} as Stat);
-
+  
   const [userInfo, setUserInfo] = useState({} as IUserData);
   const [activeApp, setActiveApp] = useState(null as null | string);
 
@@ -40,28 +37,18 @@ export default function Dashboard() {
         if (response.data.account_confirmed === false) {
           router.push("/auth/alert", { scroll: false });
         }
-      } catch (error) {}
+      } catch (error) {
+        alert("any error");
+      }
     }
 
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
   const changeActiveApp = async (app: string) => {
     setActiveApp(app);
-
-    const response = await getStat(app);
-    const body = response.data;
-
-    if (response.data.stats.avg_duration) {
-      setSectionStat({
-        visits: body.stats.first_visits,
-        countries: body.stats.top_countries.length,
-        browsers: body.stats.top_browsers.length,
-        bots: 0,
-      });
-
-      setStat(response.data);
-    }
+    dispatch(getStats({app}));
   };
 
   return (
@@ -76,10 +63,9 @@ export default function Dashboard() {
         <Metro
           activeScreen={activeScreen}
           setActiveScreen={setActiveScreen}
-          sectionStat={sectionStat}
         />
 
-        <Charts activeScreen={activeScreen} stats={stats} />
+        <Charts activeScreen={activeScreen} />
       </div>
     </main>
   );
