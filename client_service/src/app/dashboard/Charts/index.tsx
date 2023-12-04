@@ -11,26 +11,23 @@ import Button from "../components/Button";
 import ChartVisits from "./ChartVisits";
 
 
-
 enum ActiveScreen {
-  Visits = 1,
-  TopCountries = 2,
-  TopBrowsersAndOS = 3,
-  Bots = 4,
+  Visits = "visits",
+  TopCountries = "countries",
+  TopBrowsersAndOS = "browsers",
+  Bots = "bots",
 }
 
 interface IChartsButtonsState {
-  [key: number]: {
+  [key: string]: {
     activeButton: number;
   };
 }
-
-interface ICharts {
-  activeScreen: ActiveScreen;
-}
-
-const Charts: React.FC<ICharts> = ({ activeScreen }) => {
+const Charts: React.FC = () => {
   const t = useTranslate();
+  
+  const activeScreen = useAppSelector((state: RootState) => state.dashboard.screen);
+
   const [chartsState, setChartState] = useState<IChartsButtonsState>({
     [ActiveScreen.Visits]: { activeButton: 0 },
     [ActiveScreen.TopCountries]: { activeButton: 1 },
@@ -38,27 +35,30 @@ const Charts: React.FC<ICharts> = ({ activeScreen }) => {
     [ActiveScreen.Bots]: { activeButton: 1 },
   });
 
-  const setActiveScreen = (screen: ActiveScreen, btnId: number) => {
+  const setActiveScreen = (
+    screen: "visits" | "countries" | "browsers" | "bots",
+    btnId: number
+  ) => {
     setChartState((prev) => ({ ...prev, [screen]: { activeButton: btnId } }));
   };
 
   const charts = {
-    1: {
+    visits: {
       name: t("dashboard.visits.title"),
       buttons: [
         { id: 0, name: t("dashboard.visits.buttons.all") },
         { id: 1, name: t("dashboard.visits.buttons.unique") },
       ],
     },
-    2: {
+    countries: {
       name: t("dashboard.topCountries.title"),
       buttons: [],
     },
-    3: {
+    browsers: {
       name: t("dashboard.topBrowsers.title"),
       buttons: [],
     },
-    4: {
+    bots: {
       name: t("dashboard.bots.title"),
       buttons: [],
     },
@@ -85,7 +85,9 @@ const Charts: React.FC<ICharts> = ({ activeScreen }) => {
           ))}
         </div>
         <div className={styles.content}>
-          {activeScreen === 1 && stats && chartsState[1].activeButton === 0 && (
+          {activeScreen === "visits" &&
+            stats &&
+            chartsState[ActiveScreen.Visits].activeButton === 0 && (
             <ChartVisits data={stats?.visits_by_day} />
           )}
         </div>

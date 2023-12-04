@@ -4,7 +4,8 @@ import { getStatsApi } from "./api";
 import { InitialState } from ".";
 
 const initialState: InitialState = {
-  data: {}
+  data: {},
+  screen: "visits"
 } as InitialState;
 
 export const getStats = createAsyncThunk("DASHBOARD/GET_STATS",
@@ -26,7 +27,11 @@ export const getStats = createAsyncThunk("DASHBOARD/GET_STATS",
 export const dashboardSlice = createSlice({
   name: "Dashboard",
   initialState,
-  reducers: {},
+  reducers: {
+    setActiveScreen: (state, action) => {
+      state.screen = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getStats.fulfilled, (state, action) => {
@@ -34,5 +39,7 @@ export const dashboardSlice = createSlice({
       });
   },
 });
+
+export const { setActiveScreen } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

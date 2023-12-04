@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -17,8 +18,6 @@ export default function Dashboard() {
   const router = useRouter();
   
   const dispatch = useAppDispatch();
-
-  const [activeScreen, setActiveScreen] = useState(1 as 1 | 2 | 3 | 4);
   
   const [userInfo, setUserInfo] = useState({} as IUserData);
   const [activeApp, setActiveApp] = useState(null as null | string);
@@ -58,12 +57,9 @@ export default function Dashboard() {
           activeApp={activeApp}
           setActiveApp={changeActiveApp}
         />
-        <Metro
-          activeScreen={activeScreen}
-          setActiveScreen={setActiveScreen}
-        />
+        <Metro />
 
-        <Charts activeScreen={activeScreen} />
+        <Charts/>
       </div>
     </main>
   );
