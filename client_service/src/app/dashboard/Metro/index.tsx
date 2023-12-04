@@ -1,6 +1,4 @@
-"use client";
-
-import React from "react";
+import React, { SVGProps } from "react";
 import Image from "next/image";
 import classNames from "classnames/bind";
 
@@ -15,27 +13,40 @@ import BackgroundGlobe from "@/app/assets/dashboard/tabs/backgrounds/globe.svg";
 import BackgroundBrowser from "@/app/assets/dashboard/tabs/backgrounds/browser.svg";
 import BackgroundTerminal from "@/app/assets/dashboard/tabs/backgrounds/terminal.svg";
 import {useTranslate} from "@/app/shared/libs/i18n";
-import { useAppSelector } from "@/app/shared/libs/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/shared/libs/store/hooks";
 import { RootState } from "@/app/shared/libs/store/store";
+import { setActiveScreen } from "@/app/shared/libs/store/features/dashboard/slice";
 
 import styles from "./index.module.css";
 
-interface IMetro {
-  activeScreen: number;
-  setActiveScreen: Function;
-}
+const Metro: React.FC = () => {
+  const dispatch = useAppDispatch();
 
-const Metro: React.FC<IMetro> = ({
-  activeScreen,
-  setActiveScreen,
-}) => {
+  const setScreen = (screen: "visits" | "countries" | "browsers" | "bots") => {
+    dispatch(setActiveScreen(screen));
+  };
+
   const cx = classNames.bind(styles);
 
   const t = useTranslate();
 
   const stats = useAppSelector((state: RootState) => state.dashboard.data);
   
-  const sections = [
+  interface ISelection {
+    id: number;
+    name: string;
+    subtitle: string;
+    key: "visits" | "countries" | "browsers" | "bots";
+    color: string;
+    subtitle_color: string;
+    background: string;
+    icon: ({ width, height, ...props }: SVGProps<SVGSVGElement>) => React.JSX.Element;
+    count: number;
+  }
+
+  const activeScreen = useAppSelector((state: RootState) => state.dashboard.screen);
+
+  const sections: ISelection[] = [
     {
       id: 1,
       name: t("dashboard.visits.title"),
@@ -89,41 +100,43 @@ const Metro: React.FC<IMetro> = ({
           key={item.key}
           className={cx({
             metro_item: true,
-            metro_item__active: item.id === activeScreen
+            metro_item__active: item.key === activeScreen,
           })}
           style={
-            item.id === activeScreen
+            item.key === activeScreen
               ? {
                 background: item.color,
                 border: `1px solid ${item.color}`,
               }
               : {}
           }
-          onClick={() => setActiveScreen(item.id)}
+          onClick={() => setScreen(item.key)}
         >
-          {item.id === activeScreen &&
+          {item.key === activeScreen && (
             <Image
               src={item.background}
               alt="icon"
               className={styles.metro_item__icon}
-            />}
-            
+            />
+          )}
+
           <p className={styles.metro_item__title}>
             {item.name}
             <item.icon />
           </p>
-          
+
           <p className={styles.metro_item__value}>{item.count}</p>
 
           <div className={styles.bottom}>
             <p className={styles.bottom_first_text}>{item.subtitle}</p>
             <p
               style={
-                item.id === activeScreen
+                item.key === activeScreen
                   ? { color: item.subtitle_color }
                   : { color: "var(--color6)" }
               }
-              className={styles.bottom_second_text}>
+              className={styles.bottom_second_text}
+            >
               {t("dashboard.month")}
             </p>
           </div>

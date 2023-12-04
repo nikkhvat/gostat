@@ -1,6 +1,7 @@
 
 export interface InitialState {
   data: StatsResponse["stats"],
+  screen: "visits" | "countries" | "browsers" | "bots"
 }
 
 export type StatsResponse = {
