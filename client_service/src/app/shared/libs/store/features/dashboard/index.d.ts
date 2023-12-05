@@ -2,6 +2,8 @@
 export interface InitialState {
   data: StatsResponse["stats"],
   screen: "visits" | "countries" | "browsers" | "bots"
+  user: UserDataResponse,
+  activeApp: null | App
 }
 
 export type StatsResponse = {
@@ -44,4 +46,25 @@ export type StatsResponse = {
       count?: number
     }>
   }
+}
+
+export type UserDataResponse = {
+  account_confirmed: boolean,
+  apps: App[],
+  avatar: string,
+  created_at: string,
+  email: string,
+  first_name: string,
+  id: number,
+  last_name: string,
+  login: string,
+  middle_name: string
+}
+
+export type App = {
+  created_at: string,
+  id: string,
+  image: string,
+  name: string,
+  url: string
 }

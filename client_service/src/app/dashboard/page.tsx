@@ -9,10 +9,9 @@ import Header from "./Header";
 import Menu from "./Menu";
 import Charts from "./Charts";
 import Metro from "./Metro";
-import { getUserData } from "./api";
 import { IUserData } from ".";
 import { useAppDispatch } from "../shared/libs/store/hooks";
-import { getStats } from "../shared/libs/store/features/dashboard/slice";
+import { getStats, getUserData } from "../shared/libs/store/features/dashboard/slice";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -22,26 +21,28 @@ export default function Dashboard() {
   const [userInfo, setUserInfo] = useState({} as IUserData);
   const [activeApp, setActiveApp] = useState(null as null | string);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await getUserData();
+  dispatch(getUserData());
 
-        setUserInfo(response.data);
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       const response = await getUserData();
 
-        if (response.data.apps) {
-          changeActiveApp(response.data.apps[0].id);
-        }
+  //       setUserInfo(response.data);
 
-        if (response.data.account_confirmed === false) {
-          router.push("/auth/alert", { scroll: false });
-        }
-      } catch (error) {}
-    }
+  //       if (response.data.apps) {
+  //         changeActiveApp(response.data.apps[0].id);
+  //       }
 
-    fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router]);
+  //       if (response.data.account_confirmed === false) {
+  //         router.push("/auth/alert", { scroll: false });
+  //       }
+  //     } catch (error) {}
+  //   }
+
+  //   fetchData();
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [router]);
 
   const changeActiveApp = async (app: string) => {
     setActiveApp(app);
@@ -52,13 +53,9 @@ export default function Dashboard() {
     <main className={styles.page}>
       <Menu />
       <div className={styles.content}>
-        <Header
-          userInfo={userInfo}
-          activeApp={activeApp}
-          setActiveApp={changeActiveApp}
-        />
+        <Header/>
         <Metro />
-
+        
         <Charts/>
       </div>
     </main>
