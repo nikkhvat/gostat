@@ -1,8 +1,9 @@
 import { AxiosResponse } from "axios";
 
+import api from "@/app/shared/libs/api";
+
 import { StatsResponse, UserDataResponse } from ".";
 
-import api from "@/app/shared/libs/api";
 
 
 

@@ -23,8 +23,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (activeApp?.id) {
-      changeActiveApp(activeApp.id);
+      dispatch(getStats({ app: activeApp.id }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeApp]);
 
   useEffect(() => {
@@ -32,10 +33,6 @@ export default function Dashboard() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
-
-  const changeActiveApp = async (app: string) => {
-    dispatch(getStats({app}));
-  };
 
   return (
     <main className={styles.page}>

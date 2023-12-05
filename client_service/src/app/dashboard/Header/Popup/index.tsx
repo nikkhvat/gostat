@@ -3,11 +3,13 @@
 import React from "react";
 
 
+import {useTranslate} from "@/app/shared/libs/i18n";
+
 import styles from "./index.module.css";
 import { App } from "../..";
 import Button from "../../components/Button";
 
-import {useTranslate} from "@/app/shared/libs/i18n";
+
 
 
 interface IPopUp {

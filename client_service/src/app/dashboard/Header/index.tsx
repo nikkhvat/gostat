@@ -4,10 +4,6 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { IUserData } from "..";
-import Button from "../components/Button";
-import PopUp from "./Popup";
-import styles from "./index.module.css";
 
 import defaultAvatar from "@/app/assets/header/avatar/default_dark.svg";
 import { Notification } from "@/app/shared/icons/components/notification";
@@ -17,6 +13,9 @@ import { useAppDispatch, useAppSelector } from "@/app/shared/libs/store/hooks";
 import { RootState } from "@/app/shared/libs/store/store";
 import { setActiveApp } from "@/app/shared/libs/store/features/dashboard/slice";
 
+import styles from "./index.module.css";
+import PopUp from "./Popup";
+import Button from "../components/Button";
 
 const Header: React.FC = () => {
   const router = useRouter();
