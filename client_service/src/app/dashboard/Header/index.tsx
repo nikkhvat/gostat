@@ -33,24 +33,24 @@ const Header: React.FC = () => {
 
   const t = useTranslate();
 
-  // useEffect(() => {
-  //   const handleClickOutside = (event: MouseEvent) => {
-  //     const targetElement = event.target as Element;
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const targetElement = event.target as Element;
 
-  //     if (
-  //       openedPopUp &&
-  //       !targetElement.closest("#popup") &&
-  //       targetElement.id !== "avatar_image"
-  //     ) {
-  //       setOpenedPopUp((prev) => !prev);
-  //     }
-  //   };
+      if (
+        openedPopUp &&
+        !targetElement.closest("#popup") &&
+        targetElement.id !== "avatar_image"
+      ) {
+        setOpenedPopUp((prev) => !prev);
+      }
+    };
 
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [openedPopUp]);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openedPopUp]);
 
   const submitSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

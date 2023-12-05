@@ -10,42 +10,30 @@ import Menu from "./Menu";
 import Charts from "./Charts";
 import Metro from "./Metro";
 import { IUserData } from ".";
-import { useAppDispatch } from "../shared/libs/store/hooks";
+import { useAppDispatch, useAppSelector } from "../shared/libs/store/hooks";
 import { getStats, getUserData } from "../shared/libs/store/features/dashboard/slice";
+import { RootState } from "../shared/libs/store/store";
 
 export default function Dashboard() {
   const router = useRouter();
   
   const dispatch = useAppDispatch();
-  
-  const [userInfo, setUserInfo] = useState({} as IUserData);
-  const [activeApp, setActiveApp] = useState(null as null | string);
 
-  dispatch(getUserData());
+  const activeApp = useAppSelector((state: RootState) => state.dashboard.activeApp);
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const response = await getUserData();
+  useEffect(() => {
+    if (activeApp?.id) {
+      changeActiveApp(activeApp.id);
+    }
+  }, [activeApp]);
 
-  //       setUserInfo(response.data);
+  useEffect(() => {
+    dispatch(getUserData());
 
-  //       if (response.data.apps) {
-  //         changeActiveApp(response.data.apps[0].id);
-  //       }
-
-  //       if (response.data.account_confirmed === false) {
-  //         router.push("/auth/alert", { scroll: false });
-  //       }
-  //     } catch (error) {}
-  //   }
-
-  //   fetchData();
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [router]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
 
   const changeActiveApp = async (app: string) => {
-    setActiveApp(app);
     dispatch(getStats({app}));
   };
 
@@ -55,7 +43,7 @@ export default function Dashboard() {
       <div className={styles.content}>
         <Header/>
         <Metro />
-        
+
         <Charts/>
       </div>
     </main>
