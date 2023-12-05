@@ -2,17 +2,18 @@
 
 import React from "react";
 
-import {useTranslate} from "@/app/shared/libs/i18n";
 
 import styles from "./index.module.css";
 import { App } from "../..";
 import Button from "../../components/Button";
 
+import {useTranslate} from "@/app/shared/libs/i18n";
+
 
 interface IPopUp {
   name: string;
   apps: App[];
-  activeApp: string | null;
+  activeApp: string | undefined;
   singOut: (e: React.MouseEvent<HTMLButtonElement>) => void;
   setActiveApp: Function
 }
@@ -41,7 +42,7 @@ const PopUp: React.FC<IPopUp> = ({
               className={styles.app_buton}
               active={activeApp === app.id}
               inActiveClass={styles.app_buton_inactive}
-              onClick={() => setActiveApp(app.id)}
+              onClick={() => setActiveApp(app)}
             >
               {app.name}
             </Button>

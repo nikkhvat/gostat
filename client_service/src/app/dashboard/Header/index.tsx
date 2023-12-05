@@ -4,30 +4,32 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+import { IUserData } from "..";
+import Button from "../components/Button";
+import PopUp from "./Popup";
+import styles from "./index.module.css";
+
 import defaultAvatar from "@/app/assets/header/avatar/default_dark.svg";
 import { Notification } from "@/app/shared/icons/components/notification";
 import Storage from "@/app/shared/libs/storage";
 import { useTranslate } from "@/app/shared/libs/i18n";
-
-import styles from "./index.module.css";
-import PopUp from "./Popup";
-import Button from "../components/Button";
-import { IUserData } from "..";
+import { useAppDispatch, useAppSelector } from "@/app/shared/libs/store/hooks";
+import { RootState } from "@/app/shared/libs/store/store";
+import { setActiveApp } from "@/app/shared/libs/store/features/dashboard/slice";
 
 
-
-interface IHeader {
-  userInfo: IUserData;
-  activeApp: string | null;
-  setActiveApp: Function
-}
-
-const Header: React.FC<IHeader> = ({ userInfo, activeApp, setActiveApp }) => {
+const Header: React.FC = () => {
   const router = useRouter();
 
   const [search, setSearch] = useState("");
 
   const [openedPopUp, setOpenedPopUp] = useState(false);
+
+  const userData = useAppSelector((state: RootState) => state.dashboard.user);
+
+  const activeApp = useAppSelector((state: RootState) => state.dashboard.activeApp);
+
+  const dispatch = useAppDispatch();
 
   const t = useTranslate();
 
@@ -104,11 +106,11 @@ const Header: React.FC<IHeader> = ({ userInfo, activeApp, setActiveApp }) => {
         </Button>
         {openedPopUp && (
           <PopUp
-            name={userInfo?.first_name}
-            apps={userInfo?.apps}
+            name={userData?.first_name}
+            apps={userData?.apps}
             singOut={singOut}
-            activeApp={activeApp}
-            setActiveApp={setActiveApp}
+            activeApp={activeApp?.id}
+            setActiveApp={(app: any) => {dispatch(setActiveApp(app));}}
           />
         )}
       </div>
