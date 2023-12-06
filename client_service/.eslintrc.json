@@ -30,17 +30,6 @@
         ]
       }
     ],
-    "import/order": [
-      "error",
-      {
-        "newlines-between": "always",
-        "groups": [
-          [ "builtin", "external"],
-          "internal",
-          [ "parent", "sibling", "index" ]
-        ]
-      }
-    ],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/jsx-filename-extension": [
