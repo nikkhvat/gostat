@@ -17,7 +17,6 @@ func main() {
 	listener := kafka_listener.NewKafkaListener([]string{env.Get("KAFKA_HOST")})
 
 	err := listener.Subscribe("confirm_account_send_mail_request", func(message *sarama.ConsumerMessage) {
-		log.Println("confirm_account_send_mail_request")
 		mailHendler.SendMailConfirmAccount(message)
 	})
 
@@ -26,7 +25,6 @@ func main() {
 	}
 
 	err2 := listener.Subscribe("reset_password_send_mail_request", func(message *sarama.ConsumerMessage) {
-		log.Println("reset_password_send_mail_request")
 		mailHendler.SendMailResetPassword(message)
 	})
 
