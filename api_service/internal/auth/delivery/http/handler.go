@@ -95,13 +95,16 @@ func (h *AuthHandler) Login(c *gin.Context) {
 // @Router                     /auth/refresh [post]
 func (h *AuthHandler) RefreshToken(c *gin.Context) {
 	refreshToken, err := c.Cookie("refresh_token")
+
 	// refreshToken := c.GetHeader("Authorization")
+	log.Println("refreshToken", refreshToken)
 
 	if len(refreshToken) == 0 {
 		c.JSON(401, ErrorAuthResponse{Error: "Invalid refresh token"})
 		return
 	}
 
+	log.Println("refreshToken", refreshToken)
 	token, err := h.service.RefreshToken(c.Request.Context(), refreshToken)
 
 	if err != nil {
