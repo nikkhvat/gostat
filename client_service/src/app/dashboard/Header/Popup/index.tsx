@@ -11,8 +11,6 @@ import Button from "../../components/Button";
 import {useTranslate} from "@/app/shared/libs/i18n";
 
 
-
-
 interface IPopUp {
   name: string;
   apps: App[];
