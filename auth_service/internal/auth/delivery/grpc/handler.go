@@ -54,8 +54,12 @@ func (h *AuthServiceHandler) PasswordReset(ctx context.Context, req *pb.Password
 func (h *AuthServiceHandler) RefreshToken(ctx context.Context, req *pb.RefreshTokenRequest) (*pb.RefreshTokenResponse, error) {
 	token, err := h.service.RefreshToken(req.GetRefreshToken())
 
+	log.Println("--------")
+	log.Println(token, err)
+	log.Println("--------")
+
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "internal error")
+		return nil, status.Errorf(codes.Internal, "error refresh token")
 	}
 
 	return &pb.RefreshTokenResponse{NewToken: *token}, nil
