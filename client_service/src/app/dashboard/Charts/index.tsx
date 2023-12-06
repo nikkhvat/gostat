@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import {useTranslate} from "@/app/shared/libs/i18n";
+import { useTranslate } from "@/app/shared/libs/i18n";
 import { useAppSelector } from "@/app/shared/libs/store/hooks";
 import { RootState } from "@/app/shared/libs/store/store";
+import { useAppDispatch } from "@/app/shared/libs/store/hooks";
+import { getUserData } from "@/app/shared/libs/store/features/dashboard/slice";
 
 import styles from "./index.module.css";
 import Button from "../components/Button";
@@ -25,6 +27,11 @@ interface IChartsButtonsState {
 }
 const Charts: React.FC = () => {
   const t = useTranslate();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getUserData());
+  }, [dispatch]);
   
   const activeScreen = useAppSelector((state: RootState) => state.dashboard.screen);
 
@@ -86,7 +93,6 @@ const Charts: React.FC = () => {
         </div>
         <div className={styles.content}>
           {activeScreen === "visits" &&
-            stats &&
             chartsState[ActiveScreen.Visits].activeButton === 0 && (
             <ChartVisits data={stats?.visits_by_day} />
           )}
