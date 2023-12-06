@@ -44,8 +44,6 @@ func (h *MailServiceHandler) SendMailConfirmAccount(message *sarama.ConsumerMess
 		log.Printf("Error unmarshaling JSON in topic2: %v\n", err)
 	}
 
-	log.Println(parsedMessage)
-
 	h.service.SendMail(parsedMessage.Email, parsedMessage.FirstName, parsedMessage.SecondName, parsedMessage.SecretCode)
 	return nil
 }

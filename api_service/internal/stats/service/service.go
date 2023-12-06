@@ -32,10 +32,6 @@ func NewStatsService(client *grpc.StatsClient, kafkaService *kafka.KafkaService)
 			return
 		}
 
-		log.Println("=============kafkaService==============")
-		log.Println(parsedMessage)
-		log.Println(string(message.Key))
-		log.Println("=============kafkaService==============")
 		kafkaService.Notify(string(message.Key), parsedMessage.Session)
 	})
 
