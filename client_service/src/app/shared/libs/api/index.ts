@@ -20,7 +20,26 @@ api.interceptors.request.use((config) => {
 (error: AxiosError) => Promise.reject(error));
 
 api.interceptors.response.use(
-  (response: AxiosResponse) => {
+  async (response: AxiosResponse) => {
+
+    const originalRequest: CustomConfig = response.config;
+
+    if (response?.status !== 401 && originalRequest._retry != true) {
+      originalRequest._retry = true;
+
+      try {
+        const refreshResponse = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/auth/refresh`);
+        Storage.set("access_token", refreshResponse.data.access_token);
+      } catch { }
+
+      if (originalRequest) {
+        return api.request(originalRequest);
+      }
+    } else if (originalRequest._retry === true && response?.status === 401) {
+      // Storage.delete("access_token");
+
+      // window.location.href = "/auth";
+    }
     return response;
   },
   async (error: AxiosError) => {
@@ -46,9 +65,9 @@ api.interceptors.response.use(
         return api.request(error.config);
       }
     } else if (originalRequest._retry === true && error.response?.status === 401) {
-      Storage.delete("access_token");
+      // Storage.delete("access_token");
 
-      window.location.href = "/auth";
+      // window.location.href = "/auth";
     }
 
     return Promise.reject(error);
