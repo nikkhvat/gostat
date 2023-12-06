@@ -28,7 +28,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshResponse = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/auth/refresh`);
+        const refreshResponse = await axios.post("/api/auth/refresh");
         Storage.set("access_token", refreshResponse.data.access_token);
       } catch { }
 
@@ -57,7 +57,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshResponse = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/auth/refresh`);
+        const refreshResponse = await axios.post("/api/auth/refresh");
         Storage.set("access_token", refreshResponse.data.access_token);
       } catch {}
 
