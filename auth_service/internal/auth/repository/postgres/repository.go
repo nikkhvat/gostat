@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"log"
 	"os"
 	"time"
 
@@ -117,6 +118,8 @@ func (r *UserRepository) CheckSession(uuid string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
+
+	log.Println(session)
 
 	return session.Allow, nil
 }
