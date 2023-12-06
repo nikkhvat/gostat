@@ -97,7 +97,7 @@ func (h *AuthHandler) RefreshToken(c *gin.Context) {
 	refreshToken, err := c.Cookie("refresh_token")
 
 	// refreshToken := c.GetHeader("Authorization")
-	log.Println("refreshToken", refreshToken)
+	log.Println("refreshToken", refreshToken, len(refreshToken) == 0)
 
 	if len(refreshToken) == 0 {
 		c.JSON(401, ErrorAuthResponse{Error: "Invalid refresh token"})
@@ -106,6 +106,8 @@ func (h *AuthHandler) RefreshToken(c *gin.Context) {
 
 	log.Println("refreshToken", refreshToken)
 	token, err := h.service.RefreshToken(c.Request.Context(), refreshToken)
+
+	log.Println(err)
 
 	if err != nil {
 		c.JSON(401, ErrorAuthResponse{Error: "Invalid refresh token"})
