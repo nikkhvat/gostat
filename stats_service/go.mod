@@ -7,15 +7,12 @@ require (
 	github.com/ip2location/ip2location-go v8.3.0+incompatible
 	github.com/joho/godotenv v1.5.1
 	github.com/mssola/useragent v1.0.0
-	google.golang.org/grpc v1.56.2
+	google.golang.org/grpc v1.56.3
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/gorm v1.25.4
 )
 
-require (
-	github.com/IBM/sarama v1.41.2
-	google.golang.org/protobuf v1.31.0
-)
+require github.com/IBM/sarama v1.41.2
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -45,4 +42,5 @@ require (
 	golang.org/x/sys v0.12.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1 // indirect
+	google.golang.org/protobuf v1.31.0 // indirect
 )
