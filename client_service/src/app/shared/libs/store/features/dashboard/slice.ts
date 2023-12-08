@@ -20,8 +20,8 @@ export const getStats = createAsyncThunk("DASHBOARD/GET_STATS",
       }
 
       return response.data;
-    } catch {
-      alert("Возникла ошибка ...");
+    } catch (error) {
+      console.log(error);
     }
   }
 );
@@ -35,14 +35,14 @@ export const getUserData = createAsyncThunk("DASHBOARD/GET_USER_DATA",
         throw new Error("status code is not 200");
       }
 
-      if (response.data.apps.length > 0) {
+      if (response.data.apps?.length > 0) {
         dispatch(getStats({app: response.data.apps[0].id}));
       }
 
 
       return response.data;
-    } catch {
-      alert("Возникла ошибка ...");
+    } catch (error) {
+      console.log(error);
     }
   }
 );
@@ -76,7 +76,7 @@ export const dashboardSlice = createSlice({
       .addCase(getUserData.fulfilled, (state, action) => {
         if (action.payload) {
           state.user = action.payload;
-          if (action.payload.apps.length > 0) {
+          if (action.payload.apps?.length > 0) {
             state.activeApp = action.payload.apps[0];
           }
         }
