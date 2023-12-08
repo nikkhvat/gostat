@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import z from "zod";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -11,10 +12,18 @@ import { Logo } from "@/app/shared/icons/components/logo";
 import InputComponent from "@/app/auth/components/Input/index";
 import { useTranslate } from "@/app/shared/libs/i18n";
 
-import { singUp } from "../api";
+import { singUp } from "@/app/auth/auth.service";
 import styles from "./page.module.css";
 
+import { REGEX } from "@/app/shared/constants/regex";
+import { AxiosError } from "axios";
+import { IAuthError } from "../auth.types";
+
+import { useToast } from "@/app/widgets/toast";
+
 export default function SingIn() {  
+  const toast = useToast();
+
   const router = useRouter();
 
   const t = useTranslate();
@@ -39,34 +48,88 @@ export default function SingIn() {
   const handleLoginChange = (e: any) => setLogin(e.target.value);
   const handlePasswordChange = (e: any) => setPassword(e.target.value);
 
+  const AuthCredential = z.object({
+    first_name: z.string(),
+    last_name: z.string(),
+    middle_name: z.string(),
+    mail: z
+      .string()
+      .email({ message: t("errors.invalidEmail") }),
+    login: z.string(),
+    password: z
+      .string()
+      .min(8, { message: t("errors.minCharacters", { field: t("errors.password") }) })
+      .max(48, { message: t("errors.maxCharacters", { field: t("errors.password") }) })
+      .regex(REGEX.specialCharRegex, { message: t("errors.specialCharRegex", { field: t("errors.password") }) })
+      .regex(REGEX.uppercaseRegex, { message: t("errors.uppercaseRegex", { field: t("errors.password") }) })
+      .regex(REGEX.digitRegex, { message: t("errors.digitRegex", { field: t("errors.password") }) }),
+  });
+  
+  const AuthResponse = z.object({
+    access_token: z.string(),
+  });
+
+  const alert = (message: string, type: "error" | "info") =>
+    toast.create({
+      title: t("errors.authError"),
+      description: message,
+      type: type,
+      duration: 6000,
+      placement: "bottom-start",
+    });
+
   const submit = async (e: any) => {
+    e.preventDefault();
+
+    const credentials = AuthCredential.safeParse({
+      first_name: name,
+      last_name: "-",
+      middle_name: "-",
+      mail: email,
+      login: login,
+      password: password,
+    });
+
+    if (!credentials.success) {
+      for (let i = 0; i < credentials.error.errors.length; i++) {
+        const err = credentials.error.errors[i];
+        alert(err.message, "error");
+      }
+
+      return;
+    }
+
     if (password != repeat) {
-      alert(t("errors.passwordsDontMatch"));
+      alert(t("errors.passwordsDontMatch"), "error");
       return; 
     }
 
     try {
-      e.preventDefault();
-      const response = await singUp({
-        first_name: name,
-        last_name: "-",
-        middle_name: "-",
-        mail: email,
-        login: login,
-        password: password,
-      }); 
-      Storage.set("access_token", response.data.access_token);
+      const response = await singUp(credentials.data);
+      const body = AuthResponse.safeParse(response.data);
+
+      if (!body.success) {
+        throw new Error("not valid response");
+      }
+
+      Storage.set("access_token", body.data.access_token);
       router.push("/dashboard", { scroll: false });
 
-    } catch(error: any) {
-      if (error.response.data.error === "email already in exists") {
-        alert(t("errors.signUP.emailExists"));
-      } else if (error.response.data.error === "login already in exists") {
-        alert(t("errors.signUP.loginExists"));
-      } else if (error.response.data.error === "password must be at least 8 characters, include an uppercase letter and a special character") {
-        alert(t("errors.passwordNotSecure"));
-      } else {
-        alert(t("errors.error"));
+    } catch(error) {
+      if ((error as Error).message === "not valid response") {
+        alert(t("errors.responseNotValid"), "error");
+      }
+
+      const err = error as AxiosError<IAuthError>;
+
+      if (err.response?.data.error === "email already in exists") {
+        alert(t("errors.signUP.emailExists"), "error");
+      } else if (err.response?.data.error === "login already in exists") {
+        alert(t("errors.signUP.loginExists"), "error");
+      } else if (err.response?.data.error === "password must be at least 8 characters, include an uppercase letter and a special character") {
+        alert(t("errors.passwordNotSecure"), "error");
+      } else { 
+        alert(t("errors.error"), "error");
       }
     }
   };
@@ -120,7 +183,7 @@ export default function SingIn() {
         </button>
       </form>
 
-      <Link className={styles.link} href="/auth/sign-in">
+      <Link className={styles.link} href="/auth/language">
         {t("auth.signUp.link")}
       </Link>
     </div>

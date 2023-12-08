@@ -37,7 +37,7 @@ const Theme = () => {
 
       <div className={style.box__bottom}>
         <div className={style.bottom__bottoms}>
-          <Link className={style.back__button} href="/dashboard">
+          <Link className={style.back__button} href="/auth/language">
             {t("theme.back")}
           </Link>
           <Link className={style.continue__button} href="/dashboard">

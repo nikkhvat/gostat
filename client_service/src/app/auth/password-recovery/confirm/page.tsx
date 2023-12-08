@@ -10,7 +10,7 @@ import {Logo} from "@/app/shared/icons/components/logo";
 import InputComponent from "@/app/auth/components/Input/index";
 import { useTranslate } from "@/app/shared/libs/i18n";
 
-import { resetPassword } from "../../api";
+import { resetPassword } from "@/app/auth/auth.service";
 
 
 

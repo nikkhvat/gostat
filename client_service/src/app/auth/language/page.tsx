@@ -66,10 +66,10 @@ export default function Language() {
       </div>
       <div className={style.box__bottom}>
         <div className={style.bottom__bottoms}>
-          <Link className={style.back__button} href="/dashboard">
+          <Link className={style.back__button} href="/auth/registration">
             {t("theme.back")}
           </Link>
-          <Link className={style.continue__button} href="/dashboard">
+          <Link className={style.continue__button} href="/theme">
             {t("theme.continue")}
           </Link>
         </div>

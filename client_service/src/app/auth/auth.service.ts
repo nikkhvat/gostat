@@ -2,21 +2,21 @@ import { AxiosResponse } from "axios";
 
 import api from "@/app/shared/libs/api";
 
+import { ISingUpRequest, IAuthResponse, ISingInRequest, IConfirmAccountResponse, IRequestResetPassworsResponse, IResetPasswordRequest, IAuthError } from "./auth.types";
+import { authEndpoints } from "./auth.endpoints";
 
-import { ISingUpRequest, IAuthResponse, ISingInRequest, IConfirmAccountResponse, IRequestResetPassworsResponse, IResetPasswordRequest } from "./index";
-
-export const singUp = async (body: ISingUpRequest): Promise<AxiosResponse<IAuthResponse>> => {    
+export const singUp = async (body: ISingUpRequest): Promise<AxiosResponse<IAuthResponse | IAuthError>> => {
   try {
-    const response = await api.post("/api/auth/registration", body);
+    const response = await api.post(authEndpoints.registration, body);
     return response;
   } catch (error) {
     return Promise.reject(error);
   }
 };
 
-export const singIn = async (body: ISingInRequest): Promise<AxiosResponse<IAuthResponse>> => {
+export const singIn = async (body: ISingInRequest): Promise<AxiosResponse<IAuthResponse | IAuthError>> => {
   try {
-    const response = await api.post("/api/auth/login", body);
+    const response = await api.post(authEndpoints.login, body);
     return response;
   } catch (error) {
     return Promise.reject(error);
@@ -25,8 +25,8 @@ export const singIn = async (body: ISingInRequest): Promise<AxiosResponse<IAuthR
 
 export const confirmEmail = async (code: string): Promise<AxiosResponse<IConfirmAccountResponse>> => {
   try {
-    const response = await api.post("/api/auth/confirm/mail", {
-      params: {code}
+    const response = await api.post(authEndpoints.confirmMail, {
+      params: { code }
     });
 
     return response;
@@ -37,7 +37,7 @@ export const confirmEmail = async (code: string): Promise<AxiosResponse<IConfirm
 
 export const requestResetPassword = async (mail: string): Promise<AxiosResponse<IRequestResetPassworsResponse>> => {
   try {
-    const response = await api.post("/api/auth/password/request", { mail });
+    const response = await api.post(authEndpoints.resetPasswordRequest, { mail });
     return response;
   } catch (error) {
     return Promise.reject(error);
@@ -46,7 +46,7 @@ export const requestResetPassword = async (mail: string): Promise<AxiosResponse<
 
 export const resetPassword = async (body: IResetPasswordRequest): Promise<AxiosResponse<IAuthResponse>> => {
   try {
-    const response = await api.post("/api/auth/password/reset", body);
+    const response = await api.post(authEndpoints.resetPasswordConfirm, body);
     return response;
   } catch (error) {
     return Promise.reject(error);

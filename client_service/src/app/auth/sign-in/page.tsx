@@ -13,10 +13,17 @@ import { useTranslate } from "@/app/shared/libs/i18n";
 import { REGEX } from "@/app/shared/constants/regex";
 
 import styles from "./page.module.css";
-import { singIn } from "../api";
+import { singIn } from "@/app/auth/auth.service";
 
+import z from "zod";
+import { AxiosError } from "axios";
+import { IAuthError } from "../auth.types";
+
+import { useToast } from "@/app/widgets/toast";
 
 export default function SingIn() {
+  const toast = useToast();
+
   const router = useRouter();
 
   const t = useTranslate();
@@ -40,46 +47,65 @@ export default function SingIn() {
     setEmail(e.target.value);
   };
 
-  const validatePassword = (password: string) => {
-    return (
-      REGEX.lengthRegex.test(password) &&
-      REGEX.specialCharRegex.test(password) &&
-      REGEX.digitRegex.test(password) &&
-      REGEX.uppercaseRegex.test(password) &&
-      REGEX.lowercaseRegex.test(password)
-    );
-  };
+  const AuthCredential = z.object({
+    email: z.string(),
+    password: z
+      .string()
+      .min(8, { message: t("errors.minCharacters", { field: t("errors.password") }) })
+      .max(48, { message: t("errors.maxCharacters", { field: t("errors.password") }) })
+      .regex(REGEX.specialCharRegex, { message: t("errors.specialCharRegex", { field: t("errors.password") }) })
+      .regex(REGEX.uppercaseRegex, { message: t("errors.uppercaseRegex", { field: t("errors.password") }) })
+      .regex(REGEX.digitRegex, { message: t("errors.digitRegex", { field: t("errors.password") }) }),
+  });
+  
+  const AuthResponse = z.object({
+    access_token: z.string()
+  });
 
-  const validateMail = (email: string) => {
-    return REGEX.emailRegex.test(email);
-  };
+  const alert = (message: string, type: "error" | "info") =>
+    toast.create({
+      title: t("errors.authError"),
+      description: message,
+      type: type,
+      duration: 6000,
+      placement: "bottom-start",
+    });
 
   const submit = async (e: any) => {
-    const validPassword = validatePassword(password);
-    const validMail = validateMail(email);
+    e.preventDefault();
 
-    if (password !== "" && email !== "" && validPassword === true && validMail === true) {
+    const credentials = AuthCredential.safeParse({ email, password });
 
-      try {
-        e.preventDefault();
-        const response = await singIn({
-          login: email,
-          password: password,
-        });
-
-        Storage.set("access_token", response.data.access_token);
-        router.push("/dashboard", { scroll: false });
-
-      } catch(error: any) {
-        if (error.response.data.error === "login or password is not correct") {
-          alert(t("errors.signIn.inCorrect"));
-        } else {
-          alert(t("errors.error"));
-        }
+    if (!credentials.success) {  
+      for (let i = 0; i < credentials.error.errors.length; i++) {
+        const err = credentials.error.errors[i];
+        alert(err.message, "error");
       }
 
-    } else {
-      alert(t("auth.notValid"));
+      return;
+    }
+
+    try {
+      const response = await singIn({ login: email, password: password });
+      const body = AuthResponse.safeParse(response.data);
+
+      if (!body.success) {
+        throw new Error("not valid response");
+      }
+
+      Storage.set("access_token", body.data.access_token);
+      router.push("/dashboard", { scroll: false });
+    } catch (error) {
+      if ((error as Error).message === "not valid response") {
+        alert(t("errors.responseNotValid"), "error");
+      }
+
+      const err = error as AxiosError<IAuthError>;
+      if (err.response?.data.error === "login or password is not correct") {
+        alert(t("errors.signIn.inCorrect"), "error");
+      } else {
+        alert(t("errors.error"), "error");
+      }
     }
   };
 
