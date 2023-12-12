@@ -9,6 +9,7 @@ import Header from "./Header";
 import Menu from "./Menu";
 import Charts from "./Charts";
 import Metro from "./Metro";
+import TimeStatistic from "./timeStatistic";
 import { IUserData } from ".";
 import { useAppDispatch, useAppSelector } from "../shared/libs/store/hooks";
 import { getStats, getUserData } from "../shared/libs/store/features/dashboard/slice";
@@ -42,9 +43,15 @@ export default function Dashboard() {
       <Menu />
       <div className={styles.content}>
         <Header/>
-        <Metro />
-
-        <Charts/>
+        <div className={styles.content__center}>
+          <div>
+            <Metro />
+            <Charts/>
+          </div>
+          <div className={styles.content__sidebar}>
+            <TimeStatistic />
+          </div>
+        </div>
       </div>
     </main>
   );
