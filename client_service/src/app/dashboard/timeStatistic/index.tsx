@@ -5,11 +5,33 @@ import React, { useState } from "react";
 import style from "./index.module.css";
 import Button from "../components/Button";
 
+import { useAppSelector } from "@/app/shared/libs/store/hooks";
+import { RootState } from "@/app/shared/libs/store/store";
+
 export default function TimeStatistic() {
+  const activeScreen = useAppSelector((state: RootState) => state.dashboard.data.avg_duration);
   const [active, setActive] = useState("All");
 
   const setActiveButton = (id: string) => {
     setActive(id);
+  };
+
+  const formatTime = (milliSeconds: number) => {
+    // const totalSeconds = Math.floor(milliSeconds / 1000);
+
+    // let hours = Math.floor(totalSeconds / 3600);
+    // let minutes = Math.floor((totalSeconds % 3600) / 60);
+    // let seconds = totalSeconds % 60;
+
+    let hours = Math.floor(milliSeconds / 3600);
+    let minutes = Math.floor((milliSeconds % 3600) / 60);
+    let seconds = milliSeconds % 60;
+
+    hours = hours < 10 ? "0"+hours : hours;
+    minutes = minutes < 10 ? "0"+minutes : minutes;
+    seconds = seconds < 10 ? "0"+seconds : seconds;
+ 
+    return (hours+":"+minutes+":"+seconds);
   };
 
   const buttonsData = [
@@ -36,7 +58,8 @@ export default function TimeStatistic() {
           </svg>
         </div>
         <div className={style.timer}>
-          <p className={style.timer__text}>00:02:23</p>
+          <p className={style.timer__text}>{activeScreen ? formatTime(activeScreen) : "00:00:00"}</p>
+          {/* <p className={style.timer__text} onClick={() => {formatTime(76758);}}>00:02:23</p> */}
           <p className={style.timer__info}>Average time</p>
         </div>
       </div>
