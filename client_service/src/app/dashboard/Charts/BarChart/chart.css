@@ -1,0 +1,51 @@
+.highcharts-background {
+  fill: none;
+}
+
+.highcharts-plot-border {
+  fill: none;
+}
+
+.highcharts-plot-background {
+  display: none;
+}
+
+.highcharts-title {
+  display: none;
+}
+
+.highcharts-axis-title {
+  display: none;
+}
+
+.highcharts-legend-box {
+  display: none;
+}
+
+.highcharts-legend-box {
+  display: none;
+}
+
+.highcharts-grid highcharts-yaxis-grid path {
+  display: none;
+}
+
+.highcharts-credits {
+  display: none;
+}
+
+.highcharts-legend-item highcharts-column-series highcharts-color-0 highcharts-series-0 {
+  display: none;
+}
+
+.highcharts-container div  {
+  padding: 0;
+}
+
+/* .highcharts-plot-border {
+  margin-left: 20px;
+} */
+
+* {
+  /* padding: 0 !important; */
+}
