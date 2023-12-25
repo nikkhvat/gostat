@@ -6,14 +6,15 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 
-import { singIn } from "../api";
-import styles from "./page.module.css";
 
 import Storage from "@/app/shared/libs/storage";
 import { Logo } from "@/app/shared/icons/components/logo";
 import InputComponent from "@/app/auth/components/Input/index";
 import { useTranslate } from "@/app/shared/libs/i18n";
 import { REGEX } from "@/app/shared/constants/regex";
+
+import styles from "./page.module.css";
+import { singIn } from "../api";
 
 
 

@@ -43,8 +43,8 @@ export default function Dashboard() {
       <Menu />
       <div className={styles.content}>
         <Header/>
-        <div className={styles.content__center}>
-          <div>
+        <div className={styles.content__main}>
+          <div className={styles.content__center}>
             <Metro />
             <Charts/>
           </div>

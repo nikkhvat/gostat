@@ -15,11 +15,15 @@
   width: 100%;
 }
 
-.content__center {
+.content__main {
   display: flex;
   gap: 20px;
 }
 
+.content__center {
+  width: 66%;
+}
+
 .content__sidebar {
-  width: 100%;
+  width: 33%;
 }
