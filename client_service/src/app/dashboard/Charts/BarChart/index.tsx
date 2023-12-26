@@ -7,15 +7,17 @@ import "./chart.css";
 const BarChart = (data: any) => {
   const blockStyles = {
     height: "184px",
-    width: "354px",
+    width: "100%",
   };
   
   const options = {
     chart: {
       type: "column",
-      width: 320,
+      width: 364,
+      // width: blockStyles.width,
       height: 184,
-      marginLeft: 40,
+      marginLeft: 35,
+      // spacingRight: 0
     },
     title: {
       text: "Stolbchataya Diagramma",
