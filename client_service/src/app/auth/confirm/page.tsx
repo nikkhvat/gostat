@@ -9,7 +9,7 @@ import {useTranslate} from "@/app/shared/libs/i18n";
 
 import style from "./page.module.css";
 import Loader from "../components/loader";
-import { confirmEmail } from "../api";
+import { confirmEmail } from "@/app/auth/auth.service";
 
 
 

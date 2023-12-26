@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { getStatsApi, getUserDataApi } from "./api";
-import { InitialState } from ".";
+import { App, InitialState } from ".";
 
 const initialState: InitialState = {
   data: {},
@@ -20,14 +20,14 @@ export const getStats = createAsyncThunk("DASHBOARD/GET_STATS",
       }
 
       return response.data;
-    } catch {
-      alert("Возникла ошибка ...");
+    } catch (error) {
+      console.log(error);
     }
   }
 );
 
 export const getUserData = createAsyncThunk("DASHBOARD/GET_USER_DATA",
-  async () => {
+  async (_, { dispatch }) => {
     try {
       const response = await getUserDataApi();
 
@@ -35,10 +35,23 @@ export const getUserData = createAsyncThunk("DASHBOARD/GET_USER_DATA",
         throw new Error("status code is not 200");
       }
 
+      if (response.data.apps?.length > 0) {
+        dispatch(getStats({app: response.data.apps[0].id}));
+      }
+
+
       return response.data;
-    } catch {
-      alert("Возникла ошибка ...");
+    } catch (error) {
+      console.log(error);
     }
+  }
+);
+
+export const setActiveApp = createAsyncThunk("DASHBOARD/SET_ACTIVE_APP",
+  async (app: App, { dispatch }) => {
+    dispatch(getStats({app: app.id}));
+
+    return app;
   }
 );
 
@@ -49,10 +62,6 @@ export const dashboardSlice = createSlice({
     setActiveScreen: (state, action) => {
       state.screen = action.payload;
     },
-
-    setActiveApp: (state, action) => {
-      state.activeApp = action.payload;
-    }
   },
   extraReducers: (builder) => {
     builder
@@ -60,10 +69,14 @@ export const dashboardSlice = createSlice({
         if (action.payload) state.data = action.payload.stats;
       })
 
+      .addCase(setActiveApp.fulfilled, (state, action) => {
+        if (action.payload) state.activeApp = action.payload;
+      })
+
       .addCase(getUserData.fulfilled, (state, action) => {
         if (action.payload) {
           state.user = action.payload;
-          if (action.payload.apps.length > 0) {
+          if (action.payload.apps?.length > 0) {
             state.activeApp = action.payload.apps[0];
           }
         }
@@ -71,6 +84,6 @@ export const dashboardSlice = createSlice({
   },
 });
 
-export const { setActiveScreen, setActiveApp } = dashboardSlice.actions;
+export const { setActiveScreen } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

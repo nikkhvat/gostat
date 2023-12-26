@@ -20,5 +20,18 @@ export const errors = {
     inValidSecret: "Invalid secret code"
   },
 
-  error: "an error occurred"
+  password: "Password",
+
+  error: "an error occurred",
+
+  authError: "Auth error",
+
+  invalidEmail: "Invalid email",
+  maxCharacters: "{{field}} must contain at most 48 characters",
+  minCharacters: "{{field}} must contain at least 8 characters",
+  specialCharRegex: "{{field}} must contain a special character",
+  uppercaseRegex: "{{field}} must contain a uppercase letter",
+  digitRegex: "{{field}} must contain a lowercase letter",
+  
+  responseNotValid: "Not valid response"
 };

@@ -20,9 +20,7 @@ api.interceptors.request.use((config) => {
 (error: AxiosError) => Promise.reject(error));
 
 api.interceptors.response.use(
-  (response: AxiosResponse) => {
-    return response;
-  },
+  (response: AxiosResponse) => response,
   async (error: AxiosError) => {
     if (error.config?.url?.includes("api/auth") && !error.config?.url?.includes("info")) {
       return Promise.reject(error);
@@ -38,7 +36,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshResponse = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/auth/refresh`);
+        const refreshResponse = await axios.post("/api/auth/refresh");
         Storage.set("access_token", refreshResponse.data.access_token);
       } catch {}
 

@@ -1,7 +1,6 @@
 package http
 
 import (
-	"log"
 	"strconv"
 	"strings"
 
@@ -95,7 +94,6 @@ func (h *AuthHandler) Login(c *gin.Context) {
 // @Router                     /auth/refresh [post]
 func (h *AuthHandler) RefreshToken(c *gin.Context) {
 	refreshToken, err := c.Cookie("refresh_token")
-	// refreshToken := c.GetHeader("Authorization")
 
 	if len(refreshToken) == 0 {
 		c.JSON(401, ErrorAuthResponse{Error: "Invalid refresh token"})
@@ -163,8 +161,6 @@ func (h *AuthHandler) ConfirmAccount(c *gin.Context) {
 func (h *AuthHandler) ConfirmSendAccount(c *gin.Context) {
 	id := c.GetUint64("id")
 
-	log.Println(id)
-
 	err := h.service.SendConfirmMail(c, id)
 
 	if err != nil {
@@ -192,7 +188,6 @@ func (h *AuthHandler) RevokeToken(c *gin.Context) {
 	err := h.service.RevokeToken(c, session)
 
 	if err != nil {
-		log.Println(err)
 		c.JSON(400, ErrorAuthResponse{Error: "Unexpected error, failed to revoke token"})
 		return
 	}

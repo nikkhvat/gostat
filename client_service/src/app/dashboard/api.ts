@@ -1,8 +1,9 @@
 import { AxiosResponse } from "axios";
 
+import api from "@/app/shared/libs/api";
+
 import { IUserData, Stat } from "./index";
 
-import api from "@/app/shared/libs/api";
 
 
 

@@ -14,10 +14,9 @@ import { RootState } from "@/app/shared/libs/store/store";
 import { setActiveApp } from "@/app/shared/libs/store/features/dashboard/slice";
 
 import { IUserData } from "..";
-import Button from "../components/Button";
-import PopUp from "./Popup";
 import styles from "./index.module.css";
-
+import PopUp from "./Popup";
+import Button from "../components/Button";
 
 const Header: React.FC = () => {
   const router = useRouter();

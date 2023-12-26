@@ -6,7 +6,7 @@ import style from "@/app/auth/password-recovery/request/page.module.css";
 import {Logo} from "@/app/shared/icons/components/logo";
 import { useTranslate } from "@/app/shared/libs/i18n";
 
-import { requestResetPassword } from "../../api";
+import { requestResetPassword } from "@/app/auth/auth.service";
 
 
 enum Page {

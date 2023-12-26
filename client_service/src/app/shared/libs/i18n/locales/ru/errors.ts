@@ -20,5 +20,16 @@ export const errors = {
     inValidSecret: "Не верный секретный код"
   },
 
-  error: "Неизвестная ошибка"
+  password: "Пароль",
+
+  error: "Неизвестная ошибка",
+
+  authError: "Ошибка авторизации",
+
+  invalidEmail: "Не корректная почта",
+  maxCharacters: "{{field}} должен содержать не более 48 символов",
+  minCharacters: "{{field}} должен содержать не менее 8 символов",
+  specialCharRegex: "{{field}} должен содержать специальный символ",
+  uppercaseRegex: "{{field}} должен содержать заглавную букву",
+  digitRegex: "{{field}} должен содержать строчную букву",
 };

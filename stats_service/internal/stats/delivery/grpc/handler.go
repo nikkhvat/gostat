@@ -2,7 +2,6 @@ package grpc
 
 import (
 	"context"
-	"log"
 
 	"github.com/nik19ta/gostat/stats_service/internal/stats/service"
 	pb "github.com/nik19ta/gostat/stats_service/proto/stats"
@@ -77,8 +76,6 @@ func (h *StatsServiceHandler) GetVisits(ctx context.Context, req *pb.GetVisitsRe
 	dayVisits := data.FirstVisitsByDay
 	convertedDayVisits := make([]*pb.DateCountPair, len(dayVisits))
 
-	//log.Println("dayVisits", dayVisits)
-
 	for i := range dayVisits {
 		convertedDayVisits[i] = &pb.DateCountPair{
 			Date:  dayVisits[i].Date,
@@ -94,7 +91,6 @@ func (h *StatsServiceHandler) GetVisits(ctx context.Context, req *pb.GetVisitsRe
 		var details []*pb.Entry
 
 		for j := range dayBotVisits[i].Details {
-			log.Println(dayBotVisits[i].Details[j].Name)
 			details = append(details, &pb.Entry{
 				Count: dayBotVisits[i].Details[j].Count,
 				Name:  dayBotVisits[i].Details[j].Name,
@@ -118,10 +114,6 @@ func (h *StatsServiceHandler) GetVisits(ctx context.Context, req *pb.GetVisitsRe
 			Count: VisitsByHour[i].Count,
 		}
 	}
-
-	log.Println("convertedDayVisits", convertedDayVisits)
-	log.Println("convertedBotDayVisits", convertedBotDayVisits)
-	log.Println("convertedVisitsByHour", convertedVisitsByHour)
 
 	return &pb.GetVisitsResponse{
 		Stats: &pb.SiteStats{

@@ -3,7 +3,6 @@ package grpc
 import (
 	"context"
 	"errors"
-	"log"
 
 	"github.com/nik19ta/gostat/auth_service/internal/auth/service"
 	pb "github.com/nik19ta/gostat/auth_service/proto/auth"
@@ -55,7 +54,7 @@ func (h *AuthServiceHandler) RefreshToken(ctx context.Context, req *pb.RefreshTo
 	token, err := h.service.RefreshToken(req.GetRefreshToken())
 
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "internal error")
+		return nil, status.Errorf(codes.Internal, "error refresh token")
 	}
 
 	return &pb.RefreshTokenResponse{NewToken: *token}, nil
@@ -98,9 +97,6 @@ func (h *AuthServiceHandler) Registration(ctx context.Context, req *pb.Registrat
 	}
 
 	if err != nil {
-
-		log.Println(err)
-
 		if err.Error() == "pq: duplicate key value violates unique constraint \"uix_users_email\"" {
 			return nil, status.Errorf(codes.AlreadyExists, "User with the same email already exists")
 		}

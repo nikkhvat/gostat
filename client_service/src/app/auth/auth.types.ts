@@ -12,8 +12,12 @@ export interface ISingInRequest {
   password: string
 }
 
-export interface IAuthResponse {
+export type IAuthResponse = {
   access_token: string
+}
+
+export type IAuthError = {
+  error: string
 }
 
 export interface IRequestResetPassworsResponse {

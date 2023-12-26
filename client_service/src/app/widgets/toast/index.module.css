@@ -1,0 +1,75 @@
+
+.container {
+  background: var(--color8);
+  width: 372px;
+  border-radius: 15px;
+  position: relative;
+  padding: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 30px;
+  top: 0;
+  left: 0;
+  border-radius: 15px 0px 0px 15px;
+}
+
+.title {
+  color: var(--color1);
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.subtitle {
+  color: var(--color1);
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 5px;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  width: 30px;
+  height: 30px;
+
+  background-color: var(--color1);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: none;
+  border-radius: 100%;
+
+  cursor: pointer;
+}
+
+.close svg path {
+  stroke: var(--color8);
+}
+
+.container[data-part="root"][data-type="info"]::before {
+  background-color: #F5C087;
+}
+
+.container[data-part="root"][data-type="error"]::before {
+  background-color: #F48E8E;
+}
+
+.container[data-part="root"][data-type="success"]::before {
+  background-color: #86E06A;
+}
