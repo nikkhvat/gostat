@@ -18,7 +18,7 @@ const LineChart: React.FC<{
   useEffect(() => {
     const svg = d3.select(svgRef.current);
     const width = svgRef.current.clientWidth;
-    const height = svgRef.current.clientHeight - 40;
+    const height = svgRef.current.clientHeight - 0;
 
     const numLines = 10;
     const step = (height - 50) / (numLines - 1);

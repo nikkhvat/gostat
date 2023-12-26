@@ -44,6 +44,8 @@ export default function TimeStatistic() {
     {id: "Mobile", text: t("visitStats.mobile")}
   ];
 
+  console.log(chartData);
+
   return (
     <div className={style.container}>
       <div className={style.timer__block}>
