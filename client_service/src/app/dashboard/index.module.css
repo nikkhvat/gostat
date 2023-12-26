@@ -14,3 +14,16 @@
 .content {
   width: 100%;
 }
+
+.content__main {
+  display: flex;
+  gap: 20px;
+}
+
+.content__center {
+  width: 66%;
+}
+
+.content__sidebar {
+  width: 33%;
+}

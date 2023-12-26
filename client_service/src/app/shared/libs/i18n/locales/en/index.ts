@@ -6,6 +6,7 @@ import { menu } from "./menu";
 import { cookies } from "./cookies";
 import { notFound } from "./not-found";
 import { errors } from "./errors";
+import { visitStats } from "./visitStats";
 
 export const enLocale = {
   auth,
@@ -15,5 +16,6 @@ export const enLocale = {
   menu,
   cookies,
   notFound,
-  errors
+  errors,
+  visitStats
 };
