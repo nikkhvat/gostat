@@ -2,15 +2,16 @@
 
 import React, { useEffect, useState } from "react";
 
+import ChartVisits from "./ChartVisits";
+import Button from "../components/Button";
+import styles from "./index.module.css";
+
 import { useTranslate } from "@/app/shared/libs/i18n";
 import { useAppSelector } from "@/app/shared/libs/store/hooks";
 import { RootState } from "@/app/shared/libs/store/store";
 import { useAppDispatch } from "@/app/shared/libs/store/hooks";
 import { getUserData } from "@/app/shared/libs/store/features/dashboard/slice";
 
-import styles from "./index.module.css";
-import Button from "../components/Button";
-import ChartVisits from "./ChartVisits";
 
 
 enum ActiveScreen {

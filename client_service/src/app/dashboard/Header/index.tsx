@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from "@/app/shared/libs/store/hooks";
 import { RootState } from "@/app/shared/libs/store/store";
 import { setActiveApp } from "@/app/shared/libs/store/features/dashboard/slice";
 
+import { IUserData } from "..";
 import styles from "./index.module.css";
 import PopUp from "./Popup";
 import Button from "../components/Button";
@@ -73,7 +74,7 @@ const Header: React.FC = () => {
 
   return (
     <div className={styles.header}>
-      <div style={{ width: "310px" }}></div>
+      <div style={{ width: "15%" }}></div>
 
       <search role="search">
         <form onSubmit={submitSearch}>

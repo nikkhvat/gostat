@@ -1,0 +1,85 @@
+.highcharts-background {
+  fill: none;
+}
+
+.highcharts-plot-border {
+  fill: none;
+}
+
+.highcharts-plot-background {
+  display: none;
+}
+
+.highcharts-title {
+  display: none;
+}
+
+.highcharts-axis-title {
+  display: none;
+}
+
+.highcharts-legend-box {
+  display: none;
+}
+
+.highcharts-legend-box {
+  display: none;
+}
+
+.highcharts-grid highcharts-yaxis-grid path {
+  display: none;
+}
+
+.highcharts-credits {
+  display: none;
+}
+
+.highcharts-legend-item highcharts-column-series highcharts-color-0 highcharts-series-0 {
+  display: none;
+}
+
+.highcharts-container div  {
+  padding: 0;
+}
+
+.tooltip-content {
+  padding: 15px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.tooltip-title {
+  color: var(--color8);
+  font-family: Commissioner;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.tooltip-subtitle {
+  color: var(--color8);
+  font-family: Commissioner;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-top: 10px;
+}
+
+.tooltip-visits {
+  color: var(--color7);
+  font-family: Commissioner;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.highcharts-tooltip>span {
+  height: 60px;
+  width: 88px;
+}
