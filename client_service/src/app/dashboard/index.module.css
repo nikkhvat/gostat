@@ -34,5 +34,9 @@
 
 .content__sidebar {
   width: 33%;
+  height: 100%;
   max-width: 410px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
