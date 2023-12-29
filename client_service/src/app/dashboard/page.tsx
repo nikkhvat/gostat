@@ -12,6 +12,7 @@ import { IUserData } from ".";
 import { useAppDispatch, useAppSelector } from "../shared/libs/store/hooks";
 import { getStats, getUserData } from "../shared/libs/store/features/dashboard/slice";
 import { RootState } from "../shared/libs/store/store";
+import Vidget from "./widget";
 
 export default function Dashboard() {
 
@@ -28,6 +29,7 @@ export default function Dashboard() {
           </div>
           <div className={styles.content__sidebar}>
             <TimeStatistic />
+            <Vidget />
           </div>
         </div>
       </div>

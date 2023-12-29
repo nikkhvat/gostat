@@ -1,0 +1,114 @@
+.vidget__container {
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid #3C3C3C;
+}
+
+.vidget__header {
+  margin-bottom: 30px;
+}
+
+.vidget__header__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vidget__title {
+  color: #FFF;
+  font-family: Commissioner;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.vidget__header__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.vidget__button {
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--dark-dark-4, #3C3C3C);
+}
+
+.vidget__button p {
+  color: var(--dark-dark-7, #999);
+  font-family: Commissioner;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.vidget__month {
+  color: #5A5A5A;
+  font-family: Commissioner;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.vidget__data {
+  display: flex;
+  justify-content: space-between;
+}
+
+.vidget__data:not(:last-child) {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #3C3C3C;
+}
+
+.vidget__data:not(:first-child) {
+  margin-top: 10px;
+}
+
+.vidget__data__right {
+  display: flex;
+  align-items: flex-end;
+}
+
+.vidget__title {
+  color: #999;
+  font-family: Commissioner;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.vidget__link {
+  color: #FFF;
+  font-family: Commissioner;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  margin-top: 5px;
+}
+
+.vidget__visits {
+  color: #FFF;
+  font-family: Commissioner;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  margin-right: 10px;
+}
+
+.vidget__procent {
+  color: #999;
+  font-family: Commissioner;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
